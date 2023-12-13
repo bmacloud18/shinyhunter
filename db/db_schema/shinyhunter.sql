@@ -7,30 +7,23 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE IF NOT EXISTS `venue` (
-    `ven_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `ven_name` varchar(100) NOT NULL,
-    `address_city` varchar(50) NOT NULL,
-    `address_state` varchar(2) NOT NULL,
-    `address_street` varchar(100) NOT NULL,
-    `address_zip` varchar(5) NOT NULL,
-    `ven_map` varchar(150) DEFAULT NULL,
-    `ven_map_parking` varchar(150) DEFAULT NULL,
-    PRIMARY KEY (`ven_id`)
+CREATE TABLE IF NOT EXISTS `pokemon` (
+    `pkm_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `pkm_name` varchar(100) NOT NULL,
+    PRIMARY KEY (`pkm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DELETE FROM `venue`;
-INSERT INTO `venue` (`ven_name`, `address_city`, `address_state`, `address_street`, `address_zip`, `ven_map`, `ven_map_parking`) VALUES
+DELETE FROM `pokemon`;
+INSERT INTO `pokemon` (`pkm_name`, `address_city`, `address_state`, `address_street`, `address_zip`, `ven_map`, `ven_map_parking`) VALUES
     ('Bank of America Stadium', 'Charlotte', 'NC', '2343 Bank Street', '28908', 'BOA_Stadium.png', 'BOA_Stadium_Lot.png'),
     ('Lucas Oil Stadium', 'Indianapolis', 'IN', '534 Oil Blvd', '63230', 'LO_Stadium.png', 'LO_Stadium_Lot.png'),
     ('Arrowhead Stadium', 'Kansas City', 'MO', '523 Not Kansas Rd', '34028', 'Arrowhead_Stadium.png', 'Arrowhead_Stadium_Lot.jpeg'),
     ('PNC Arena', 'Raleigh', 'NC', 'Wolf Lane', '27505', 'PNC_Arena.jpg', 'PNC_Arena_Lot.jpeg');
 
-CREATE TABLE IF NOT EXISTS `event` (
-    `evt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `evt_name` varchar(100) NOT NULL,
-    `evt_descr` varchar(1000) NOT NULL,
-    `ven_id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `hunt` (
+    `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `hnt_name` varchar(100) NOT NULL,
+    `hnt_id` int(10) unsigned NOT NULL,
     `date_string` varchar(100) NOT NULL,
     `evt_bathroom_map` varchar(150) DEFAULT NULL,
     `evt_vendor_map` varchar(150) DEFAULT NULL,
@@ -55,7 +48,6 @@ CREATE TABLE IF NOT EXISTS `user` (
     `usr_password` varchar(255) NOT NULL,
     `usr_salt` varchar(255) NOT NULL,
     `usr_avatar` varchar(150) NOT NULL,
-    `usr_active_ticket` int(11) unsigned DEFAULT NULL,
     `usr_stg_dark` bit NOT NULL DEFAULT 0,
     `usr_stg_notify` bit NOT NULL DEFAULT 1,
     `usr_stg_text` bit NOT NULL DEFAULT 0,
@@ -63,25 +55,6 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DELETE FROM `user`;
-
-CREATE TABLE IF NOT EXISTS `ticket` (
-    `tkt_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `usr_id` int(11) unsigned NOT NULL,
-    `evt_id` int(11) unsigned NOT NULL,
-    `tkt_seat_map` varchar(150) DEFAULT NULL,
-    `tkt_seat_desc` varchar(150) DEFAULT NULL,
-    `tkt_parking_map` varchar(150) DEFAULT NULL,
-    `tkt_qr_code` varchar(150) NOT NULL,
-    `tkt_bar_code` varchar(150) NOT NULL,
-    KEY `FK_USR_ID` (`usr_id`),
-    KEY `FK_EVT_ID` (`evt_id`),
-    CONSTRAINT `FK_USR_ID` FOREIGN KEY (`usr_id`) REFERENCES `user` (`usr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT `FK_EVT_ID` FOREIGN KEY (`evt_id`) REFERENCES `event` (`evt_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    PRIMARY KEY (`tkt_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DELETE FROM `ticket`;
-
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
