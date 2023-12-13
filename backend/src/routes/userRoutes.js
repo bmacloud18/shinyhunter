@@ -3,10 +3,10 @@ const cookieParser = require('cookie-parser');
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-const UserDAO = require('../../backend/DAOs/UserDAO');
-const HuntDAO = require('../../backend/DAOs/HuntDAO');
+const UserDAO = require('../../objects/DAOs/UserDAO');
+const HuntDAO = require('../../objects/DAOs/HuntDAO');
 const { tokenMiddleware, generateToken, removeToken } = require('../middleware/tokenMiddleware');
-const PokemonDAO = require('../../backend/DAOs/PokemonDAO');
+const PokemonDAO = require('../../objects/DAOs/PokemonDAO');
 
 router.get('/users/:userId', tokenMiddleware, (req, res) => {
     const userId = req.params.userId;
