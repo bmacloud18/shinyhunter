@@ -3,11 +3,15 @@ module.exports = class {
     pkm = null;
     user = null;
     game = null;
+    method = null;
     start_date_string = null;
     start_date_display= null;
     end_date_string = null;
     end_date_display = null;
     hunt_time = null;
+    count = null;
+    increment = null;
+    charm = null;
 
     constructor (data) {
         this.id = data.hnt_id;

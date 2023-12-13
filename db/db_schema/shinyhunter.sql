@@ -15,11 +15,8 @@ CREATE TABLE IF NOT EXISTS `game` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DELETE FROM `game`;
-INSERT INTO `game` (`pkm_name`, `address_city`, `address_state`, `address_street`, `address_zip`, `ven_map`, `ven_map_parking`) VALUES
-    ('Bank of America Stadium', 'Charlotte', 'NC', '2343 Bank Street', '28908', 'BOA_Stadium.png', 'BOA_Stadium_Lot.png'),
-    ('Lucas Oil Stadium', 'Indianapolis', 'IN', '534 Oil Blvd', '63230', 'LO_Stadium.png', 'LO_Stadium_Lot.png'),
-    ('Arrowhead Stadium', 'Kansas City', 'MO', '523 Not Kansas Rd', '34028', 'Arrowhead_Stadium.png', 'Arrowhead_Stadium_Lot.jpeg'),
-    ('PNC Arena', 'Raleigh', 'NC', 'Wolf Lane', '27505', 'PNC_Arena.jpg', 'PNC_Arena_Lot.jpeg');
+INSERT INTO `game` (`gam_name`, `gam_avatar`) VALUES
+    ('Red', 'Red.jpeg');
 
 
 CREATE TABLE IF NOT EXISTS `pokemon` (
@@ -31,20 +28,21 @@ CREATE TABLE IF NOT EXISTS `pokemon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DELETE FROM `pokemon`;
-INSERT INTO `pokemon` (`pkm_name`, `address_city`, `address_state`, `address_street`, `address_zip`, `ven_map`, `ven_map_parking`) VALUES
-    ('Bank of America Stadium', 'Charlotte', 'NC', '2343 Bank Street', '28908', 'BOA_Stadium.png', 'BOA_Stadium_Lot.png'),
-    ('Lucas Oil Stadium', 'Indianapolis', 'IN', '534 Oil Blvd', '63230', 'LO_Stadium.png', 'LO_Stadium_Lot.png'),
-    ('Arrowhead Stadium', 'Kansas City', 'MO', '523 Not Kansas Rd', '34028', 'Arrowhead_Stadium.png', 'Arrowhead_Stadium_Lot.jpeg'),
-    ('PNC Arena', 'Raleigh', 'NC', 'Wolf Lane', '27505', 'PNC_Arena.jpg', 'PNC_Arena_Lot.jpeg');
+INSERT INTO `pokemon` (`pkm_name`, `pkm_avatar`, `pkm_type`) VALUES
+    ('Bulbasaur', 'Bulbasaur.png', 'grass');
 
 CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `pkm_id` int(10) unsigned NOT NULL,
     `usr_id` int(10) unsigned NOT NULL,
     `gam_id` int(10) unsigned NOT NULL,
+    `hnt_method` varchar(100) NOT NULL,
     `hnt_start_date_string` varchar(100) NOT NULL,
     `hnt_end_date_string` varchar(100) NOT NULL,
     `hnt_time_ms` int(10) unsigned NOT NULL,
+    `hnt_count` int(10) unsigned NOT NULL,
+    `hnt_increment` int(2) unsigned NOT NULL,
+    `hnt_charm` bit NOT NULL DEFAULT 0,
     KEY `FK_PKM_ID` (`pkm_id`),
     KEY `FK_USR_ID` (`usr_id`),
     KEY `FK_GAM_ID` (`gam_id`),
@@ -55,11 +53,6 @@ CREATE TABLE IF NOT EXISTS `hunt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DELETE FROM `hunt`;
-INSERT INTO `hunt` (`evt_name`, `evt_descr`, `ven_id`, `date_string`, `evt_bathroom_map`, `evt_vendor_map`, `evt_services_map`) VALUES
-    ('Panthers vs. Texans', 'Football game between the Carolina Panthers and Houston Texans', 1, '2023-12-06T10:34:56.789Z', 'evt_1_bathroom.png', 'evt_1_vendor.png', 'evt_1_services.png'),
-    ('Panthers vs. Vikings', 'Football game between the Carolina Panthers and Houston Texans', 1, '2023-12-13T12:34:56.789Z', 'evt_1_bathroom.png', 'evt_2_vendor.png', 'evt_1_services.png'),
-    ('Taylor Swift Concert', 'Come see Taylor Swift perform Live at Arrowhead Stadium in Kansas City!', 3, '2023-12-06T12:34:56.789Z', 'evt_3_bathroom.png', 'evt_3_vendor.png', 'evt_3_services.png'),
-    ('Pitbull Concert', 'Come see Pitbull perform Live at PNC Arena in Raleigh!', 4, '2023-11-06T12:34:56.789Z', 'evt_4_bathroom.png', 'evt_4_vendor.png', 'evt_4_services.png');
 
 CREATE TABLE IF NOT EXISTS `user` (
     `usr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
