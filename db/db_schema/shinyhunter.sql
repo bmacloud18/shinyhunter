@@ -7,9 +7,26 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE TABLE IF NOT EXISTS `game` (
+    `gam_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `gam_name` varchar(100) NOT NULL,
+    `gam_avatar` varchar(150) NOT NULL,
+    PRIMARY KEY (`pkm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DELETE FROM `game`;
+INSERT INTO `game` (`pkm_name`, `address_city`, `address_state`, `address_street`, `address_zip`, `ven_map`, `ven_map_parking`) VALUES
+    ('Bank of America Stadium', 'Charlotte', 'NC', '2343 Bank Street', '28908', 'BOA_Stadium.png', 'BOA_Stadium_Lot.png'),
+    ('Lucas Oil Stadium', 'Indianapolis', 'IN', '534 Oil Blvd', '63230', 'LO_Stadium.png', 'LO_Stadium_Lot.png'),
+    ('Arrowhead Stadium', 'Kansas City', 'MO', '523 Not Kansas Rd', '34028', 'Arrowhead_Stadium.png', 'Arrowhead_Stadium_Lot.jpeg'),
+    ('PNC Arena', 'Raleigh', 'NC', 'Wolf Lane', '27505', 'PNC_Arena.jpg', 'PNC_Arena_Lot.jpeg');
+
+
 CREATE TABLE IF NOT EXISTS `pokemon` (
     `pkm_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `pkm_name` varchar(100) NOT NULL,
+    `pkm_avatar` varchar(150) NOT NULL,
+    `pkm_type` varchar(100) NOT NULL,
     PRIMARY KEY (`pkm_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -23,12 +40,17 @@ INSERT INTO `pokemon` (`pkm_name`, `address_city`, `address_state`, `address_str
 CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `pkm_id` int(10) unsigned NOT NULL,
-    `hnt_id` int(10) unsigned NOT NULL,
+    `usr_id` int(10) unsigned NOT NULL,
+    `gam_id` int(10) unsigned NOT NULL,
     `hnt_start_date_string` varchar(100) NOT NULL,
     `hnt_end_date_string` varchar(100) NOT NULL,
     `hnt_time_ms` int(10) unsigned NOT NULL,
     KEY `FK_PKM_ID` (`pkm_id`),
+    KEY `FK_USR_ID` (`usr_id`),
+    KEY `FK_GAM_ID` (`gam_id`),
     CONSTRAINT `FK_PKM_ID` FOREIGN KEY (`pkm_id`) REFERENCES `pokemon` (`pkm_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `FK_USR_ID` FOREIGN KEY (`usr_id`) REFERENCES `user` (`usr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `FK_GAM_ID` FOREIGN KEY (`gam_id`) REFERENCES `game` (`gam_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     PRIMARY KEY (`hnt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
