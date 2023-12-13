@@ -22,19 +22,18 @@ INSERT INTO `pokemon` (`pkm_name`, `address_city`, `address_state`, `address_str
 
 CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `hnt_name` varchar(100) NOT NULL,
+    `pkm_id` int(10) unsigned NOT NULL,
     `hnt_id` int(10) unsigned NOT NULL,
-    `date_string` varchar(100) NOT NULL,
-    `evt_bathroom_map` varchar(150) DEFAULT NULL,
-    `evt_vendor_map` varchar(150) DEFAULT NULL,
-    `evt_services_map` varchar(150) DEFAULT NULL,
-    KEY `FK_VEN_ID` (`ven_id`),
-    CONSTRAINT `FK_VEN_ID` FOREIGN KEY (`ven_id`) REFERENCES `venue` (`ven_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    PRIMARY KEY (`evt_id`)
+    `start_date_string` varchar(100) NOT NULL,
+    `end_date_string` varchar(100) NOT NULL,
+    `hnt_time_ms` int(10) unsigned NOT NULL,
+    KEY `FK_PKM_ID` (`pkm_id`),
+    CONSTRAINT `FK_PKM_ID` FOREIGN KEY (`pkm_id`) REFERENCES `pokemon` (`pkm_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    PRIMARY KEY (`hnt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DELETE FROM `event`;
-INSERT INTO `event` (`evt_name`, `evt_descr`, `ven_id`, `date_string`, `evt_bathroom_map`, `evt_vendor_map`, `evt_services_map`) VALUES
+DELETE FROM `hunt`;
+INSERT INTO `hunt` (`evt_name`, `evt_descr`, `ven_id`, `date_string`, `evt_bathroom_map`, `evt_vendor_map`, `evt_services_map`) VALUES
     ('Panthers vs. Texans', 'Football game between the Carolina Panthers and Houston Texans', 1, '2023-12-06T10:34:56.789Z', 'evt_1_bathroom.png', 'evt_1_vendor.png', 'evt_1_services.png'),
     ('Panthers vs. Vikings', 'Football game between the Carolina Panthers and Houston Texans', 1, '2023-12-13T12:34:56.789Z', 'evt_1_bathroom.png', 'evt_2_vendor.png', 'evt_1_services.png'),
     ('Taylor Swift Concert', 'Come see Taylor Swift perform Live at Arrowhead Stadium in Kansas City!', 3, '2023-12-06T12:34:56.789Z', 'evt_3_bathroom.png', 'evt_3_vendor.png', 'evt_3_services.png'),
