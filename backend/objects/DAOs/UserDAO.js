@@ -142,27 +142,6 @@ async function updatePassword(id, password, new_password) {
     });
 }
 
-//active ticket functionality
-async function setActiveHunt(userId, huntId) {
-    const hunt = await db.query('SELECT * FROM hunt \
-            JOIN pokemon ON pokemon.pkm_id=hunt.pkm_id \
-            WHERE hunt.hnt_id=? AND hunt.usr_id=?', [huntId, userId])
-        .then(({results}) => {
-            return new Hunt( results[ 0 ] );
-        }).catch( () => {
-            throw new Error( "Oops! Something went wrong." );
-    });
-
-    //update in the database
-    return db.query('UPDATE user SET usr_active_ticket=? WHERE usr_id=?', [huntId, userId]).then( ({results}) => {
-        if ( results.affectedRows == 1 && results.warningCount == 0 )
-            return hunt;
-        throw new Error( "Oops! Something went wrong." );
-    }).catch(() => {
-        throw new Error("couldn't update active ticket");
-    });
-}
-
 async function updateSettings( id, settings ) {
     if ( !id || settings.dark === undefined || settings.notify === undefined || settings.text === undefined )
         throw new Error( 'Oops! Something went wrong.' );
