@@ -1,8 +1,8 @@
 const crypto = require( 'crypto' );
 const db = require('./DBConnection');
 const User = require('./models/User');
-const Ticket = require('./models/Ticket');
-const Event = require('./models/Event');
+const Hunt = require('./models/Hunt');
+const Pokemon = require('./models/Pokemon');
 
 async function getUser(username) {
     return db.query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
@@ -139,27 +139,6 @@ async function updatePassword(id, password, new_password) {
             throw new Error( "Oops! Something went wrong." );
         }).catch( () => {
             throw new Error( "Oops! Something went wrong." );
-    });
-}
-
-//active ticket functionality
-async function setActiveHunt(userId, huntId) {
-    const hunt = await db.query('SELECT * FROM hunt \
-            JOIN pokemon ON pokemon.pkm_id=hunt.pkm_id \
-            WHERE hunt.hnt_id=? AND hunt.usr_id=?', [huntId, userId])
-        .then(({results}) => {
-            return new Hunt( results[ 0 ] );
-        }).catch( () => {
-            throw new Error( "Oops! Something went wrong." );
-    });
-
-    //update in the database
-    return db.query('UPDATE user SET usr_active_ticket=? WHERE usr_id=?', [huntId, userId]).then( ({results}) => {
-        if ( results.affectedRows == 1 && results.warningCount == 0 )
-            return hunt;
-        throw new Error( "Oops! Something went wrong." );
-    }).catch(() => {
-        throw new Error("couldn't update active ticket");
     });
 }
 
