@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_end_date_string` varchar(100) NOT NULL,
     `hnt_time_ms` int(10) unsigned NOT NULL,
     `hnt_count` int(10) unsigned NOT NULL,
-    `hnt_increment` int(2) unsigned NOT NULL,
+    `hnt_inc` int(2) unsigned NOT NULL,
     `hnt_charm` bit NOT NULL DEFAULT 0,
     `hnt_nnm` varchar(18) DEFAULT NULL,
     KEY `FK_PKM_ID` (`pkm_id`),

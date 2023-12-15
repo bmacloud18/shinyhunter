@@ -25,6 +25,9 @@ module.exports = class {
         this.end_date_string = data.hnt_end_date_string;
         this.end_date_display = convertDate(data.hnt_end_date_string);
         this.hunt_time = data.hnt_time_ms;
+        this.count = data.hnt_count;
+        this.increment = data.hnt_inc;
+        this.charm = data.hnt_charm;
     }
 };
 
