@@ -1,6 +1,7 @@
 module.exports = class {
     id = null;
     pkm = null;
+    nickname = null;
     user = null;
     game = null;
     method = null;
@@ -16,6 +17,7 @@ module.exports = class {
     constructor (data) {
         this.id = data.hnt_id;
         this.pkm = data.pkm_id;
+        this.nickname = data.hnt_nnm;
         this.user = data.usr_id;
         this.game = data.gam_id;
         this.start_date_string = data.hnt_start_date_string;
