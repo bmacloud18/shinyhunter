@@ -6,7 +6,6 @@ module.exports = class {
   last_name = null;
   username = null;
   avatar = null;
-  active_hunt = null;
   stg_dark = null;
   stg_notify = null;
   stg_text = null;
@@ -19,7 +18,6 @@ module.exports = class {
     this.last_name = data.usr_last_name;
     this.username = data.usr_username;
     this.avatar = data.usr_avatar;
-    this.active_hunt = data.usr_active_hunt;
     this.stg_dark = data.usr_stg_dark[0];
     this.stg_notify = data.usr_stg_notify[0];
     this.stg_text = data.usr_stg_text[0];
@@ -53,7 +51,6 @@ module.exports = class {
       last_name: this.last_name,
       username: this.username,
       avatar: this.avatar,
-      active_ticket: this.active_ticket,
       stg_dark: this.stg_dark,
       stg_notify: this.stg_notify,
       stg_text: this.stg_text,
