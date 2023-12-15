@@ -1,0 +1,144 @@
+<!-- sidebar -->
+<aside id="sidebar" class="nav">
+    {{! logo header }}
+    {{> logo}}
+    <!-- top buttons -->
+    <div id="topButtons">
+        <button class="sidebarItem button round secondaryColors">Sign Out</button>
+        <a class="button round primaryColors" href="./home">Home</a>
+    </div>
+    <!-- navigation -->
+    <nav id="links">
+        <!-- maps -->
+        <section>
+            <input type="radio" id="maps" name="navbarSection">
+            <label for="maps">Maps</label>
+            <!-- collapsible -->
+            <div>
+                <!-- my seat -->
+                <div class="navLink downloadable" data-asset="/seat">
+                    <a href="./seat">
+                        <img src="./images/icons8-seat-50.png" alt="My Seat">
+                        My Seat
+                    </a>
+                </div>
+                <!-- bathrooms -->
+                <div class="navLink downloadable" data-asset="/bathroom">
+                    <a href="./bathroom">
+                        <img src="./images/icons8-bathroom-50.png" alt="Bathrooms">
+                        Bathrooms
+                    </a>
+                </div>
+                <!-- parking -->
+                <div class="navLink downloadable" data-asset="/park">
+                    <a href="./park">
+                        <img src="./images/icons8-parking-50.png" alt="Parking">
+                        Parking
+                    </a>
+                </div>
+                <!-- vendors -->
+                <div class="navLink downloadable"data-asset="/vendor">
+                    <a href="./vendor">
+                        <img src="./images/icons8-vendor-24.png" alt="Vendors">
+                        Vendors
+                    </a>
+                </div>
+                <!-- emergency services -->
+                <div class="navLink downloadable" data-asset="/service">
+                    <a href="./service">
+                        <img src="./images/icons8-health-32.png" alt="Emergency Services">
+                        Emergency Services
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- details -->
+        <section>
+            <input type="radio" id="details"  name="navbarSection">
+            <label for="details">Details</label>
+            <!-- collapsible -->
+            <div>
+                <!-- schedule -->
+                <div class="navLink">
+                    <a href="./construction">
+                        <img src="./images/icons8-schedule-50.png" alt="Schedule">
+                        Schedule
+                    </a>
+                </div>
+                <!-- announcements -->
+                <div class="navLink">
+                    <a href="./construction">
+                        <img src="./images/icons8-alarm-50.png" alt="Announcements">
+                        Announcements
+                    </a>
+                </div>
+                <!-- general information -->
+                <div class="navLink downloadable" data-asset="/info">
+                    <a href="./info">
+                        <img src="./images/icons8-info-50.png" alt="General Information">
+                        General Information
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- account -->
+        <section>
+            <input type="radio" id="account"  name="navbarSection">
+            <label for="account">Account</label>
+            <!-- collapsible -->
+            <div>
+                <!-- wallet -->
+                <div class="navLink">
+                    <a href="./wallet">
+                        <img src="./images/icons8-wallet-50.png" alt="Wallet">
+                        Wallet
+                    </a>
+                    <img src="./images/icons8-check-30.png" alt="downloaded">
+                </div>
+                <!-- profile -->
+                <div class="navLink downloadable" data-asset="/profile">
+                    <a href="./profile">
+                        <img src="./images/icons8-user-24.png" alt="Profile">
+                        Profile
+                    </a>
+                </div>
+                <!-- history -->
+                <div class="navLink downloadable" data-asset="/history">
+                    <a href="./history">
+                        <img src="./images/icons8-folder-50.png" alt="History">
+                        History
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- support -->
+        <section>
+            <input type="radio" id="settings"  name="navbarSection">
+            <label for="settings">Support</label>
+            <!-- collapsible -->
+            <div>
+                <!-- Settings -->
+                <div class="navLink">
+                    <a href="./settings">
+                        <img src="./images/icons8-settings-50.png" alt="Settings">
+                        Settings
+                    </a>
+                </div>
+                <!-- about us -->
+                <div class="navLink">
+                    <a href="./about">
+                        <img src="./images/icons8-info-50.png" alt="About Us">
+                        About Us
+                    </a>
+                </div>
+                <!-- help -->
+                <div class="navLink">
+                    <a href="./help">
+                        <img src="./images/icons8-help-50.png" alt="Help">
+                        Help
+                    </a>
+                </div>
+            </div>
+        </section>
+    </nav>
+</aside>
