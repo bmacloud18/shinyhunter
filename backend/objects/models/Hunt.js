@@ -1,22 +1,33 @@
 module.exports = class {
     id = null;
     pkm = null;
+    nickname = null;
     user = null;
+    game = null;
+    method = null;
     start_date_string = null;
     start_date_display= null;
     end_date_string = null;
     end_date_display = null;
     hunt_time = null;
+    count = null;
+    increment = null;
+    charm = null;
 
     constructor (data) {
         this.id = data.hnt_id;
         this.pkm = data.pkm_id;
+        this.nickname = data.hnt_nnm;
         this.user = data.usr_id;
+        this.game = data.gam_id;
         this.start_date_string = data.hnt_start_date_string;
         this.start_date_display = convertDate(data.hnt_start_date_string);
         this.end_date_string = data.hnt_end_date_string;
         this.end_date_display = convertDate(data.hnt_end_date_string);
         this.hunt_time = data.hnt_time_ms;
+        this.count = data.hnt_count;
+        this.increment = data.hnt_inc;
+        this.charm = data.hnt_charm;
     }
 };
 
