@@ -8,10 +8,10 @@ services:
       - "80:80"
 
   api:
-    build: ./api
+    build: ./backend
     restart: unless-stopped
     volumes:
-      - ./api/src:/app/src
+      - ./backend/src:/app/src
     environment:
       - PORT=80
 

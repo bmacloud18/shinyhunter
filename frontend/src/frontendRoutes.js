@@ -16,9 +16,9 @@ router.get( '/login', ( req, res ) => {
 });
 
 // login
-router.get( '/login', ( req, res ) => {
+router.get( '/signup', ( req, res ) => {
     const data = { title: 'Welcome!' };
-    res.render('login', data );
+    res.render('signup', data );
 });
 
 // home
@@ -74,3 +74,5 @@ router.get( '/userprofile', ( req, res ) => {
     const data = { title: 'User Profile' };
     res.render('userprofile', data );
 });
+
+module.exports = router;

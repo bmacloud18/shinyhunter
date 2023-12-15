@@ -1,5 +1,5 @@
-const db = require('./DBConnection');
-const Pokemon = require('./models/Pokemon');
+const db = require('../DBConnection');
+const Pokemon = require('../models/Pokemon');
 
 async function getPokemonByName(name) {
     return db.query('SELECT * FROM pokemon WHERE pkm_name=?', [name]).then(({results}) => {

@@ -1,7 +1,7 @@
-const db = require('./DBConnection');
-const User = require('./models/User');
-const Hunt = require('./models/Hunt');
-const Pokemon = require('./models/Pokemon');
+const db = require('../DBConnection');
+const User = require('../models/User');
+const Hunt = require('../models/Hunt');
+const Pokemon = require('../models/Pokemon');
 
 async function getHuntById(id) {
     return db.query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {

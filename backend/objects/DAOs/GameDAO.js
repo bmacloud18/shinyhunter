@@ -1,5 +1,5 @@
-const db = require('./DBConnection');
-const Game = require('./models/Game');
+const db = require('../DBConnection');
+const Game = require('../models/Game');
 
 async function getGameByName(name) {
     return db.query('SELECT * FROM game WHERE gam_name=?', [name]).then(({results}) => {
