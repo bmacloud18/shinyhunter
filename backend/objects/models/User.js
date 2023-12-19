@@ -1,6 +1,6 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-module.exports = class {
+export class User {
   id = null;
   first_name = null;
   last_name = null;

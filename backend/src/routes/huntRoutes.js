@@ -1,10 +1,10 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
+import express from 'express';
+import cookieParser from 'cookie-parser';
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-const HuntDAO = require('../../objects/DAOs/HuntDAO');
-const { tokenMiddleware } = require('../middleware/tokenMiddleware');
+import HuntDAO from '../../objects/DAOs/HuntDAO';
+import tokenMiddleware from '../middleware/tokenMiddleware';
 
 
 router.get('/hunt/:id', tokenMiddleware, (req, res) => {
@@ -14,4 +14,4 @@ router.get('/hunt/:id', tokenMiddleware, (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

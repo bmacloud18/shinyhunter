@@ -1,8 +1,8 @@
-const crypto = require( 'crypto' );
-const db = require('../DBConnection');
-const User = require('../models/User');
-const Hunt = require('../models/Hunt');
-const Pokemon = require('../models/Pokemon');
+import crypto from  'crypto' ;
+import db from '../DBConnection';
+import User from '../models/User';
+import Hunt from '../models/Hunt';
+import Pokemon from '../models/Pokemon';
 
 async function getUser(username) {
     return db.query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
@@ -171,14 +171,14 @@ async function search( value ) {
         });
 }
 
-module.exports = {
-    getUser: getUser,
-    getUserById: getUserById,
-    login: getUserByCredentials,
-    signup: createUser,
-    getUserHunts: getUserHunts,
-    updateUser: updateUser,
-    updatePassword: updatePassword,
-    updateSettings: updateSettings,
-    search: search
-};
+export {
+    getUser,
+    getUserById,
+    getUserByCredentials as login,
+    createUser as signup,
+    getUserHunts,
+    updateUser,
+    updatePassword,
+    updateSettings,
+    search
+}

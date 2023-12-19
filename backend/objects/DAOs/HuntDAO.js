@@ -1,7 +1,7 @@
-const db = require('../DBConnection');
-const User = require('../models/User');
-const Hunt = require('../models/Hunt');
-const Pokemon = require('../models/Pokemon');
+import db from '../DBConnection';
+import User from '../models/User';
+import Hunt from '../models/Hunt';
+import Pokemon from '../models/Pokemon';
 
 async function getHuntById(id) {
     return db.query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
@@ -27,7 +27,7 @@ async function getHuntsByUser(user_id) {
     });
 }
 
-module.exports = {
-    getHuntById: getHuntById,
-    getHuntsByUser: getHuntsByUser,
-}
+export {
+    getHuntById,
+    getHuntsByUser
+};

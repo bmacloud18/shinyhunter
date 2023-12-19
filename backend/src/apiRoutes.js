@@ -1,9 +1,9 @@
-const userRoutes = require('./routes/userRoutes.js');
-const pokemonRoutes = require('./routes/pokemonRoutes.js');
-const huntRoutes = require('./routes/huntRoutes.js');
-const gameRoutes = require('./routes/gameRoutes.js');
+import userRoutes from './routes/userRoutes.js';
+import pokemonRoutes from './routes/pokemonRoutes.js';
+import huntRoutes from './routes/huntRoutes.js';
+import gameRoutes from './routes/gameRoutes.js';
 
-const express = require('express');
+import express from 'express';
 const apiRouter = express.Router();
 
 apiRouter.use(userRoutes);

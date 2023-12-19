@@ -1,4 +1,4 @@
-module.exports = class {
+export class Hunt {
     id = null;
     pkm = null;
     nickname = null;

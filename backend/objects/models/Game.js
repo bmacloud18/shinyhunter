@@ -1,4 +1,4 @@
-module.exports = class {
+export class Game {
     id = null;
     name = null;
     avatar = null;
@@ -8,5 +8,4 @@ module.exports = class {
         this.name = data.gam_name;
         this.avatar = data.gam_avatar;
     }
-
 }

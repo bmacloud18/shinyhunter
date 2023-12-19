@@ -1,5 +1,5 @@
-const db = require('../DBConnection');
-const Game = require('../models/Game');
+import db from '../DBConnection';
+import Game from '../models/Game'
 
 async function getGameByName(name) {
     return db.query('SELECT * FROM game WHERE gam_name=?', [name]).then(({results}) => {
@@ -24,7 +24,8 @@ async function getGameById(id) {
         }
     });
 }
-module.exports = {
-    getGameByName: getGameByName,
-    getGameById: getGameById,
-}
+
+export {
+    getGameByName, 
+    getGameById
+};

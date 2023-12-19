@@ -1,5 +1,5 @@
-const db = require('../DBConnection');
-const Pokemon = require('../models/Pokemon');
+import db from '../DBConnection';
+import Pokemon from '../models/Pokemon';
 
 async function getPokemonByName(name) {
     return db.query('SELECT * FROM pokemon WHERE pkm_name=?', [name]).then(({results}) => {
@@ -25,7 +25,7 @@ async function getPokemonById(id) {
     });
 }
 
-module.exports = {
-    getPokemonByName: getPokemonByName,
-    getPokemonById: getPokemonById,
+export {
+    getPokemonByName,
+    getPokemonById
 };

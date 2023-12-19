@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 
 const app = express();
 const PORT = 80;
 
-const routes = require('./apiRoutes');
+import routes from './apiRoutes';
 
 app.use(express.json());
 app.use(routes);
 
-const cookieParser = require('cookie-parser');
+import cookieParser from 'cookie-parser';
 app.use(cookieParser());
 
 

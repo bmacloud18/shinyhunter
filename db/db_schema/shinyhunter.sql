@@ -7,49 +7,30 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE IF NOT EXISTS `game` (
-    `gam_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `gam_name` varchar(100) NOT NULL,
-    `gam_avatar` varchar(150) NOT NULL,
-    PRIMARY KEY (`pkm_id`)
+CREATE TABLE IF NOT EXISTS `method` (
+    `mtd_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `mtd_name` varchar(100) NOT NULL,
+    `mtd_odds` DECIMAL(9, 9) unsigned NOT NULL,
+    PRIMARY KEY (`mtd_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DELETE FROM `game`;
-INSERT INTO `game` (`gam_name`, `gam_avatar`) VALUES
-    ('Red', 'Red.jpeg');
-
-
-CREATE TABLE IF NOT EXISTS `pokemon` (
-    `pkm_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `pkm_name` varchar(100) NOT NULL,
-    `pkm_avatar` varchar(150) NOT NULL,
-    `pkm_type` varchar(100) NOT NULL,
-    PRIMARY KEY (`pkm_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DELETE FROM `pokemon`;
-INSERT INTO `pokemon` (`pkm_name`, `pkm_avatar`, `pkm_type`) VALUES
-    ('Bulbasaur', 'Bulbasaur.png', 'grass');
 
 CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `pkm_id` int(10) unsigned NOT NULL,
     `usr_id` int(10) unsigned NOT NULL,
     `gam_id` int(10) unsigned NOT NULL,
-    `hnt_method` varchar(100) NOT NULL,
+    `mtd_id` int(10) unsigned NOT NULL,
     `hnt_start_date_string` varchar(100) NOT NULL,
-    `hnt_end_date_string` varchar(100) NOT NULL,
+    `hnt_end_date_string` varchar(100),
     `hnt_time_ms` int(10) unsigned NOT NULL,
     `hnt_count` int(10) unsigned NOT NULL,
     `hnt_inc` int(2) unsigned NOT NULL,
     `hnt_charm` bit NOT NULL DEFAULT 0,
     `hnt_nnm` varchar(18) DEFAULT NULL,
-    KEY `FK_PKM_ID` (`pkm_id`),
+    KEY `FK_MTD_ID` (`mtd_id`),
     KEY `FK_USR_ID` (`usr_id`),
-    KEY `FK_GAM_ID` (`gam_id`),
-    CONSTRAINT `FK_PKM_ID` FOREIGN KEY (`pkm_id`) REFERENCES `pokemon` (`pkm_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `FK_MTD_ID` FOREIGN KEY (`mtd_id`) REFERENCES `method` (`mtd_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `FK_USR_ID` FOREIGN KEY (`usr_id`) REFERENCES `user` (`usr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT `FK_GAM_ID` FOREIGN KEY (`gam_id`) REFERENCES `game` (`gam_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     PRIMARY KEY (`hnt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

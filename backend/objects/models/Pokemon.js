@@ -1,4 +1,4 @@
-module.exports = class {
+export class Pokemon {
     id = null;
     name = null;
     avatar = null;

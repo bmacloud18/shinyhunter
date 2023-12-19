@@ -1,4 +1,4 @@
-const jwt = require( 'jsonwebtoken' );
+import jwt from  'jsonwebtoken';
 
 // cookie name
 const TOKEN_COOKIE_NAME = 'ShinyHunter';
@@ -7,7 +7,7 @@ const TOKEN_COOKIE_NAME = 'ShinyHunter';
 const API_SECRET = process.env.API_SECRET_KEY;
 
 // token middleware
-exports.tokenMiddleware = ( req, res, next ) => {
+export function tokenMiddleware (req, res, next) {
     let token = req.cookies[ TOKEN_COOKIE_NAME ];
     // do we have a cookie?
     if ( !token ) {
@@ -36,7 +36,7 @@ exports.tokenMiddleware = ( req, res, next ) => {
 };
 
 // new token
-exports.generateToken = ( req, res, user ) => {
+export function generateToken(req, res, user) {
     // store the sanitized user, and token expiration
     let data = {
         user: user,
@@ -56,7 +56,7 @@ exports.generateToken = ( req, res, user ) => {
 };
 
 // remove token
-exports.removeToken = ( req, res ) => {
+export function removeToken (req, res) {
     // send cookie
     res.cookie( TOKEN_COOKIE_NAME, '', {
         httpOnly: true,

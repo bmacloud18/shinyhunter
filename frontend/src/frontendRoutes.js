@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 router.use(express.static('static'));
@@ -75,4 +75,4 @@ router.get( '/userprofile', ( req, res ) => {
     res.render('userprofile', data );
 });
 
-module.exports = router;
+export default router;

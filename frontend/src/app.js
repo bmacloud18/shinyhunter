@@ -1,5 +1,5 @@
-const express = require('express');
-const hbs = require('hbs');
+import express from 'express';
+import hbs from 'hbs';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -14,7 +14,7 @@ app.set('views', __dirname + '/views/templates');
 hbs.registerPartials(__dirname + '/views/partials');
 
 // get and use frontend routes
-const frontendRoutes = require( './frontendRoutes' );
+import frontendRoutes from './frontendRoutes';
 app.use(frontendRoutes);
 
 // As our server to listen for incoming connections
