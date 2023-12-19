@@ -1,8 +1,11 @@
 import {query} from '../DBConnection.js';
 import Pokemon from '../models/Pokemon.js';
 
+import Pokedex from 'pokedex-promise-v2';
+const P = new Pokedex();
+
 async function getPokemonByName(name) {
-    return query('SELECT * FROM pokemon WHERE pkm_name=?', [name]).then(({results}) => {
+    return P.getPokemonByName(name).then(({results}) => {
         const mon = new Pokemon(results[0]);
         if (mon) {
             return mon;
@@ -14,7 +17,7 @@ async function getPokemonByName(name) {
 }
 
 async function getPokemonById(id) {
-    return query('SELECT * FROM pokemon WHERE pkm_id=?', [id]).then(({results}) => {
+    return P.getPokemonByName(id).then(({results}) => {
         const mon = new Pokemon(results[0]);
         if (mon) {
             return mon;
