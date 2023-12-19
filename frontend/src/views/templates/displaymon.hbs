@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- page title -->
+    <title>{{title}}</title>
+    <!-- common links -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="./css/app.css">
+    <!-- page specific links -->
+    <!-- <link rel="stylesheet" href="./css/TEMPLATE.css"> -->
+    <!-- favicon -->
+    <link rel="icon" type="image/x-icon" href="./images/icons8-stadium-16.png">
+    <!-- common scripts -->
+    <script src="./js/common.js" type="module"></script>
+    <script src="./js/nav.js" defer></script>
+    <script src="./js/serviceWorker.js" async defer></script>
+    <!-- page specific scripts -->
+    <!-- <script src="./js/TEMPLATE.js" defer></script> -->
+    <!-- <script src="./js/TEMPLATE.js" async defer></script> -->
+    <!-- <script src="./js/TEMPLATE.js" type="module"></script> -->
+    <!-- installable app -->
+    <link rel="manifest" href="./manifest.webmanifest" crossorigin="use-credentials">
+</head>
+<body>
+    {{! sidebar }}
+    {{> sidebar}}
+    {{! search screen + dimmer }}
+    {{> search}}
+    <!-- page content -->
+    <main>
+        <!-- page specific content -->
+        <!-- style this content with page specific css/js -->
+        <!-- section 1 -->
+        <section class="container">
+            <h1>Active Hunts</h1>
+            <!-- content created with csr -->
+            <div id="myHunts" class="hunts"></div>
+        </section>
+    </main>
+</body>
+</html>
