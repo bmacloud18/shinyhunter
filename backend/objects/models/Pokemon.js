@@ -1,4 +1,4 @@
-export class Pokemon {
+export default class Pokemon {
     id = null;
     name = null;
     avatar = null;

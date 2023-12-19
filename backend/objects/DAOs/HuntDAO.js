@@ -1,10 +1,10 @@
-import db from '../DBConnection';
-import User from '../models/User';
-import Hunt from '../models/Hunt';
-import Pokemon from '../models/Pokemon';
+import {query} from '../DBConnection.js';
+import User from '../models/User.js';
+import Hunt from '../models/Hunt.js';
+import Pokemon from '../models/Pokemon.js';
 
 async function getHuntById(id) {
-    return db.query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
+    return query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
         const hunt = new Hunt(results[0]);
         if (hunt) {
             return hunt;
@@ -16,7 +16,7 @@ async function getHuntById(id) {
 }
 
 async function getHuntsByUser(user_id) {
-    return db.query('SELECT * FROM hunt WHERE usr_id=?', [user_id]).then(({results}) => {
+    return query('SELECT * FROM hunt WHERE usr_id=?', [user_id]).then(({results}) => {
         const hunts = results.map(h => new Hunt(h));
         if (hunts) {
             return hunts;
@@ -27,7 +27,7 @@ async function getHuntsByUser(user_id) {
     });
 }
 
-export {
+export default {
     getHuntById,
     getHuntsByUser
 };

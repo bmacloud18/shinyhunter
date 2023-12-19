@@ -1,11 +1,11 @@
 import crypto from  'crypto' ;
-import db from '../DBConnection';
-import User from '../models/User';
-import Hunt from '../models/Hunt';
-import Pokemon from '../models/Pokemon';
+import {query} from '../DBConnection.js';
+import User from '../models/User.js';
+import Hunt from '../models/Hunt.js';
+import Pokemon from '../models/Pokemon.js';
 
 async function getUser(username) {
-    return db.query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
+    return query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
         const user = new User(results[0]);
         if (user) {
             return user;
@@ -17,7 +17,7 @@ async function getUser(username) {
 }
 
 async function getUserById(userId) {
-    return db.query('SELECT * FROM user WHERE usr_id=?', [userId]).then(({results}) => {
+    return query('SELECT * FROM user WHERE usr_id=?', [userId]).then(({results}) => {
         const user = new User(results[0]);
         if (user) {
             return user;
@@ -29,7 +29,7 @@ async function getUserById(userId) {
 }
 
 async function getUserHunts(userId) {
-    return db.query('SELECT * FROM hunt \
+    return query('SELECT * FROM hunt \
             JOIN pokemon ON hunt.pkm_id=pokemon.pkm_id \
             WHERE hunt.usr_id=?',
             [userId]).then(({results}) => {
@@ -46,8 +46,8 @@ async function getUserHunts(userId) {
 }
 
 //login
-async function getUserByCredentials(username, password) {
-    return db.query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
+async function login(username, password) {
+    return query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
         const user = new User(results[0]);
         if (user) {
             return user.validatePassword(password);
@@ -58,7 +58,7 @@ async function getUserByCredentials(username, password) {
     });
 }
 
-async function createUser(user) {
+async function signup(user) {
     let newSalt = crypto.randomBytes(64);
     let saltHex = newSalt.toString('hex');
 
@@ -82,7 +82,7 @@ async function createUser(user) {
         randomString += validChars.charAt( Math.floor( Math.random() * validChars.length ) );
     const avatar = `https://robohash.org/${randomString}.png?size=64x64&set=set1&bgset=any`;
 
-    return db.query('INSERT INTO user (usr_first_name, usr_last_name, usr_username, usr_password, usr_salt, usr_avatar) VALUES (?, ?, ?, ?, ?, ?)',
+    return query('INSERT INTO user (usr_first_name, usr_last_name, usr_username, usr_password, usr_salt, usr_avatar) VALUES (?, ?, ?, ?, ?, ?)',
     [user.first_name, user.last_name, user.username, computedPassword, saltHex, avatar]).then(({results}) => {
         if (results.insertId) {
             return getUserById(results.insertId);
@@ -91,7 +91,7 @@ async function createUser(user) {
 }
 
 async function updateUser(id, updatedUser) {
-    return db.query('UPDATE user SET usr_username=?, usr_first_name=?, usr_last_name=?, usr_avatar=? WHERE usr_id=?', [updatedUser.username, updatedUser.first_name, updatedUser.last_name, updatedUser.avatar, id])
+    return query('UPDATE user SET usr_username=?, usr_first_name=?, usr_last_name=?, usr_avatar=? WHERE usr_id=?', [updatedUser.username, updatedUser.first_name, updatedUser.last_name, updatedUser.avatar, id])
         .then( ({results}) => {
             if ( results.affectedRows == 1 && results.warningCount == 0 )
                 return getUserById( id );
@@ -103,7 +103,7 @@ async function updateUser(id, updatedUser) {
 
 async function updatePassword(id, password, new_password) {
     // validate password
-    const user = await db.query('SELECT * FROM user WHERE usr_id=?', [id]).then(async ({results}) => {
+    const user = await query('SELECT * FROM user WHERE usr_id=?', [id]).then(async ({results}) => {
         const user = new User(results[0]);
         if ( user ) {
             const tmpUser = await user.validatePassword( password );
@@ -132,7 +132,7 @@ async function updatePassword(id, password, new_password) {
     });
 
     // persist the new password and salt
-    return db.query('UPDATE user SET usr_password=?, usr_salt=? WHERE usr_id=?', [computedPassword, salt, id])
+    return query('UPDATE user SET usr_password=?, usr_salt=? WHERE usr_id=?', [computedPassword, salt, id])
         .then( ({results}) => {
             if ( results.affectedRows == 1 && results.warningCount == 0 )
                 return getUserById( id );
@@ -145,7 +145,7 @@ async function updatePassword(id, password, new_password) {
 async function updateSettings( id, settings ) {
     if ( !id || settings.dark === undefined || settings.notify === undefined || settings.text === undefined )
         throw new Error( 'Oops! Something went wrong.' );
-    return db.query( 'UPDATE user SET usr_stg_dark=?, usr_stg_notify=?, usr_stg_text=? WHERE usr_id=?', [settings.dark, settings.notify, settings.text, id] ).then( ({results}) => {
+    return query( 'UPDATE user SET usr_stg_dark=?, usr_stg_notify=?, usr_stg_text=? WHERE usr_id=?', [settings.dark, settings.notify, settings.text, id] ).then( ({results}) => {
         if ( results.affectedRows == 1 && results.warningCount == 0 )
             return getUserById( id );
         throw new Error( 'Oops! Something went wrong.' );
@@ -156,7 +156,7 @@ async function updateSettings( id, settings ) {
 
 async function search( value ) {
     const param = `%${value}%`;
-    return db.query( 'SELECT * FROM event \
+    return query( 'SELECT * FROM event \
         JOIN venue ON venue.ven_id=event.ven_id \
         WHERE event.evt_name LIKE ? \
         OR event.evt_descr LIKE ? \
@@ -171,11 +171,11 @@ async function search( value ) {
         });
 }
 
-export {
+export default {
     getUser,
     getUserById,
-    getUserByCredentials as login,
-    createUser as signup,
+    login,
+    signup,
     getUserHunts,
     updateUser,
     updatePassword,

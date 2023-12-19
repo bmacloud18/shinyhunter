@@ -1,9 +1,10 @@
 import express from 'express';
 
 const app = express();
-const PORT = 80;
+const PORT = process.env.PORT;
+const IP_ADDRESS = process.env.IP_ADDRESS;
 
-import routes from './apiRoutes';
+import routes from './apiRoutes.js';
 
 app.use(express.json());
 app.use(routes);
@@ -14,4 +15,4 @@ app.use(cookieParser());
 
 
 // As our server to listen for incoming connections
-app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
+app.listen(PORT, IP_ADDRESS, () => console.log(`Server listening on port: ${PORT}`));

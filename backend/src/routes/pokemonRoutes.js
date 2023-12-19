@@ -3,8 +3,8 @@ import cookieParser from 'cookie-parser';
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-import PokemonDAO from '../../objects/DAOs/PokemonDAO';
-import tokenMiddleware from '../middleware/tokenMiddleware';
+import PokemonDAO from '../../objects/DAOs/PokemonDAO.js';
+import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
 
 
 router.get('/pokemon/:id', tokenMiddleware, (req, res) => {

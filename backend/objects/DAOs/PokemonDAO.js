@@ -1,8 +1,8 @@
-import db from '../DBConnection';
-import Pokemon from '../models/Pokemon';
+import {query} from '../DBConnection.js';
+import Pokemon from '../models/Pokemon.js';
 
 async function getPokemonByName(name) {
-    return db.query('SELECT * FROM pokemon WHERE pkm_name=?', [name]).then(({results}) => {
+    return query('SELECT * FROM pokemon WHERE pkm_name=?', [name]).then(({results}) => {
         const mon = new Pokemon(results[0]);
         if (mon) {
             return mon;
@@ -14,7 +14,7 @@ async function getPokemonByName(name) {
 }
 
 async function getPokemonById(id) {
-    return db.query('SELECT * FROM pokemon WHERE pkm_id=?', [id]).then(({results}) => {
+    return query('SELECT * FROM pokemon WHERE pkm_id=?', [id]).then(({results}) => {
         const mon = new Pokemon(results[0]);
         if (mon) {
             return mon;
@@ -25,7 +25,7 @@ async function getPokemonById(id) {
     });
 }
 
-export {
+export default {
     getPokemonByName,
     getPokemonById
 };

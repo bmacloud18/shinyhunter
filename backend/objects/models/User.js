@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-export class User {
+export default class User {
   id = null;
   first_name = null;
   last_name = null;

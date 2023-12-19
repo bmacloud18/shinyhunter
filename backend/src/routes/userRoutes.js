@@ -3,10 +3,10 @@ import cookieParser from 'cookie-parser';
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-import UserDAO from('../../objects/DAOs/UserDAO');
-import HuntDAO from('../../objects/DAOs/HuntDAO');
-import { tokenMiddleware, generateToken, removeToken } from '../middleware/tokenMiddleware';
-import PokemonDAO from '../../objects/DAOs/PokemonDAO';
+import UserDAO from '../../objects/DAOs/UserDAO.js';
+import HuntDAO from '../../objects/DAOs/HuntDAO.js';
+import {tokenMiddleware, generateToken, removeToken} from '../middleware/tokenMiddleware.js';
+import PokemonDAO from '../../objects/DAOs/PokemonDAO.js';
 
 router.get('/users/:userId', tokenMiddleware, (req, res) => {
     const userId = req.params.userId;
@@ -151,7 +151,7 @@ router.put('/currentuser/settings', tokenMiddleware, (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;
 
 function sortEvents(events) {
     return events.sort(timeComparator);

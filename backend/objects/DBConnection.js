@@ -2,7 +2,7 @@ import mysql from 'mysql';
 
 let connection;
 
-export function getDatabaseConnection() {
+export const getDatabaseConnection = () => {
   if(!connection) {
     connection = mysql.createPool({
       host: process.env.DB_HOST,
@@ -16,7 +16,7 @@ export function getDatabaseConnection() {
   return connection;
 };
 
-export function query(query, params = []) {
+export const query = (query, params = []) => {
   return new Promise((resolve, reject) => {
     if(!connection) {
       connection = exports.getDatabaseConnection();
@@ -34,7 +34,7 @@ export function query(query, params = []) {
   });
 };
 
-export function close() {
+export const close = () => {
   if(connection) {
     connection.end();
     connection = null;

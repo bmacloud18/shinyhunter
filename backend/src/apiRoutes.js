@@ -11,4 +11,4 @@ apiRouter.use(pokemonRoutes);
 apiRouter.use(huntRoutes);
 apiRouter.use(gameRoutes);
 
-module.exports = apiRouter;
+export default apiRouter;

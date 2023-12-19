@@ -1,8 +1,8 @@
-import db from '../DBConnection';
-import Game from '../models/Game'
+import {query} from '../DBConnection.js';
+import Game from '../models/Game.js'
 
 async function getGameByName(name) {
-    return db.query('SELECT * FROM game WHERE gam_name=?', [name]).then(({results}) => {
+    return query('SELECT * FROM game WHERE gam_name=?', [name]).then(({results}) => {
         const game = new Game(results[0]);
         if (game) {
             return game;
@@ -14,7 +14,7 @@ async function getGameByName(name) {
 }
 
 async function getGameById(id) {
-    return db.query('SELECT * FROM game WHERE gam_id=?', [id]).then(({results}) => {
+    return query('SELECT * FROM game WHERE gam_id=?', [id]).then(({results}) => {
         const game = new Game(results[0]);
         if (game) {
             return game;
@@ -25,7 +25,7 @@ async function getGameById(id) {
     });
 }
 
-export {
+export default {
     getGameByName, 
     getGameById
 };
