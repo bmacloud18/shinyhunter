@@ -1,8 +1,16 @@
 import {query} from '../DBConnection.js';
 import Pokemon from '../models/Pokemon.js';
 
-import Pokedex from 'pokedex-promise-v2';
-const P = new Pokedex();
+const Pokedex = require("pokeapi-js-wrapper")
+const customOptions = {
+  protocol: "https",
+  hostName: "pokeapi.co",
+  versionPath: "/api/v2/",
+  cache: true,
+  timeout: 5 * 1000, // 5s
+  cacheImages: true
+}
+const P = new Pokedex.Pokedex(customOptions)
 
 async function getPokemonByName(name) {
     return P.getPokemonByName(name).then(({results}) => {

@@ -2,8 +2,17 @@ import {query} from '../DBConnection.js';
 import User from '../models/User.js';
 import Hunt from '../models/Hunt.js';
 import Pokemon from '../models/Pokemon.js';
-import Pokedex from 'pokedex-promise-v2';
-const P = new Pokedex();
+
+const Pokedex = require("pokeapi-js-wrapper")
+const customOptions = {
+  protocol: "https",
+  hostName: "localhost:443",
+  versionPath: "/api/v2/",
+  cache: true,
+  timeout: 5 * 1000, // 5s
+  cacheImages: true
+}
+const P = new Pokedex.Pokedex(customOptions)
 
 async function getHuntById(id) {
     return query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
