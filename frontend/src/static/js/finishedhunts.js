@@ -2,29 +2,29 @@ import api from './APIclient.js';
 
 const huntContainer = document.querySelector('#huntContainer');
 
-function deleteHunt( e ) {
-    console.log( e.target.huntId );
+function deleteHunt(e) {
+    console.log(e.target.huntId);
     
-    api.deleteHunt( e.target.huntId ).then( () => {
+    api.deleteHunt(e.target.huntId).then(() => {
         location.reload();
-    }).catch( () => {
+    }).catch(() => {
         location.href = './guest';
     });
 }
 
-function createHunt( hunt ) {
-    const section = document.createElement( 'section' );
-    section.classList.add( 'container' );
-    const header = document.createElement( 'h1' );
+function createHunt(hunt) {
+    const section = document.createElement('section');
+    section.classList.add('container');
+    const header = document.createElement('h1');
     header.textContent = hunt.pokemon;
-    const div = document.createElement( 'div' );
-    const start_date = document.createElement( 'span' );
+    const div = document.createElement('div');
+    const start_date = document.createElement('span');
     start_date.textContent = hunt.start_date_converted;
     div.append(date);
-    const sprite = document.createElement( 'img' );
+    const sprite = document.createElement('img');
     sprite.src = hunt.sprite;
     sprite.alt = 'Shiny Sprite';
-    const button = document.createElement( 'button' );
+    const button = document.createElement('button');
     button.type = 'button';
     button.classList.add('button', 'primaryColors', 'mediaButton');
     button.textContent = 'Remove Hunt';
@@ -37,11 +37,11 @@ function createHunt( hunt ) {
     confirmButton.classList.add('button', 'primaryColors', 'mediaButton');
     confirmButton.textContent = 'Confirm Send';
     confirmButton.ticketId = ticket.id;
-    confirmButton.addEventListener( 'click', e => {
+    confirmButton.addEventListener('click', e => {
         deleteHunt(e.target.ticketId, usernameInput.value);
     });
 
-    const sendButton = document.createElement( 'button' );
+    const sendButton = document.createElement('button');
     sendButton.type = 'button';
     sendButton.classList.add('button', 'primaryColors', 'mediaButton');
     sendButton.textContent = 'Send Ticket';
@@ -74,7 +74,7 @@ function noHunts() {
     ticketContainer.append(section);
 }
 
-api.getCurrentUserHunts().then( hunts => {
+api.getCurrentUserHunts().then(hunts => {
     if (hunts.length === 0)
         noTickets();
     else {
@@ -83,7 +83,7 @@ api.getCurrentUserHunts().then( hunts => {
             huntContainer.append(section);
         }
     }
-}).catch( () => {
+}).catch(() => {
     noHunts();
 });
 

@@ -3,7 +3,7 @@ import User from '../models/User.js';
 import Hunt from '../models/Hunt.js';
 import Pokemon from '../models/Pokemon.js';
 
-const Pokedex = require("pokeapi-js-wrapper")
+import Pokedex from "pokeapi-js-wrapper"
 const customOptions = {
   protocol: "https",
   hostName: "localhost:443",

@@ -1,13 +1,13 @@
 import api from './APIclient.js';
 
-const huntContainer = document.querySelector( '#huntContainer' );
+const huntContainer = document.querySelector('#huntContainer');
 
-function deleteHunt( e ) {
-    console.log( e.target.huntId );
+function deleteHunt(e) {
+    console.log(e.target.huntId);
     
-    api.deleteHunt( e.target.huntId ).then( () => {
+    api.deleteHunt(e.target.huntId).then(() => {
         location.reload();
-    }).catch( () => {
+    }).catch(() => {
         location.href = './guest';
     });
 }
@@ -56,7 +56,7 @@ function noHunts() {
     ticketContainer.append(section);
 }
 
-api.getCurrentUserHunts().then( hunts => {
+api.getCurrentUserHunts().then(hunts => {
     if (hunts.length === 0)
         noHunts();
     else {
@@ -65,7 +65,7 @@ api.getCurrentUserHunts().then( hunts => {
             huntContainer.append(section);
         }
     }
-}).catch( () => {
+}).catch(() => {
     noHunts();
 });
 
