@@ -1,4 +1,6 @@
 import api from './APIclient.js';
+import pokedex from './pokedex.js';
+
 
 const huntContainer = document.querySelector('#huntContainer');
 
@@ -13,6 +15,8 @@ function deleteHunt(e) {
 }
 
 function createHunt(hunt) {
+    const pkm = hunt.pkm
+
     const section = document.createElement('section');
     section.classList.add('container');
 
@@ -28,7 +32,7 @@ function createHunt(hunt) {
     const div = document.createElement('div');
     div.classList.add('hunt_details');
     const sprite = document.createElement('img');
-    sprite.src = hunt.sprite;
+    sprite.src = pokedex.getPokemonByName(pkm).sprites('front_shiny');
     sprite.alt = 'Shiny Sprite';
     div.append(sprite);
     const elapsed_time = document.createElement('span');
