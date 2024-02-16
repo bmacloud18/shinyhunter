@@ -14,6 +14,22 @@ CREATE TABLE IF NOT EXISTS `method` (
     PRIMARY KEY (`mtd_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+CREATE TABLE IF NOT EXISTS `user` (
+    `usr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `usr_first_name` varchar(100) NOT NULL,
+    `usr_last_name` varchar(100) NOT NULL,
+    `usr_username` varchar(150) NOT NULL,
+    `usr_password` varchar(255) NOT NULL,
+    `usr_salt` varchar(255) NOT NULL,
+    `usr_avatar` varchar(150) NOT NULL,
+    `usr_stg_dark` bit NOT NULL DEFAULT 0,
+    `usr_stg_notify` bit NOT NULL DEFAULT 1,
+    `usr_stg_text` bit NOT NULL DEFAULT 0,
+    PRIMARY KEY (`usr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DELETE FROM `user`;
+
 CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `pkm_name` int(10) unsigned NOT NULL,
@@ -36,21 +52,8 @@ CREATE TABLE IF NOT EXISTS `hunt` (
 
 DELETE FROM `hunt`;
 
-CREATE TABLE IF NOT EXISTS `user` (
-    `usr_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `usr_first_name` varchar(100) NOT NULL,
-    `usr_last_name` varchar(100) NOT NULL,
-    `usr_username` varchar(150) NOT NULL,
-    `usr_password` varchar(255) NOT NULL,
-    `usr_salt` varchar(255) NOT NULL,
-    `usr_avatar` varchar(150) NOT NULL,
-    `usr_stg_dark` bit NOT NULL DEFAULT 0,
-    `usr_stg_notify` bit NOT NULL DEFAULT 1,
-    `usr_stg_text` bit NOT NULL DEFAULT 0,
-    PRIMARY KEY (`usr_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DELETE FROM `user`;
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
