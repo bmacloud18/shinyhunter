@@ -10,6 +10,7 @@ export default class Hunt {
     end_date_string = null;
     end_date_display = null;
     hunt_time = null;
+    hunt_time_converted = null;
     count = null;
     increment = null;
     charm = null;
@@ -25,11 +26,41 @@ export default class Hunt {
         this.end_date_string = data.hnt_end_date_string;
         this.end_date_display = convertDate(data.hnt_end_date_string);
         this.hunt_time = data.hnt_time_ms;
+        this.hunt_time_display = convertTime(data.hnt_time_ms);
         this.count = data.hnt_count;
         this.increment = data.hnt_inc;
         this.charm = data.hnt_charm;
     }
 };
+
+function convertTime(ms) {
+    // Ensure the input is a non-negative number
+    if (!Number.isFinite(ms) || ms < 0) {
+        return 'Invalid input';
+    }
+
+    // Calculate hours, minutes, and seconds
+    const hours = Math.floor(ms / 3600000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
+    const minutes = Math.floor((ms % 3600000) / 60000); // 1 minute = 60 seconds * 1000 milliseconds
+    const seconds = Math.floor((ms % 60000) / 1000);
+
+    // Construct the formatted string
+    const formattedTime = [];
+
+    if (hours > 0) {
+        formattedTime.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`);
+    }
+
+    if (minutes > 0) {
+        formattedTime.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`);
+    }
+
+    if (seconds > 0 || (hours === 0 && minutes === 0)) {
+        formattedTime.push(`${seconds} ${seconds === 1 ? 'second' : 'seconds'}`);
+    }
+
+    return formattedTime.join(', ');
+}
 
 function convertDate(date) {
     let eventdate = new Date(date)

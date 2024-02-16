@@ -20,15 +20,13 @@
     <script src="./js/serviceWorker.js" async defer></script>
     <script src="./pokeapi-js-wrapper-sw.js" async defer></script>
     <!-- page specific scripts -->
-    <!-- <script src="./js/TEMPLATE.js" defer></script> -->
+    <script src="./js/activehunts.js" defer></script>
     <!-- <script src="./js/TEMPLATE.js" async defer></script> -->
     <!-- <script src="./js/TEMPLATE.js" type="module"></script> -->
     <!-- installable app -->
     <link rel="manifest" href="./manifest.webmanifest" crossorigin="use-credentials">
 </head>
 <body>
-    {{! navigation bar }}
-    {{> navbar}}
     {{! sidebar }}
     {{> sidebar}}
     {{! search screen + dimmer }}
@@ -39,18 +37,10 @@
         <!-- style this content with page specific css/js -->
         <!-- section 1 -->
         <section class="container">
-            <h1>Section 1</h1>
-            <div>
-                <p>section with container...</p>
-            </div>
+            <h1>Active Hunts</h1>
+            <!-- content created with csr -->
+            <div id="hunt_container" class="hunts"></div>
         </section>
-        <!-- section 2 -->
-        <section>
-            <h1>Section 2</h1>
-            <p>section without container...</p>
-        </section>
-        <!-- more content -->
-        <p>more content...</p>
     </main>
 </body>
 </html>

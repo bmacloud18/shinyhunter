@@ -22,3 +22,17 @@ services:
       - ./frontend/src:/app/src
     env_file:
       - .env
+
+  database:
+    image: mariadb:10.6
+    restart: unless-stopped
+    ports:
+      # Make the DB accessible from outside of the Docker network if needed
+      - 3307:3306
+    volumes:
+      # Mount a volume for mariadb's persistent files for lifecylce outside of stack
+      - "./database/data:/var/lib/mysql"
+      # Mount the db_schema into the container to be auto-read and created in the new db
+      - "./database/db_schema/mystadiumnavigator.sql:/docker-entrypoint-initdb.d/mystadiumnavigator.sql"
+    env_file:
+      - .env
