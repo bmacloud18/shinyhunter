@@ -1,9 +1,8 @@
 import crypto from  'crypto' ;
 import {query} from '../DBConnection.js';
 import User from '../models/User.js';
-import Hunt from '../models/Hunt.js';
-import Pokemon from '../models/Pokemon.js';
 
+//get user by username
 async function getUser(username) {
     return query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {
         const user = new User(results[0]);
@@ -14,8 +13,9 @@ async function getUser(username) {
             throw new Error("User not found");
         }
     });
-}
+};
 
+//get user by id
 async function getUserById(userId) {
     return query('SELECT * FROM user WHERE usr_id=?', [userId]).then(({results}) => {
         const user = new User(results[0]);
@@ -26,24 +26,7 @@ async function getUserById(userId) {
             throw new Error("User not found");
         }
     });
-}
-
-async function getUserHunts(userId) {
-    return query('SELECT * FROM hunt \
-            JOIN pokemon ON hunt.pkm_id=pokemon.pkm_id \
-            WHERE hunt.usr_id=?',
-            [userId]).then(({results}) => {
-        const events = results.map( res => new Event( res ) );
-        // get unique events only
-        let ids = [];
-        return events.filter( event => {
-            if ( ids.find( id => id == event.id ) )
-                return false;
-            ids.push( event.id );
-            return true;
-        } );
-    });
-}
+};
 
 //login
 async function login(username, password) {
@@ -56,8 +39,9 @@ async function login(username, password) {
             throw new Error("User not found");
         }
     });
-}
+};
 
+//signup
 async function signup(user) {
     let newSalt = crypto.randomBytes(64);
     let saltHex = newSalt.toString('hex');
@@ -88,7 +72,7 @@ async function signup(user) {
             return getUserById(results.insertId);
         }
     });
-}
+};
 
 async function updateUser(id, updatedUser) {
     return query('UPDATE user SET usr_username=?, usr_first_name=?, usr_last_name=?, usr_avatar=? WHERE usr_id=?', [updatedUser.username, updatedUser.first_name, updatedUser.last_name, updatedUser.avatar, id])
@@ -99,8 +83,10 @@ async function updateUser(id, updatedUser) {
         }).catch( () => {
             throw new Error( "Oops! Something went wrong." );
     });
-}
+};
 
+
+//update password
 async function updatePassword(id, password, new_password) {
     // validate password
     const user = await query('SELECT * FROM user WHERE usr_id=?', [id]).then(async ({results}) => {
@@ -140,8 +126,9 @@ async function updatePassword(id, password, new_password) {
         }).catch( () => {
             throw new Error( "Oops! Something went wrong." );
     });
-}
+};
 
+//update settings
 async function updateSettings( id, settings ) {
     if ( !id || settings.dark === undefined || settings.notify === undefined || settings.text === undefined )
         throw new Error( 'Oops! Something went wrong.' );
@@ -152,33 +139,32 @@ async function updateSettings( id, settings ) {
     }).catch( () => {
         throw new Error( 'Oops! Something went wrong.' );
     });
-}
+};
 
-async function search( value ) {
-    const param = `%${value}%`;
-    return query( 'SELECT * FROM event \
-        JOIN venue ON venue.ven_id=event.ven_id \
-        WHERE event.evt_name LIKE ? \
-        OR event.evt_descr LIKE ? \
-        OR venue.ven_name LIKE ? \
-        OR venue.address_city LIKE ?', [param, param, param, param] ).then( ({results}) => {
-            const events = results.map( res => new Event( res ) );
-            if ( !events?.length )
-                throw new Error( 'Oops!' );
-            return events;
-        }).catch( () => {
-            throw new Error( 'Oops!' );
-        });
-}
+// async function search( value ) {
+//     const param = `%${value}%`;
+//     return query( 'SELECT * FROM event \
+//         JOIN venue ON venue.ven_id=event.ven_id \
+//         WHERE event.evt_name LIKE ? \
+//         OR event.evt_descr LIKE ? \
+//         OR venue.ven_name LIKE ? \
+//         OR venue.address_city LIKE ?', [param, param, param, param] ).then( ({results}) => {
+//             const events = results.map( res => new Event( res ) );
+//             if ( !events?.length )
+//                 throw new Error( 'Oops!' );
+//             return events;
+//         }).catch( () => {
+//             throw new Error( 'Oops!' );
+//         });
+// };
 
 export default {
     getUser,
     getUserById,
     login,
     signup,
-    getUserHunts,
     updateUser,
     updatePassword,
     updateSettings,
-    search
-}
+    // search
+};
