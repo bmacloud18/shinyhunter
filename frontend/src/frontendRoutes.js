@@ -15,7 +15,7 @@ router.get( '/login', ( req, res ) => {
     res.render('login', data );
 });
 
-// login
+// signup
 router.get( '/signup', ( req, res ) => {
     const data = { title: 'Welcome!' };
     res.render('signup', data );
@@ -28,9 +28,9 @@ router.get( '/home', ( req, res ) => {
 });
 
 // hunt
-router.get( '/hunt', ( req, res ) => {
+router.get( '/activehunt', ( req, res ) => {
     const data = { title: 'Hunting' };
-    res.render('hunt', data );
+    res.render('activehunt', data );
 });
 
 // account settings
@@ -39,28 +39,10 @@ router.get( '/accountsettings', ( req, res ) => {
     res.render('accountsettings', data );
 });
 
-// add a new finished hunt
-router.get( '/addcaught', ( req, res ) => {
-    const data = { title: 'Add New Hunt' };
-    res.render('addcaught', data );
-});
-
-// caught
-router.get( '/caught', ( req, res ) => {
-    const data = { title: 'Completed Hunts' };
-    res.render('caught', data );
-});
-
 // huntsettings
 router.get( '/huntsettings', ( req, res ) => {
     const data = { title: 'Hunt Settings' };
     res.render('huntsettings', data );
-});
-
-// new hunt
-router.get( '/newhunt', ( req, res ) => {
-    const data = { title: 'Begin Hunt' };
-    res.render('newhunt', data );
 });
 
 // successful hunt
