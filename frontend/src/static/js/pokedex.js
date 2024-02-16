@@ -7,8 +7,5 @@ const customOptions = {
   timeout: 5 * 1000, // 5s
   cacheImages: true
 }
-const P = new Pokedex.Pokedex(customOptions)
 
-export default {
-    P
-}
+export const pokedex = new Pokedex.Pokedex(customOptions)

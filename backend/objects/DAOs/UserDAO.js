@@ -87,7 +87,7 @@ async function signup(user) {
         if (results.insertId) {
             return getUserById(results.insertId);
         }
-    })
+    });
 }
 
 async function updateUser(id, updatedUser) {

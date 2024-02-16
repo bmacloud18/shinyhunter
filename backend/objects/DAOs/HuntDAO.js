@@ -45,6 +45,7 @@ async function createNewFinishedHunt(user, pokemon, game, method, start_date_str
         }
     });
 }
+
 export default {
     getHuntById,
     getHuntsByUser,

@@ -1,18 +1,9 @@
 import api from './APIclient.js';
 import pokedex from './pokedex.js';
 
-
-const huntContainer = document.querySelector('#huntContainer');
-
-function deleteHunt(e) {
-    console.log(e.target.huntId);
     
-    api.deleteHunt(e.target.huntId).then(() => {
-        location.reload();
-    }).catch(() => {
-        location.href = './guest';
-    });
-}
+const activeContainer = document.querySelector('#activeHunts');
+const finishedContainer = document.querySelector('#finishedHunts');
 
 function createHunt(hunt) {
     const pkm = hunt.pkm
@@ -21,7 +12,7 @@ function createHunt(hunt) {
     section.classList.add('container');
 
     const date_header = document.createElement('h2');
-    date_header.textContent = hunt.start_date_display;
+    date_header.textContent = (hunt.end_date_dispay == null) ? hunt.start_date_display : hunt.end_date_display;
 
     const name_header = document.createElement('h1');
     name_header.textContent = hunt.pokemon;
@@ -47,29 +38,59 @@ function createHunt(hunt) {
     return section;
 }
 
-function noHunts() {
+function noHunts(text) {
+    const status = text == 'No Hunts in Progress';
     const section = document.createElement('section');
     section.classList.add('container');
     const header = document.createElement('h1');
-    header.textContent = 'No hunts found for this user';
+    header.textContent = text;
     const link = document.createElement('a');
     link.href = './home';
     link.classList.add('button', 'primaryColors', 'mediaButton');
     link.textContent = 'Find More Events!';
     section.append(header, link);
-    ticketContainer.append(section);
+    if (status) {
+        activeContainer.append(section);
+    }
+    else {
+        finishedContainer.append(section);
+    }
+    
+}
+
+function deleteHunt(e) {
+    console.log(e.target.huntId);
+    
+    api.deleteHunt(e.target.huntId).then(() => {
+        location.reload();
+    }).catch(() => {
+        location.href = './guest';
+    });
 }
 
 api.getCurrentUserHunts().then(hunts => {
-    if (hunts.length === 0)
-        noHunts();
-    else {
-        for (const h of hunts) {
-            const section = createHunt(h);
-            huntContainer.append(section);
+    const active = 0;
+    const finished = 0;
+    for (const h of hunts) {
+        const section = createHunt(h);
+        
+        if (h.end_date_display == null) {
+            active++;
+            activeContainer.append(section);
+        }
+        else {
+            finished++;
+            finishedContainer.append(section);
         }
     }
-}).catch(() => {
-    noHunts();
-});
 
+    if (active == 0) {
+        noHunts('No Hunts in Progress');
+    }
+    if (finished == 0) {
+        noHunts('Your Pokedex is Empty!');
+    }
+}).catch(() => {
+    noHunts('No Hunts in Progress');
+    noHunts('Your Pokedex is Empty!');
+});

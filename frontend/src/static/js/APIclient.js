@@ -149,7 +149,12 @@ export default {
     //Hunt Routes\\
     \*\\\\\///////*/
 
-    // getCurrentUserHunts: async() => {
+    // getCurrentUserActiveHunts: async() => {
+        
+    // }
+
+
+    // getCurrentUserFinishedHunts: async() => {
         
     // }
 };

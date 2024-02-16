@@ -33,7 +33,7 @@ export default class Hunt {
     }
 };
 
-function convertTime(time) {
+function convertTime(ms) {
     // Ensure the input is a non-negative number
     if (!Number.isFinite(ms) || ms < 0) {
         return 'Invalid input';
