@@ -1,12 +1,12 @@
+//This script is for the user profile page, and loads all the user's hunts, filling the active and completed hunts sections
+//This script should be imported by the current user profile page and the general user profile page
 import api from './APIclient.js';
-import pokedex from './pokedex.js';
-
     
 const activeContainer = document.querySelector('#activeHunts');
 const finishedContainer = document.querySelector('#finishedHunts');
 
 function createHunt(hunt) {
-    const pkm = hunt.pkm
+    const pkm = api.getPokemonByName(hunt.pkm);
 
     const section = document.createElement('section');
     section.classList.add('container');
@@ -15,7 +15,7 @@ function createHunt(hunt) {
     date_header.textContent = (hunt.end_date_dispay == null) ? hunt.start_date_display : hunt.end_date_display;
 
     const name_header = document.createElement('h1');
-    name_header.textContent = hunt.pokemon;
+    name_header.textContent = pkm.name;
     if (hunt.nickname) {
         name_header.textContent = hunt.nickname;
     }
@@ -23,7 +23,7 @@ function createHunt(hunt) {
     const div = document.createElement('div');
     div.classList.add('hunt_details');
     const sprite = document.createElement('img');
-    sprite.src = pokedex.getPokemonByName(pkm).sprites('front_shiny');
+    sprite.src = pkm.sprite;
     sprite.alt = 'Shiny Sprite';
     div.append(sprite);
     const elapsed_time = document.createElement('span');
@@ -35,6 +35,7 @@ function createHunt(hunt) {
     
 
     section.append(name_header, date_header, div);
+    section.style.color = pkm.color;
     return section;
 }
 

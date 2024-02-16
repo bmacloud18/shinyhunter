@@ -1,3 +1,4 @@
+//Basic HTTP Client, fulfills requests which come from the API client
 const API_BASE = './api/';
 
 const handleError = (res) => {

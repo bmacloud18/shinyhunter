@@ -1,3 +1,4 @@
+//Sign up page script
 import api from './APIclient.js';
 
 const signup = document.getElementById('signup');

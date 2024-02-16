@@ -1,3 +1,4 @@
+//Login page script
 import api from './APIclient.js';
 
 const signin = document.getElementById('signin');

@@ -1,15 +1,7 @@
+//Basic API Client, interacts with the backend of this project as well as poke-api through the pokedex import
+//Defines a clean pokemon object for frontend use
 import HTTPclient from './HTTPclient.js';
-import Pokedex from "pokeapi-js-wrapper"
-
-const customOptions = {
-  protocol: "https",
-  hostName: "localhost:443",
-  versionPath: "/api/v2/",
-  cache: true,
-  timeout: 5 * 1000, // 5s
-  cacheImages: true
-}
-const P = new Pokedex.Pokedex(customOptions)
+import pokedex from './pokdex.js';
 
 function getGames(pokemon) {
     let ret = [];
@@ -119,8 +111,8 @@ export default {
 
     //returns a clean pokemon object with sprite, name, types, games
     getPokemonByName: async (name) => {
-        const pokemon_obj = await P.getPokemonByName(name);
-        const species_obj = await P.getPokemonSpeciesByName(name);
+        const pokemon_obj = await pokedex.getPokemonByName(name);
+        const species_obj = await pokedex.getPokemonSpeciesByName(name);
 
         return cleanMon(pokemon_obj, species_obj);
     },
@@ -130,7 +122,7 @@ export default {
             offset: 0,
             limit: 43,
         }
-        return P.getVersionsList(interval).then(results => {
+        return pokedex.getVersionsList(interval).then(results => {
             return cleanGames(results.results);
         });
     },
@@ -140,7 +132,7 @@ export default {
             offset: 0,
             limit: 1000,
         }
-        return P.getPokemonList(interval).then(results => {
+        return pokedex.getPokemonList(interval).then(results => {
             return cleanMons(results.results);
         });
     }

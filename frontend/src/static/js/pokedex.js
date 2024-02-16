@@ -1,3 +1,4 @@
+//import for the poke-api client-side js wrapper, imported by the APIClient of this project
 import Pokedex from "pokeapi-js-wrapper"
 const customOptions = {
   protocol: "https",

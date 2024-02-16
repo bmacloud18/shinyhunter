@@ -1,3 +1,4 @@
+//This script will fill out the profile of the current user, along with the userhunts script
 import user from './getCurrentUser.js';
 
 const title = document.querySelector('title');
