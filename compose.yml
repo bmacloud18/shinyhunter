@@ -8,17 +8,32 @@ services:
       - "80:80"
 
   api:
-    build: ./api
+    build: ./backend
     restart: unless-stopped
     volumes:
-      - ./api/src:/app/src
-    environment:
-      - PORT=80
+      - ./backend/src:/app/src
+    env_file:
+      - .env
 
   frontend:
     build: ./frontend
     restart: unless-stopped
     volumes:
       - ./frontend/src:/app/src
-    environment:
-      - PORT=80
+      - ./frontend/node_modules:/app/node_modules
+    env_file:
+      - .env
+
+  database:
+    image: mariadb:10.6
+    restart: unless-stopped
+    ports:
+      # Make the DB accessible from outside of the Docker network if needed
+      - 3307:3306
+    volumes:
+      # Mount a volume for mariadb's persistent files for lifecycle outside of stack
+      - "./db/data:/var/lib/mysql"
+      # Mount the db_schema into the container to be auto-read and created in the new db
+      - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
+    env_file:
+      - .env

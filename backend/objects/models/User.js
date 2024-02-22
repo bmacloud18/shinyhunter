@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-module.exports = class {
+module.exports = class Hunt {
   id = null;
   first_name = null;
   last_name = null;
