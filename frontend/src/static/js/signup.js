@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     signup.addEventListener('click', e => {
         api.register(first_name.value, last_name.value, username.value, password.value).then(user => {
             document.location = "./userprofile";
+            console.log('successfully signed up!')
             username.setCustomValidity('');
             username.reportValidity();
         }).catch((err) => {
