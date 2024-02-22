@@ -20,7 +20,7 @@ const getDatabaseConnection = () => {
 const query = (query, params = []) => {
   return new Promise((resolve, reject) => {
     if(!connection) {
-      connection = exports.getDatabaseConnection();
+      connection = getDatabaseConnection();
     }
     connection.query(query, params, (err, results, fields) => {
       if(err) {

@@ -79,7 +79,7 @@ async function updateHunt(id, start_date, count, increment, nickname) {
     })
 }
 
-export default {
+export {
     getHuntById,
     getHuntsByUser,
     createNewHunt,

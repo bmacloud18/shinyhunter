@@ -3,7 +3,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
-import HuntDAO from '../../objects/DAOs/HuntDAO.js';
+import * as HuntDAO from '../../objects/DAOs/HuntDAO.js';
 
 const router = express.Router();
 router.use(cookieParser());

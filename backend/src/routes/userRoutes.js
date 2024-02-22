@@ -3,8 +3,8 @@
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
-import UserDAO from '../../objects/DAOs/UserDAO.js';
+import {tokenMiddleware, generateToken, removeToken} from '../middleware/tokenMiddleware.js';
+import * as UserDAO from '../../objects/DAOs/UserDAO.js';
 
 const router = express.Router();
 router.use(cookieParser());

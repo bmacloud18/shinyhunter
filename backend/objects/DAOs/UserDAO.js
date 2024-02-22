@@ -162,7 +162,7 @@ async function updateSettings( id, settings ) {
 //         });
 // };
 
-export default {
+export {
     getUser,
     getUserById,
     login,
