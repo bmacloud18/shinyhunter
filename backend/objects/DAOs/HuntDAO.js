@@ -1,5 +1,8 @@
-const query = require('../DBConnection.js').query;
-const Hunt = require('../models/Hunt');
+// const query = require('../DBConnection.js').query;
+// const Hunt = require('../models/Hunt');
+
+import {query} from '../DBConnection.js';
+import Hunt from '../models/Hunt.js';
 
 //unfinished
 function validateEndDate(date_string) {
@@ -76,7 +79,7 @@ async function updateHunt(id, start_date, count, increment, nickname) {
     })
 }
 
-module.exports = {
+export default {
     getHuntById,
     getHuntsByUser,
     createNewHunt,

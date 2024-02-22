@@ -1,5 +1,5 @@
 //import for the poke-api client-side js wrapper, imported by the APIClient of this project
-const Pokedex = require('pokeapi-js-wrapper');
+import Pokedex from 'pokedex-promise-v2';
 const customOptions = {
   protocol: "https",
   hostName: "localhost:443",
@@ -9,10 +9,12 @@ const customOptions = {
   cacheImages: true
 }
 
-const pokedex = new Pokedex.Pokedex(customOptions);
+const pokedex = new Pokedex(customOptions);
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
+
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
@@ -94,7 +96,7 @@ router.get('/pokemon/games', tokenMiddleware, (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;
 
 
 

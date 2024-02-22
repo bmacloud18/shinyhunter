@@ -1,4 +1,4 @@
-module.exports = class Hunt {
+export default class Hunt {
     id = null;
     pkm = null;
     nickname = null;

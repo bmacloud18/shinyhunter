@@ -1,11 +1,17 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
+// const express = require('express');
+// const cookieParser = require('cookie-parser');
+
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
+import UserDAO from '../../objects/DAOs/UserDAO.js';
+
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
-const UserDAO = require('../../objects/DAOs/UserDAO.js')
-const {tokenMiddleware, generateToken, removeToken} = require('../middleware/tokenMiddleware');
+// const UserDAO = require('../../objects/DAOs/UserDAO.js')
+// const {tokenMiddleware, generateToken, removeToken} = require('../middleware/tokenMiddleware');
 
 //get user by their id
 router.get('/users/:userId', tokenMiddleware, (req, res) => {
@@ -114,4 +120,4 @@ router.put('/currentuser/settings', tokenMiddleware, (req, res) => {
 
 });
 
-module.exports = router;
+export default router;
