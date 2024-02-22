@@ -1,12 +1,11 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
+const express = require('express');
+const cookieParser = require('cookie-parser');
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-import UserDAO from '../../objects/DAOs/UserDAO.js';
-import HuntDAO from '../../objects/DAOs/HuntDAO.js';
-import {tokenMiddleware, generateToken, removeToken} from '../middleware/tokenMiddleware.js';
-import PokemonDAO from '../../objects/DAOs/PokemonDAO.js';
+
+const UserDAO = require('../../objects/DAOs/UserDAO.js')
+const {tokenMiddleware, generateToken, removeToken} = require('../middleware/tokenMiddleware');
 
 //get user by their id
 router.get('/users/:userId', tokenMiddleware, (req, res) => {
@@ -115,4 +114,4 @@ router.put('/currentuser/settings', tokenMiddleware, (req, res) => {
 
 });
 
-export default router;
+module.exports = router;

@@ -1,10 +1,10 @@
-import userRoutes from './routes/userRoutes.js';
-import huntRoutes from './routes/huntRoutes.js';
+const userRoutes = require('./routes/userRoutes.js') ;
+const huntRoutes = require('./routes/huntRoutes.js');
 
-import express from 'express';
+const express = require('express');
 const apiRouter = express.Router();
 
 apiRouter.use(userRoutes);
 apiRouter.use(huntRoutes);
 
-export default apiRouter;
+module.exports = apiRouter;

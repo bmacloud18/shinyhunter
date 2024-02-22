@@ -13,8 +13,8 @@ const last_name = document.getElementById('last_name');
 
 document.addEventListener('DOMContentLoaded', function () {
     signup.addEventListener('click', e => {
-        api.signup(username.value, password.value, first_name.value, last_name.value).then(user => {
-            document.location = "./";
+        api.register(first_name.value, last_name.value, username.value, password.value).then(user => {
+            document.location = "./userprofile";
             username.setCustomValidity('');
             username.reportValidity();
         }).catch((err) => {

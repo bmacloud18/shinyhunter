@@ -1,8 +1,16 @@
-import {query} from '../DBConnection.js';
-import Hunt from '../models/Hunt.js';
+const query = require('../DBConnection.js').query;
+const Hunt = require('../models/Hunt');
 
 //unfinished
-function validateDate(date_string) {
+function validateEndDate(date_string) {
+    if (date_string == null) {
+        throw new Error("Oops! couldn't complete hunt");
+    }
+
+    return date_string;
+}
+
+function validateStartDate(date_string) {
     if (date_string == null) {
         throw new Error("Oops! couldn't complete hunt");
     }
@@ -59,7 +67,7 @@ async function completeHunt(id, end_date) {
 
 //update a hunt by providing it with hunt settings data
 async function updateHunt(id, start_date, count, increment, nickname) {
-    const start_date_string = validateDate(start_date);
+    const start_date_string = validateStartDate(start_date);
 
     return query ('UPDATE hunt SET start_date_string=?, count=?, increment=?, nickname=? WHERE id=?', [start_date_string, count, increment, nickname, id]).then(({results}) => {
         return results;
@@ -68,7 +76,7 @@ async function updateHunt(id, start_date, count, increment, nickname) {
     })
 }
 
-export default {
+module.exports = {
     getHuntById,
     getHuntsByUser,
     createNewHunt,

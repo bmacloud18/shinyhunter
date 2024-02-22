@@ -1,60 +1,58 @@
-import express from 'express';
+
+const express = require( 'express' );
 const router = express.Router();
 
 router.use(express.static('static'));
 router.use(express.urlencoded({extended: true}));
 
+const path = require('path');
+const html_dir = path.join(__dirname ,'./views/templates2/');
+
 // base
-router.get( '/', ( req, res ) => {
-    res.redirect( '/login' );
+router.get('/', (req, res) => {
+    res.sendFile(`${html_dir}login.html`);
 });
 
-// login
-router.get( '/login', ( req, res ) => {
-    const data = { title: 'Welcome!' };
-    res.render('login', data );
+// base
+router.get('/login', (req, res) => {
+    res.sendFile(`${html_dir}login.html`);
 });
 
 // signup
-router.get( '/signup', ( req, res ) => {
-    const data = { title: 'Welcome!' };
-    res.render('signup', data );
+router.get('/signup', (req, res) => {
+    res.sendFile(`${html_dir}signup.html`);
 });
 
-// home
-router.get( '/home', ( req, res ) => {
-    const data = { title: 'Welcome!' };
-    res.render('homepage', data );
+// userprofile
+router.get('/userprofile', (req, res) => {
+    res.sendFile(`${html_dir}userprofile.html`);
 });
 
-// hunt
-router.get( '/activehunt', ( req, res ) => {
-    const data = { title: 'Hunting' };
-    res.render('activehunt', data );
+// active hunt
+router.get('/activehunt', (req, res) => {
+    res.sendFile(`${html_dir}activehunt.html`);
+});
+
+// finished hunt
+router.get( '/finishedhunt', ( req, res ) => {
+    res.sendFile(`${html_dir}finishedhunt.html`);
 });
 
 // account settings
 router.get( '/accountsettings', ( req, res ) => {
-    const data = { title: 'Settings' };
-    res.render('accountsettings', data );
+    res.sendFile(`${html_dir}accountsettings.html`);
 });
 
 // huntsettings
 router.get( '/huntsettings', ( req, res ) => {
-    const data = { title: 'Hunt Settings' };
-    res.render('huntsettings', data );
+    res.sendFile(`${html_dir}huntsettings.html`);
 });
 
 // successful hunt
 router.get( '/success', ( req, res ) => {
-    const data = { title: 'Congratulations!' };
-    res.render('success', data );
+    res.sendFile(`${html_dir}success.html`);
 });
 
-// user profile
-router.get( '/userprofile', ( req, res ) => {
-    const data = { title: 'User Profile' };
-    res.render('userprofile', data );
-});
 
-export default router;
+
+module.exports = router;

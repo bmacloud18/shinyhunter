@@ -1,6 +1,6 @@
-import crypto from  'crypto' ;
-import {query} from '../DBConnection.js';
-import User from '../models/User.js';
+const crypto = require('crypto');
+const query = require('../DBConnection.js').query;
+const User = require('../models/User');
 
 //get user by username
 async function getUser(username) {
@@ -158,7 +158,7 @@ async function updateSettings( id, settings ) {
 //         });
 // };
 
-export default {
+module.exports = {
     getUser,
     getUserById,
     login,

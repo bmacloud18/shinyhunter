@@ -20,6 +20,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./frontend/src:/app/src
+      - ./frontend/node_modules:/app/node_modules
     env_file:
       - .env
 
@@ -30,9 +31,9 @@ services:
       # Make the DB accessible from outside of the Docker network if needed
       - 3307:3306
     volumes:
-      # Mount a volume for mariadb's persistent files for lifecylce outside of stack
-      - "./database/data:/var/lib/mysql"
+      # Mount a volume for mariadb's persistent files for lifecycle outside of stack
+      - "./db/data:/var/lib/mysql"
       # Mount the db_schema into the container to be auto-read and created in the new db
-      - "./database/db_schema/mystadiumnavigator.sql:/docker-entrypoint-initdb.d/mystadiumnavigator.sql"
+      - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
     env_file:
       - .env

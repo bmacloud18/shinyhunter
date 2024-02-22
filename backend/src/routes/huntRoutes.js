@@ -1,10 +1,11 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
+const express = require('express');
+const cookieParser = require('cookie-parser');
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-import HuntDAO from '../../objects/DAOs/HuntDAO.js';
-import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
+
+const HuntDAO = require('../../objects/DAOs/HuntDAO.js')
+const {tokenMiddleware} = require('../middleware/tokenMiddleware.js');
 
 //get a hunt by its id
 router.get('/hunt/:id', tokenMiddleware, (req, res) => {
@@ -25,7 +26,7 @@ router.get('/hunt/users/id/:id', tokenMiddleware, (req, res) => {
 });
 
 //get the currently logged in user's hunts
-router.get('/hunt/users/current'. tokenMiddleware, (req, res) => {
+router.get('/hunt/users/current', tokenMiddleware, (req, res) => {
     const userId = req.user.id;
 
     HuntDAO.getHuntsByUser(userId).then(hunts => {
@@ -99,4 +100,4 @@ function timeComparator(a, b) {
     return d1.getTime() - d2.getTime();
 }
 
-export default router;
+module.exports = router;

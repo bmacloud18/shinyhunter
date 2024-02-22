@@ -1,8 +1,8 @@
-import mysql from 'mysql';
+const mysql = require('mysql');
 
 let connection;
 
-export const getDatabaseConnection = () => {
+exports.getDatabaseConnection = () => {
   if(!connection) {
     connection = mysql.createPool({
       host: process.env.DB_HOST,
@@ -16,7 +16,7 @@ export const getDatabaseConnection = () => {
   return connection;
 };
 
-export const query = (query, params = []) => {
+exports.query = (query, params = []) => {
   return new Promise((resolve, reject) => {
     if(!connection) {
       connection = exports.getDatabaseConnection();
@@ -34,7 +34,7 @@ export const query = (query, params = []) => {
   });
 };
 
-export const close = () => {
+exports.close = () => {
   if(connection) {
     connection.end();
     connection = null;

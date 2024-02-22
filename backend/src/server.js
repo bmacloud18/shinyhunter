@@ -1,18 +1,17 @@
-import express from 'express';
+const express = require('express');
 
 const app = express();
-const PORT = process.env.PORT;
-const IP_ADDRESS = process.env.IP_ADDRESS;
+const PORT = 80;
 
-import routes from './apiRoutes.js';
+const routes = require('./apiRoutes.js')
 
 app.use(express.json());
 app.use(routes);
 
-import cookieParser from 'cookie-parser';
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 
 
 // As our server to listen for incoming connections
-app.listen(PORT, IP_ADDRESS, () => console.log(`Server listening on port: ${PORT}`));
+app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
