@@ -94,6 +94,8 @@ router.get('/pokemon/games', tokenMiddleware, (req, res) => {
     });
 });
 
+module.exports = router;
+
 
 
 
