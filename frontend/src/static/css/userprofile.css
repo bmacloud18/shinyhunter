@@ -55,7 +55,7 @@ main {
 
 .huntlists {
     min-width: 60vw;
-    height: 20em;
+    height: 50em;
     grid-template-areas:
     "active completed";
     grid-auto-flow: column;
@@ -65,7 +65,7 @@ main {
 
 .huntlist {
     min-width: 30vw;
-    height: 10em;
+    height: 25em;
     grid-auto-flow: column;
     overflow-y: scroll;
     border: 5px solid black;
