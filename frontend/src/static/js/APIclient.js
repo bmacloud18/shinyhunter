@@ -26,6 +26,7 @@ export default {
     /*//////\\\\\\*\
     //User Routes\\
     \*\\\\\////////*/
+
     login: async (username, password) => {
         const data = {
             username: username,
@@ -49,7 +50,7 @@ export default {
     },
 
     // current user
-    getUser: async () => {
+    getCurrentUser: async () => {
         return HTTPclient.get('currentuser');
     },
 

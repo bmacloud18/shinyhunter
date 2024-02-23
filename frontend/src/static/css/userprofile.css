@@ -57,7 +57,7 @@ h2 {
     grid-area: followbutton;
 }
 
-.followinglist {
+.huntlist {
     min-width: 40vw;
     height: 10em;
     overflow-y: scroll;

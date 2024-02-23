@@ -70,7 +70,7 @@ router.get('/currentuser', tokenMiddleware, (req, res) => {
     }).catch( (err) => {
         res.status( 401 ).json( {error: 'Oops! Not authenticated.'} );
     });
-
+    
 });
 
 //update current user info

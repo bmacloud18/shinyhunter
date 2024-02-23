@@ -1,0 +1,1 @@
+// script for active hunt page (user is actively hunting)
