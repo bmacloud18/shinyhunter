@@ -24,8 +24,8 @@ export default class Hunt {
         this.start_date_display = convertDate(data.hnt_start_date_string);
         this.end_date_string = data.hnt_end_date_string;
         this.end_date_display = convertDate(data.hnt_end_date_string);
-        this.hunt_time = data.hnt_time_ms;
-        this.hunt_time_display = convertTime(data.hnt_time_ms);
+        this.hunt_time = data.hnt_time_s;
+        this.hunt_time_display = convertTime(data.hnt_time_s);
         this.count = data.hnt_count;
         this.increment = data.hnt_inc;
         this.charm = data.hnt_charm;
@@ -33,16 +33,16 @@ export default class Hunt {
     }
 };
 
-function convertTime(ms) {
+function convertTime(s) {
     // Ensure the input is a non-negative number
-    if (!Number.isFinite(ms) || ms < 0) {
+    if (!Number.isFinite(s) || s < 0) {
         return 'Invalid input';
     }
 
     // Calculate hours, minutes, and seconds
-    const hours = Math.floor(ms / 3600000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
-    const minutes = Math.floor((ms % 3600000) / 60000); // 1 minute = 60 seconds * 1000 milliseconds
-    const seconds = Math.floor((ms % 60000) / 1000);
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
 
     // Construct the formatted string
     const formattedTime = [];

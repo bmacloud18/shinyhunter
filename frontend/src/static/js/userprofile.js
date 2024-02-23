@@ -63,8 +63,10 @@ function createHunt(hunt, pkm, active) {
     div.append(sprite);
     const elapsed_time = document.createElement('span');
     elapsed_time.textContent = hunt.hunt_time_display;
+    elapsed_time.classList.add('time_display');
     div.append(elapsed_time);
     const count = document.createElement('span');
+    count.classList.add('count_display');
     count.textContent = hunt.count;
     div.append(count);
 

@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     `mtd_id` int(10) unsigned NOT NULL,
     `hnt_start_date_string` varchar(100) NOT NULL,
     `hnt_end_date_string` varchar(100) DEFAULT NULL,
-    `hnt_time_ms` int(10) unsigned NOT NULL DEFAULT 0,
+    `hnt_time_s` int(10) unsigned NOT NULL DEFAULT 0,
     `hnt_count` int(10) unsigned NOT NULL DEFAULT 0,
     `hnt_inc` int(2) unsigned NOT NULL,
     `hnt_charm` bit NOT NULL DEFAULT 0,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `hunt`;
 
-INSERT INTO `hunt` (`pkm_name`, `usr_id` , `gam_name`, `mtd_id`, `hnt_start_date_string`, `hnt_end_date_string`, `hnt_time_ms`, `hnt_count`, `hnt_inc`, `hnt_charm`, `hnt_nnm`) VALUES
+INSERT INTO `hunt` (`pkm_name`, `usr_id` , `gam_name`, `mtd_id`, `hnt_start_date_string`, `hnt_end_date_string`, `hnt_time_s`, `hnt_count`, `hnt_inc`, `hnt_charm`, `hnt_nnm`) VALUES
     ('Pikachu', 1, 'Sun', 1, '2020-05-29T03:50:25Z', '2020-05-29T03:50:25Z', 123412, 150, 5, 1, 'testcompleted'),
     ('Pikachu', 1, 'Sun', 1, '2023-05-22T03:50:25Z', null, 4233, 50, 5, 1, 'testactive');
     
