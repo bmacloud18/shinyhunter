@@ -13,6 +13,14 @@ router.use(express.json());
 // const {tokenMiddleware} = require('../middleware/tokenMiddleware.js');
 
 //get a hunt by its id
+router.get('/hunt', tokenMiddleware, (req, res) => {
+    console.log('hunt point hit');
+    HuntDAO.getAllHunts().then(hunts => {
+        res.json(sortHunts(hunts));
+    });
+});
+
+//get a hunt by its id
 router.get('/hunt/:id', tokenMiddleware, (req, res) => {
     const huntId = req.params.id;
 

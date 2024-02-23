@@ -2,25 +2,6 @@
 //Defines a clean pokemon object for frontend use
 import HTTPclient from './HTTPclient.js';
 
-function getGames(pokemon) {
-    let ret = [];
-    for (g in pokemon.game_indices)
-    {
-        ret.push(g.version.name);
-    }
-    return ret;
-}
-
-//cleans up the types array from PokeAPI
-function getTypes(pokemon) {
-    let ret = [];
-    for (t in pokemon.types)
-    {
-        ret.push(t.type.name);
-    }
-    return ret;
-}
-
 export default {
 
     /*//////\\\\\\*\
@@ -106,15 +87,19 @@ export default {
     //Hunt Routes\\
     \*\\\\\///////*/
 
+    getAllHunts: async() => {
+        return HTTPclient.get('hunt');
+    },
+
     getCurrentUserHunts: async() => {
         return HTTPclient.get('hunt/users/current');
     },
 
-    getHuntById: async() => {
+    getHuntById: async(id) => {
         return HTTPclient.get(`hunt/${id}`);
     },
 
-    getHuntsByUser: async() => {
+    getHuntsByUser: async(id) => {
         return HTTPclient.get(`hunt/users/id/${id}`)
     },
 

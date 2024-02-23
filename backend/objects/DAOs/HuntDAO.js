@@ -21,6 +21,19 @@ function validateStartDate(date_string) {
     return date_string;
 }
 
+//get all hunts
+async function getAllHunts() {
+    return query('SELECT * FROM hunt').then(({results}) => {
+        const hunts = results.map(h => new Hunt(h));
+        if (hunts.length > 0) {
+            return hunts;
+        }
+        else {
+            throw new Error("No Hunts Found");
+        }
+    });
+};
+
 //get hunt by id
 async function getHuntById(id) {
     return query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
@@ -80,6 +93,7 @@ async function updateHunt(id, start_date, count, increment, nickname) {
 }
 
 export {
+    getAllHunts,
     getHuntById,
     getHuntsByUser,
     createNewHunt,

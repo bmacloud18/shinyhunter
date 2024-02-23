@@ -17,10 +17,9 @@ export default class Hunt {
 
     constructor (data) {
         this.id = data.hnt_id;
-        this.pkm = data.pkm_id;
-        this.nickname = data.hnt_nnm;
+        this.pkm = data.pkm_name;
         this.user = data.usr_id;
-        this.game = data.gam_id;
+        this.game = data.gam_name;
         this.start_date_string = data.hnt_start_date_string;
         this.start_date_display = convertDate(data.hnt_start_date_string);
         this.end_date_string = data.hnt_end_date_string;
@@ -30,6 +29,7 @@ export default class Hunt {
         this.count = data.hnt_count;
         this.increment = data.hnt_inc;
         this.charm = data.hnt_charm;
+        this.nickname = data.hnt_nnm;
     }
 };
 

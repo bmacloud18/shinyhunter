@@ -24,15 +24,56 @@ api.getCurrentUser().then(currentuser => {
             // posts(user);
             profileDetails(currentuser, user);
             console.log('user profile');
+        }).catch((err) => {
+            throw new Error("Error Occurred: " + err.message);
         });
     }
+}).catch((err) => {
+    throw new Error("Error Occurred: " + err.message);
 });
 
-// document.addEventListener('DOMContentLoaded', function () {
+
+
+function createHunt(hunt, pkm, active) {
+    const section = document.createElement('li');
+
+    const date_header = document.createElement('h2');
+    date_header.textContent = (active) ? hunt.start_date_display : hunt.end_date_display;
+
+    const name_header = document.createElement('h1');
+    name_header.textContent = pkm.name;
+    if (hunt.nickname) {
+        name_header.textContent = hunt.nickname;
+    }
+
+    const div = document.createElement('div');
+    div.classList.add('hunt_details');
+    const sprite = document.createElement('img');
+    sprite.alt = 'Shiny Sprite';
+    const spritelink = document.createElement('a');
+    if(active && currentuserprofile) {
+        spritelink.href = './activehunt?id=' + hunt.id;
+    }
+    else {
+        spritelink.href = './hunt?id=' + hunt.id;
+    }
+    sprite.src = pkm.avatar;
+    sprite.classList.add('pkm_pic')
+    spritelink.append(sprite);
+    div.append(sprite);
+    const elapsed_time = document.createElement('span');
+    elapsed_time.textContent = hunt.hunt_time_display;
+    div.append(elapsed_time);
+    const count = document.createElement('span');
+    count.textContent = hunt.count;
+    div.append(count);
 
     
-// });
 
+    section.append(name_header, date_header, div);
+    section.style.color = pkm.color;
+    return section;
+}
 
 
 //generate header
@@ -201,7 +242,6 @@ async function profileDetails(currentuser, user) {
     }
     else {
         api.getCurrentUserHunts().then(hunts => {
-            console.log(hunts);
             let alreadyFollowing = false;
             // following.forEach(follow => { 
             //     if (follow.id == user.id) {
@@ -235,49 +275,42 @@ async function profileDetails(currentuser, user) {
     }
     
     //getting and propogating following list
-    let activehunts = document.querySelector(".active");
-    let completedhunts = document.querySelector(".completed");
-    followinglist.innerHTML = '<h3>Following</h3>';
-    api.getHuntsByUser(user.id).then(hunts => {
+    let activehunts = document.querySelector("#active");
+    let completedhunts = document.querySelector("#completed");
+    let huntPromises = [];
+    api.getAllHunts().then(hunts => {
         // create a hunt container/object
-        hunts.forEach(hunt => {
+        huntPromises = hunts.map(hunt => {
             const name = hunt.pkm;
-            let mon;
-            let type1;
-            let type2;
-
-            api.getPokemonByName(name).then(pkm => {
-                mon = pkm;
+            // Return a promise for each getPokemonByName call
+            return api.getPokemonByName(name.toLowerCase()).then(pkm => {
+                return {hunt, pkm};
+            }).catch(err => {
+                console.log('API error');
+                throw new Error("Couldn't find pokemon - " + err.message);
             });
-            
-            type1 = mon.types[0].type.name;
-            if (mon.types[1].type.name != null)
-                type2 = mon.types[1].type.name;
-
-            let li = document.createElement('li');
-
-            let active = hunt.end_date_string == null;
-            const imglink = document.createElement('a');
-            const img = document.createElement('img');
-            if(active && currentuserprofile) {
-                imglink.href = './activehunt?id=' + hunt.id;
-            }
-            else {
-                imglink.href = './hunt?id=' + hunt.id;
-            }
-            img.src = mon.sprites.front_shiny;
-            img.classList.add('pkm_pic')
-            imglink.append(img);
-            li.append(imglink);
-            li.append(`${name}` + '  ' + `${hunt.count}`);
-
-            if (active) {
-                activehunts.appendChild(li);
-            }
-            else {
-                completedhunts.appendChild(li);
-            }
-            
         });
+
+        // Wait for all promises to resolve
+        Promise.all(huntPromises).then(results => {
+            results.forEach(({ hunt, pkm }) => {
+                const active = hunt.end_date_string == null;
+                console.log(pkm, hunt, active);
+
+                const section = createHunt(hunt, pkm, active);
+
+                if (active) {
+                    activehunts.appendChild(section);
+                }
+                else {
+                    completedhunts.appendChild(section);
+                }
+            });
+        }).catch(err => {
+            throw new Error("Error occurred: " + err.message);
+        });
+
+    }).catch((err) => {
+        throw new Error("Error Occurred: " + err.message);
     });
 }

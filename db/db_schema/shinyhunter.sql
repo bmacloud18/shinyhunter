@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS `method` (
     `mtd_odds` DECIMAL(9, 9) unsigned NOT NULL,
     PRIMARY KEY (`mtd_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DELETE FROM `method`;
+
+INSERT INTO `method` (`mtd_name`, `mtd_odds`) VALUES ('masuda', 0.001953125);
 
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -32,9 +35,9 @@ DELETE FROM `user`;
 
 CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `pkm_name` int(10) unsigned NOT NULL,
+    `pkm_name` varchar(18) NOT NULL,
     `usr_id` int(10) unsigned NOT NULL,
-    `gam_name` int(10) unsigned NOT NULL,
+    `gam_name` varchar(18)  NOT NULL,
     `mtd_id` int(10) unsigned NOT NULL,
     `hnt_start_date_string` varchar(100) NOT NULL,
     `hnt_end_date_string` varchar(100) DEFAULT NULL,
@@ -49,8 +52,14 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     CONSTRAINT `FK_USR_ID` FOREIGN KEY (`usr_id`) REFERENCES `user` (`usr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     PRIMARY KEY (`hnt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 DELETE FROM `hunt`;
+
+INSERT INTO `hunt` (`pkm_name`, `usr_id` , `gam_name`, `mtd_id`, `hnt_start_date_string`, `hnt_end_date_string`, `hnt_time_ms`, `hnt_count`, `hnt_inc`, `hnt_charm`, `hnt_nnm`) VALUES
+    ('Pikachu', 1, 'Sun', 1, '2020-05-29T03:50:25Z', '2020-05-29T03:50:25Z', 123412, 150, 5, 1, 'testcompleted'),
+    ('Pikachu', 1, 'Sun', 1, '2023-05-22T03:50:25Z', null, 4233, 50, 5, 1, 'testactive');
+    
+
+
 
 
 
