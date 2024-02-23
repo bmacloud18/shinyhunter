@@ -68,11 +68,16 @@ function createHunt(hunt, pkm, active) {
     const count = document.createElement('span');
     count.classList.add('count_display');
     count.textContent = hunt.count;
-    div.append(count);
 
     
+    const left = document.createElement('div');
+    left.classList.add('left');
+    left.append(name_header, date_header, div);
+    const right = document.createElement('div');
+    right.classList.add('right');
+    right.append(count);
 
-    section.append(name_header, date_header, div);
+    section.append(left, right);
     section.style.color = pkm.color;
     return section;
 }
