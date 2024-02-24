@@ -16,6 +16,7 @@ if (!newhunt) {
     dates.style.display = 'none';
 }
 else {
+    dates.style.display = 'none';
     const allMons = await api.getAllMons();
     const allGames = await api.getAllGames();
     // const allMethods = await api.getAllMethods();
