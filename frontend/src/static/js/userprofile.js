@@ -9,21 +9,22 @@ let id = parameters.get('id');
 let currentuserprofile = false;
 
 api.getCurrentUser().then(currentuser => {
-    console.log(currentuser);
     header(currentuser);
-    console.log('header filled');
     const cid = currentuser.id;
     if (cid == id) {
         // posts(currentuser);
         currentuserprofile = true;
+        const newhunt = document.getElementById('huntbtndiv');
+        newhunt.style.visibility = 'visible';
+        newhunt.addEventListener('click', (e) => {
+            document.location = './newhunt';
+        });
         profileDetails(currentuser, currentuser);
-        console.log('current user profile');
     }
     else {
         api.getUserById(id).then(user => {
             // posts(user);
             profileDetails(currentuser, user);
-            console.log('user profile');
         }).catch((err) => {
             throw new Error("Error Occurred: " + err.message);
         });
@@ -71,7 +72,7 @@ function createHunt(hunt, pkm, active) {
 
     const left = document.createElement('div');
     left.classList.add('left');
-    left.append(sprite, elapsed_time);
+    left.append(sprite);
 
     const right = document.createElement('div');
     right.classList.add('right');
@@ -83,7 +84,7 @@ function createHunt(hunt, pkm, active) {
     
     const main = document.createElement('div');
     main.classList.add('main');
-    main.append(name_header, date_header, div);
+    main.append(name_header, date_header, elapsed_time, div);
 
     main.addEventListener('click', (e) => {
         document.location = './hunt?id=' + hunt.id;;
@@ -99,7 +100,7 @@ function createHunt(hunt, pkm, active) {
 function header(user) {
     let logoutlink = document.createElement('button');
     logoutlink.innerHTML = "Logout";
-    logoutlink.classList.add('logoutbtn');
+    logoutlink.classList.add('button');
 
     let logo = document.querySelector('.hheader');
     logo.addEventListener('click', e => {
@@ -127,6 +128,94 @@ function header(user) {
     document.querySelector('.lastname').innerHTML = `${user.last_name}`;
     document.querySelector('.logoutbutton').appendChild(logoutlink)
 }
+
+
+async function profileDetails(currentuser, user) {
+    //setting profile details left side
+    document.querySelector('.userpfp').innerHTML = `<img src="${user.avatar}" alt="Image Preview" id="img">`;
+    document.querySelector('.fullname').innerHTML = `${user.first_name}` + ` ` + `${user.last_name}`;
+    document.querySelector('.username').innerHTML = `@` + `${user.username}`;
+
+    //setting follow button on right side of profile details
+    if (currentuserprofile) {
+        let editbutton = document.querySelector('#followbutton');
+        editbutton.innerText = "Edit Profile";
+    }
+    else {
+        api.getCurrentUserHunts().then(hunts => {
+            let alreadyFollowing = false;
+            // following.forEach(follow => { 
+            //     if (follow.id == user.id) {
+            //         alreadyFollowing = true;
+            //     }
+            // });
+            let followbutton = document.querySelector('#followbutton');
+            if(alreadyFollowing) {
+                followbutton.innerText = "Unfollow"
+                followbutton.addEventListener('click', e => {
+                    api.unfollow(user.id).then(message => {
+                        profileDetails(currentuser, user);
+                    }).catch((error) => {
+                        console.log("could not unfollow" + user.username)
+                    });
+                });
+            }
+            else {
+                followbutton.innerText = "Follow"
+                // followbutton.addEventListener('click', e => {
+                //     api.follow(user.id).then(message => {
+                //         console.log(message);
+                //         profileDetails(currentuser, user);
+                //     }).catch((error) => {
+                //         console.log("could not follow " + user.username)
+                //     });
+                // });
+            }
+        });
+    }
+    
+    //getting and propogating following list
+    let activehunts = document.querySelector("#active");
+    let completedhunts = document.querySelector("#completed");
+    let huntPromises = [];
+    api.getHuntsByUser(user.id).then(hunts => {
+        // create a hunt container/object
+        huntPromises = hunts.map(hunt => {
+            const name = hunt.pkm;
+            // Return a promise for each getPokemonByName call
+            return api.getPokemonByName(name.toLowerCase()).then(pkm => {
+                return {hunt, pkm};
+            }).catch(err => {
+                console.log('API error');
+                throw new Error("Couldn't find pokemon - " + err.message);
+            });
+        });
+
+        // Wait for all promises to resolve
+        Promise.all(huntPromises).then(results => {
+            results.forEach(({ hunt, pkm }) => {
+                const active = hunt.end_date_string == null;
+
+                const section = createHunt(hunt, pkm, active);
+
+                if (active) {
+                    activehunts.appendChild(section);
+                }
+                else {
+                    completedhunts.appendChild(section);
+                }
+            });
+        }).catch(err => {
+            throw new Error("Error occurred: " + err.message);
+        });
+
+    }).catch((err) => {
+        throw new Error("Error Occurred: " + err.message);
+    });
+}
+
+
+
 
 // -> for later
 
@@ -248,88 +337,4 @@ function header(user) {
 //     howls();
 // }
 
-async function profileDetails(currentuser, user) {
-    //setting profile details left side
-    document.querySelector('.userpfp').innerHTML = `<img src="${user.avatar}" alt="Image Preview" id="img">`;
-    document.querySelector('.fullname').innerHTML = `${user.first_name}` + ` ` + `${user.last_name}`;
-    document.querySelector('.username').innerHTML = `@` + `${user.username}`;
 
-    //setting follow button on right side of profile details
-    if (currentuserprofile) {
-        let editbutton = document.querySelector('#followbutton');
-        editbutton.innerText = "Edit Profile";
-    }
-    else {
-        api.getCurrentUserHunts().then(hunts => {
-            let alreadyFollowing = false;
-            // following.forEach(follow => { 
-            //     if (follow.id == user.id) {
-            //         alreadyFollowing = true;
-            //     }
-            // });
-            let followbutton = document.querySelector('#followbutton');
-            if(alreadyFollowing) {
-                followbutton.innerText = "Unfollow"
-                followbutton.addEventListener('click', e => {
-                    api.unfollow(user.id).then(message => {
-                        console.log(message);
-                        profileDetails(currentuser, user);
-                    }).catch((error) => {
-                        console.log("could not unfollow" + user.username)
-                    });
-                });
-            }
-            else {
-                followbutton.innerText = "Follow"
-                // followbutton.addEventListener('click', e => {
-                //     api.follow(user.id).then(message => {
-                //         console.log(message);
-                //         profileDetails(currentuser, user);
-                //     }).catch((error) => {
-                //         console.log("could not follow " + user.username)
-                //     });
-                // });
-            }
-        });
-    }
-    
-    //getting and propogating following list
-    let activehunts = document.querySelector("#active");
-    let completedhunts = document.querySelector("#completed");
-    let huntPromises = [];
-    api.getAllHunts().then(hunts => {
-        // create a hunt container/object
-        huntPromises = hunts.map(hunt => {
-            const name = hunt.pkm;
-            // Return a promise for each getPokemonByName call
-            return api.getPokemonByName(name.toLowerCase()).then(pkm => {
-                return {hunt, pkm};
-            }).catch(err => {
-                console.log('API error');
-                throw new Error("Couldn't find pokemon - " + err.message);
-            });
-        });
-
-        // Wait for all promises to resolve
-        Promise.all(huntPromises).then(results => {
-            results.forEach(({ hunt, pkm }) => {
-                const active = hunt.end_date_string == null;
-                console.log(pkm, hunt, active);
-
-                const section = createHunt(hunt, pkm, active);
-
-                if (active) {
-                    activehunts.appendChild(section);
-                }
-                else {
-                    completedhunts.appendChild(section);
-                }
-            });
-        }).catch(err => {
-            throw new Error("Error occurred: " + err.message);
-        });
-
-    }).catch((err) => {
-        throw new Error("Error Occurred: " + err.message);
-    });
-}

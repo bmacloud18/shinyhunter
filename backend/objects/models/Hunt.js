@@ -30,12 +30,15 @@ export default class Hunt {
         this.hunt_time_display = convertTime(data.hnt_time_s);
         this.count = data.hnt_count;
         //limit count to 1 million
-        if (this.count > 1000000) {
-            this.count = 999999
+        if (this.count > 100000) {
+            this.count = 99999;
         }
         this.increment = data.hnt_inc;
         this.charm = data.hnt_charm;
         this.nickname = data.hnt_nnm;
+        if (this.nickname == null) {
+            this.nickname = this.pkm;
+        }
     }
 };
 
