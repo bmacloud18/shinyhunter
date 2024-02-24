@@ -85,6 +85,10 @@ function createHunt(hunt, pkm, active) {
     main.classList.add('main');
     main.append(name_header, date_header, div);
 
+    main.addEventListener('click', (e) => {
+        document.location = './hunt?id=' + hunt.id;;
+    });
+
     section.append(main);
     section.style.color = pkm.color;
     return section;

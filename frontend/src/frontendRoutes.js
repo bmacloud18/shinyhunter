@@ -28,14 +28,14 @@ router.get('/userprofile', (req, res) => {
     res.sendFile(`${html_dir}userprofile.html`);
 });
 
-// active hunt
+// user active hunt (interactive)
 router.get('/activehunt', (req, res) => {
     res.sendFile(`${html_dir}activehunt.html`);
 });
 
-// finished hunt
-router.get( '/finishedhunt', ( req, res ) => {
-    res.sendFile(`${html_dir}finishedhunt.html`);
+// hunt (noninteractive)
+router.get( '/hunt', ( req, res ) => {
+    res.sendFile(`${html_dir}hunt.html`);
 });
 
 // account settings
