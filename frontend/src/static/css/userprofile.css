@@ -62,7 +62,7 @@ main {
     justify-content: flex-start;
     align-items: center;
     border: 3px solid black;
-    background-color: rgba(219, 214, 215, 0.116);
+    background-color: rgba(219, 214, 215, 0.952);
 }
 
 .huntlist {
@@ -72,7 +72,7 @@ main {
     overflow-x: hidden;
     overflow-y: auto;
     border: 5px solid black;
-    background-color: rgba(219, 214, 215, 0.116);
+    background-color: rgba(7, 2, 3, 0.767);
 }
 
 li {
@@ -81,20 +81,39 @@ li {
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: flex-start;
-    min-width: 100%;
-    min-height: 75%;
-    margin: 1em;
+    border: 1px solid black;
+    margin: 1em 2em 1em 2em;
 }
 
-/* h1 {
-    grid-area: "nnm";
-    align-self: flex-start;
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-h2 {
-    grid-area: "date";
-    align-self: flex-start;
-} */
+.hunt_details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content:space-between;
+}
+
+.right {
+    align-self: center;
+}
+
+.count_display {
+    margin-right: .25em;
+    font-size: 200%;
+}
+
+.date_display {
+    margin-left: 1em;
+}
+
+.name_display {
+    margin-left: 1em;
+}
 
 #active {
     grid-area: "active";

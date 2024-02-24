@@ -20,13 +20,19 @@ export default class Hunt {
         this.pkm = data.pkm_name;
         this.user = data.usr_id;
         this.game = data.gam_name;
+        //dates stored as ISO 8601 string for some functions and also converted to a display string field
         this.start_date_string = data.hnt_start_date_string;
         this.start_date_display = convertDate(data.hnt_start_date_string);
         this.end_date_string = data.hnt_end_date_string;
         this.end_date_display = convertDate(data.hnt_end_date_string);
+        //time stored in seconds
         this.hunt_time = data.hnt_time_s;
         this.hunt_time_display = convertTime(data.hnt_time_s);
         this.count = data.hnt_count;
+        //limit count to 1 million
+        if (this.count > 1000000) {
+            this.count = 999999
+        }
         this.increment = data.hnt_inc;
         this.charm = data.hnt_charm;
         this.nickname = data.hnt_nnm;
@@ -48,15 +54,15 @@ function convertTime(s) {
     const formattedTime = [];
 
     if (hours > 0) {
-        formattedTime.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`);
+        formattedTime.push(`${hours}h`);
     }
 
     if (minutes > 0) {
-        formattedTime.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`);
+        formattedTime.push(`${minutes}m`);
     }
 
     if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds} ${seconds === 1 ? 'second' : 'seconds'}`);
+        formattedTime.push(`${seconds}s`);
     }
 
     return formattedTime.join(', ');

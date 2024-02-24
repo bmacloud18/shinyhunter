@@ -37,10 +37,12 @@ api.getCurrentUser().then(currentuser => {
 function createHunt(hunt, pkm, active) {
     const section = document.createElement('li');
 
-    const date_header = document.createElement('h2');
+    const date_header = document.createElement('span');
+    date_header.classList.add('date_display');
     date_header.textContent = (active) ? hunt.start_date_display : hunt.end_date_display;
 
-    const name_header = document.createElement('h1');
+    const name_header = document.createElement('span');
+    name_header.classList.add('name_display');
     name_header.textContent = pkm.name;
     if (hunt.nickname) {
         name_header.textContent = hunt.nickname;
@@ -60,24 +62,30 @@ function createHunt(hunt, pkm, active) {
     sprite.src = pkm.avatar;
     sprite.classList.add('pkm_pic')
     spritelink.append(sprite);
-    div.append(sprite);
     const elapsed_time = document.createElement('span');
     elapsed_time.textContent = hunt.hunt_time_display;
     elapsed_time.classList.add('time_display');
-    div.append(elapsed_time);
     const count = document.createElement('span');
     count.classList.add('count_display');
     count.textContent = hunt.count;
 
-    
     const left = document.createElement('div');
     left.classList.add('left');
-    left.append(name_header, date_header, div);
+    left.append(sprite, elapsed_time);
+
     const right = document.createElement('div');
     right.classList.add('right');
     right.append(count);
 
-    section.append(left, right);
+
+    div.append(left, right);
+
+    
+    const main = document.createElement('div');
+    main.classList.add('main');
+    main.append(name_header, date_header, div);
+
+    section.append(main);
     section.style.color = pkm.color;
     return section;
 }
