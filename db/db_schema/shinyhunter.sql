@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_end_date_string` varchar(100) DEFAULT NULL,
     `hnt_time_s` int(10) unsigned NOT NULL DEFAULT 0,
     `hnt_count` int(6) unsigned NOT NULL DEFAULT 0,
-    `hnt_inc` int(2) unsigned NOT NULL,
+    `hnt_inc` int(2) unsigned NOT NULL DEFAULT 1,
     `hnt_charm` bit NOT NULL DEFAULT 0,
     `hnt_nnm` varchar(18) DEFAULT NULL,
     KEY `FK_MTD_ID` (`mtd_id`),

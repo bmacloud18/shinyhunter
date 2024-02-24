@@ -6,6 +6,9 @@ body {
 .body {
     background-color: rgba(156, 9, 38, 0.767);
     min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    
 }
 
 main {

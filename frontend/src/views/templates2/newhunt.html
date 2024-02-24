@@ -3,21 +3,39 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Sign-Up</title>
-        <link rel="stylesheet" href="css/newhunt.css" />
+        <title>New Hunt</title>
+        <link rel="stylesheet" href="css/newhunt.css"/>
+        <link rel="stylesheet" href="css/header.css"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
         <script src="js/newhunt.js" type="module"></script>
     </head>
 
     <body class="body">
+        <div class="container">
+            <header id="mainheader" class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+            <h1 class="hheader">
+                ShinyHunter
+            </h1>
+        
+            <div class="userdetails">
+                <a class="pfp"></a>
+                <div class = "fields">
+                    <div class="firstname"></div>
+                    <div class="lastname"></div>
+                </div>
+                <div class="logoutbutton"></div>
+                </div>
+            </header>
+        </div>
+
         <main class="form-signin vw-100 m-auto">
             <form>
                 <div class="newhuntheader">
                     <h1 class="h3 mb-3 fw-normal text-center">New Hunt</h1>
                 </div>
 
-                <div class="selections">
+                <div class="selections" id="selections">
                     <div class="selection">
                         <select id="pokemonSelect"></select>
                         <label for="nickname">Pokemon</label>

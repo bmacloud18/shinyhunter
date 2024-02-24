@@ -103,14 +103,15 @@ export default {
         return HTTPclient.get(`hunt/users/id/${id}`)
     },
 
-    createHunt: async(userId, pkm, game, method, start_date, end_date, count, increment, charm, nickname) => {
+    createHunt: async(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname) => {
         const data = {
             userId: userId,
             pkm: pkm,
             game: game,
             method: method,
             start_date: start_date,
-            end_date, end_date,
+            end_date: end_date,
+            time: time,
             count: count,
             increment: increment,
             charm: charm,

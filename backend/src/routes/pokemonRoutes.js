@@ -92,8 +92,8 @@ router.get('/pokemon', tokenMiddleware, async (req, res) => {
         limit: 1100,
     }
 
-    pokedex.getPokemonList(interval).then(results => {
-        res.json(cleanMons(results.results));
+    pokedex.getPokemonsList(interval).then(results => {
+        res.json((results.results));
     });
 });
 
@@ -104,7 +104,7 @@ router.get('/pokemon/games', tokenMiddleware, (req, res) => {
     }
 
     pokedex.getVersionsList(interval).then(results => {
-        res.json(cleanGames(results.results));
+        res.json(results.results);
     });
 });
 
