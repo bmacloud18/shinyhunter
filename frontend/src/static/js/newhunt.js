@@ -2,23 +2,44 @@
 
 import api from './APIclient.js';
 
-const newhunt = true;
 const url = window.location.href;
-console.log(url);
 
-const selections = document.getElementById('selections');
 
-const pokemon = document.getElementById('pokemonSelect');
-const game = document.getElementById('gameSelect');
-const method = document.getElementById('methodSelect');
-
-if (!newhunt) {
-    selections.style.display = 'none';
+function getPage(url) {
+    const lastIndex = url.lastIndexOf('/');
+    
+    if (lastIndex !== -1) {
+        return url.slice(lastIndex + 1);
+    }
+    else {
+        return url;
+    }
 }
-else {
+
+const page = getPage(url);
+
+
+const nickname = document.getElementById('nickname');
+
+const increment = document.getElementById('increment');
+const charm = document.getElementById('charm');
+
+const count = document.getElementById('count');
+const time = document.getElementById('time');
+
+const submit = document.getElementById('submitbutton')
+
+const user = await api.getCurrentUser();
+header(user);
+
+if (page == 'importhunt' || page == 'newhunt') {
+    const pokemon = document.getElementById('pokemonSelect');
+    const game = document.getElementById('gameSelect');
+    const method = document.getElementById('methodSelect');
+
     const allMons = await api.getAllMons();
     const allGames = await api.getAllGames();
-    // const allMethods = await api.getAllMethods();
+    const allMethods = await api.getAllMethods();
 
     console.log(allMons, allGames);
 
@@ -34,42 +55,63 @@ else {
         game.add(option);
     });
 
-    // allMethods.forEach(m => {
-    //     const option = document.createElement('option');
-    //     option.text = m.name;
-    //     method.add(option);
-    // });
+    allMethods.forEach(m => {
+        const option = document.createElement('option');
+        option.text = m.name;
+        option.value = m.id;
+        method.add(option);
+    });
 }
 
+if (page == 'importhunt') {
+    const pokemon = document.getElementById('pokemonSelect');
+    const game = document.getElementById('gameSelect');
+    const method = document.getElementById('methodSelect');
+    const startdate = document.getElementById('startdate');
+    const enddate = document.getElementById('enddate');
 
-
-const nickname = document.getElementById('nickname');
-
-const increment = document.getElementById('increment');
-const charm = document.getElementById('charm');
-
-const startdate = document.getElementById('startdate');
-const enddate = document.getElementById('enddate');
-
-const count = document.getElementById('count');
-const time = document.getElementById('time');
-
-const starthunt = document.getElementById('startbutton')
-
-api.getCurrentUser().then(user => {
-    header(user);
-    starthunt.addEventListener('click', e => {
+    submit.addEventListener('click', e => {
         if (pokemon.value != null && game.value != null && method.value != null) {
             api.createHunt(user.id, pokemon.value, game.value, method.value, startdate.value, enddate.value, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
                 const id = hunt.id;
-                document.location = './activehunt?id=' + id;
+                document.location = './hunt?id=' + id;
+                console.log('new hunt imported');
+            }).catch((err) => {
+                throw new Error('Error Occurred Creating Hunt: ' + err.message)
+            });
+        }
+    });
+}
+else if (page == 'newhunt') {
+    console.log(page);
+    const pokemon = document.getElementById('pokemonSelect');
+    const game = document.getElementById('gameSelect');
+    const method = document.getElementById('methodSelect');
+    submit.addEventListener('click', e => {
+        e.preventDefault();
+        if (pokemon.value != null && game.value != null && method.value != null) {
+            api.createHunt(user.id, pokemon.value, game.value, method.value, new Date(), null, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
+                console.log(hunt);
+                const id = hunt.id;
+                // document.location = './activehunt?id=' + id;
                 console.log('new hunt started');
             }).catch((err) => {
                 throw new Error('Error Occurred Creating Hunt: ' + err.message)
             });
         }
     });
-});
+}
+else if (page == 'huntsettings') {
+    submit.addEventListener('click', e => {
+        api.updateHunt(user.id, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
+            const id = hunt.id;
+            document.location = './activehunt?id=' + id;
+            console.log('hunt updated');
+        }).catch((err) => {
+            throw new Error('Error Occurred Creating Hunt: ' + err.message)
+        });
+    });
+}
 
 function header(user) {
     let logoutlink = document.createElement('button');
@@ -78,14 +120,14 @@ function header(user) {
 
     let logo = document.querySelector('.hheader');
     logo.addEventListener('click', e => {
-        document.location = './login';
+        // document.location = './login';
     });
     
     logoutlink.addEventListener("click", e => {
         e.preventDefault();
         api.logout().then(() => {
             localStorage.removeItem('user');
-            document.location = './login';
+            // document.location = './login';
         });
     });
 

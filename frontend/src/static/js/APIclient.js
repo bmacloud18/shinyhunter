@@ -118,7 +118,7 @@ export default {
             nickname: nickname
         };
 
-        return HTTPclient.post('/hunt', data);
+        return HTTPclient.post('hunt', data);
     },
 
     completeHunt: async(id, end_date) => {
@@ -140,6 +140,18 @@ export default {
         };
 
         return HTTPclient.put(`hunt/${id}`, data)
+    },
+
+    /*//////\\\\\\*\
+    //Method Routes\\
+    \*\\\\\\//////*/
+
+    getAllMethods: async() => {
+        return HTTPclient.get('method');
+    },
+
+    getMethodById: async(id) => {
+        return HTTPclient.get(`method/${id}`);
     }
 
 };

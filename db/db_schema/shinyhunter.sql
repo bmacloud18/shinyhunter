@@ -10,12 +10,13 @@
 CREATE TABLE IF NOT EXISTS `method` (
     `mtd_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `mtd_name` varchar(100) NOT NULL,
-    `mtd_odds` DECIMAL(9, 9) unsigned NOT NULL,
+    `mtd_odds` int(4) unsigned NOT NULL,
+    `mtd_charm_odds` int(4) unsigned NOT NULL,
     PRIMARY KEY (`mtd_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `method`;
 
-INSERT INTO `method` (`mtd_name`, `mtd_odds`) VALUES ('masuda', 0.001953125);
+INSERT INTO `method` (`mtd_name`, `mtd_odds`, `mtd_charm_odds`) VALUES ('Masuda', 683, 512);
 
 
 CREATE TABLE IF NOT EXISTS `user` (

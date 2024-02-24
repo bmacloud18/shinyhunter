@@ -13,7 +13,7 @@ const last_name = document.getElementById('last_name');
 
 document.addEventListener('DOMContentLoaded', function () {
     signup.addEventListener('click', e => {
-        if (first_name.value.length > 1 && last_name.value.length > 1 && username.value > 4 && password.value > 3) {
+        if (first_name.value.length > 1 && last_name.value.length > 1 && username.value.length > 4 && password.value.length > 3) {
             api.register(first_name.value, last_name.value, username.value, password.value).then(user => {
                 const id = user.id;
                 document.location = './userprofile?id=' + id;

@@ -62,18 +62,24 @@ async function getHuntsByUser(user_id) {
 
 //create new hunt, leave end_date_string null if hunt is active
 async function createNewHunt(user, pokemon, game, method, start_date, end_date, time, count, increment, charm, nickname) {
+    let start_date_string;
+    let end_date_string;
     if (start_date != null) {
-        const start_date_string = new Date(start_date).toISOString();
+        start_date_string = new Date(start_date).toISOString();
     }
     if (end_date != null) {
-        const end_date_string = new Date(end_date).toISOString();
+        end_date_string = new Date(end_date).toISOString();
     }
 
-    return query('INSERT INTO hunt (usr_id, pkm_name, gam_name, mtd_id, hnt_start_date_string, hnt_end_date_string, htn_time_s, hnt_count, hnt_inc, htn_charm, hnt_nnm VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [user, pokemon, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname]).then(({results}) => {
+    console.log(user, pokemon, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname);
+
+    return query('INSERT INTO hunt (pkm_name, usr_id, gam_name, mtd_id, hnt_start_date_string, hnt_time_s, hnt_count, hnt_inc, hnt_charm, hnt_nnm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    [pokemon, user, game, method, start_date_string, time, count, increment, charm, nickname]).then(({results}) => {
         if (results.insertId) {
             return getHuntById(results.insertId);
         }
+    }).catch( (err) => {
+        throw new Error("Oops! error occurred: " + err.message);
     });
 };
 

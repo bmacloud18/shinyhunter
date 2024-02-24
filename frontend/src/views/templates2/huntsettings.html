@@ -3,43 +3,60 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Sign-Up</title>
-        <link rel="stylesheet" href="css/signup.css" />
+        <title>New Hunt</title>
+        <link rel="stylesheet" href="css/newhunt.css"/>
+        <link rel="stylesheet" href="css/header.css"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-        <script src="js/huntsettings.js" type="module"></script>
+        <script src="js/newhunt.js" type="module"></script>
     </head>
 
     <body class="body">
+        <div class="container">
+            <header id="mainheader" class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+            <h1 class="hheader">
+                ShinyHunter
+            </h1>
+        
+            <div class="userdetails">
+                <a class="pfp"></a>
+                <div class = "fields">
+                    <div class="firstname"></div>
+                    <div class="lastname"></div>
+                </div>
+                <div class="logoutbutton"></div>
+                </div>
+            </header>
+        </div>
+
         <main class="form-signin vw-100 m-auto">
             <form>
-              <!-- <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-              <div class="loginheader">
-                <h1 class="h5 mb-3 fw-normal text-center">ShinyHunter Account Sign Up</h1>
-                <button class="w-100 btn btn-sm btn-primary" type="button" id="signin">or Sign In</button>
-              </div>
-              <div class="nameinput">
+                <div class="newhuntheader">
+                    <h1 class="h3 mb-3 fw-normal text-center">New Hunt</h1>
+                </div>
+
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="first_name" placeholder="First" autocomplete="username" required="true">
-                    <label for="username">First Name</label>
-                  </div>
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="last_name" placeholder="Last" autocomplete="username" required="true">
-                    <label for="username">Last Name</label>
-                  </div>
-              </div>
-              <div class="form-floating">
-                <input type="text" class="form-control" id="username" placeholder="Username" autocomplete="username" required="true">
-                <label for="username">Username</label>
-              </div>
-              <div class="form-floating">
-                <input type="password" class="form-control" id="password" placeholder="Password">
-                <label for="password">Password</label>
-              </div>
-          
-              <div class="checkbox mb-3">
-              </div>
-              <button class="w-100 btn btn-lg btn-primary" type="button" id="signup">Sign Up</button>
+                    <input type="text" class="form-control" id="nickname" placeholder="Nickname" required="true">
+                    <label for="nickname">Nickname</label>
+                </div>
+
+                <div class="huntdetails">
+                    <div class="detail" id="top">
+                        <input type="number" class="topin" id="increment" placeholder="Increment">
+                        <div class="charmcontainer">
+                            <input type="checkbox" class="topin" id="charm">
+                            <label for="charm">Charm?</label>
+                        </div>
+                    </div>
+                    <div class="detail" id="bottom">
+                        <input type="number" class="bottomin" id="count" placeholder="Count">
+                        <input type="number" class="bottomin" id="time" placeholder="Time (in sec)">
+                    </div>
+                </div>
+            
+                <div class="checkbox mb-3">
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Update Hunt</button>
             </form>
-          </main>
+        </main>
     </body>

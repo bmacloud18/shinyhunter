@@ -72,39 +72,46 @@ function convertTime(s) {
 }
 
 function convertDate(date) {
-    let eventdate = new Date(date)
-    let datestring = eventdate.toDateString();
-    let timestring = eventdate.toLocaleTimeString();
-  
-    let dws = 0;
-    let idx = 0;
-    let fullstring = "";
-    let dcc = datestring.charAt(idx);
-    while (dws < 3)
-    {
-        if (dcc == " ") {
-            dws++;
+    console.log(date);
+    if (date != null) {
+        let eventdate = new Date(date)
+        let datestring = eventdate.toDateString();
+        let year = date.substring(0, 4);
+        // let timestring = eventdate.toLocaleTimeString();
+      
+        let dws = 0;
+        let idx = 0;
+        let fullstring = "";
+        let dcc = datestring.charAt(idx);
+        while (dws < 3)
+        {
+            if (dcc == " ") {
+                dws++;
+            }
+            fullstring = fullstring + dcc;
+            idx++;
+            dcc = datestring.charAt(idx);
         }
-        fullstring = fullstring + dcc;
-        idx++;
-        dcc = datestring.charAt(idx);
+      
+        fullstring = fullstring.substring(0, fullstring.length - 1) + ", ";
+      
+        // idx = 0;
+        // let tcol = 0;
+        // let tcc = timestring.charAt(idx);
+        // while (tcol < 2)
+        // {
+        //     if (tcc == ":") {
+        //         tcol++;
+        //     }
+        //     fullstring = fullstring + tcc;
+        //     idx++;
+        //     tcc = timestring.charAt(idx);
+        // }
+      
+        // let timesuffix = timestring.substring(timestring.length - 2, timestring.length) == "PM" ? "pm" : "am";
+        return fullstring.substring(0, fullstring.length) + year;
     }
-  
-    fullstring = fullstring.substring(0, fullstring.length - 1) + ", ";
-  
-    idx = 0;
-    let tcol = 0;
-    let tcc = timestring.charAt(idx);
-    while (tcol < 2)
-    {
-        if (tcc == ":") {
-            tcol++;
-        }
-        fullstring = fullstring + tcc;
-        idx++;
-        tcc = timestring.charAt(idx);
-    }
-  
-    let timesuffix = timestring.substring(timestring.length - 2, timestring.length) == "PM" ? "pm" : "am";
-    return fullstring.substring(0, fullstring.length - 1) + timesuffix;
+
+    return null;
+
 };
