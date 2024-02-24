@@ -3,9 +3,10 @@
 import api from './APIclient.js';
 
 const newhunt = true;
+const url = window.location.href;
+console.log(url);
 
 const selections = document.getElementById('selections');
-const dates = document.getElementById('middle');
 
 const pokemon = document.getElementById('pokemonSelect');
 const game = document.getElementById('gameSelect');
@@ -13,10 +14,8 @@ const method = document.getElementById('methodSelect');
 
 if (!newhunt) {
     selections.style.display = 'none';
-    dates.style.display = 'none';
 }
 else {
-    dates.style.display = 'none';
     const allMons = await api.getAllMons();
     const allGames = await api.getAllGames();
     // const allMethods = await api.getAllMethods();

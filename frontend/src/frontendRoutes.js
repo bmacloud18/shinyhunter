@@ -53,6 +53,11 @@ router.get( '/newhunt', ( req, res ) => {
     res.sendFile(`${html_dir}newhunt.html`);
 });
 
+// import hunt page
+router.get( '/importhunt', ( req, res ) => {
+    res.sendFile(`${html_dir}importhunt.html`);
+});
+
 // successful hunt
 router.get( '/success', ( req, res ) => {
     res.sendFile(`${html_dir}success.html`);
