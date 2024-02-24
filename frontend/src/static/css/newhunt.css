@@ -1,0 +1,109 @@
+html,
+body {
+  height: 100%;
+}
+
+.body {
+    background-color: rgba(156, 9, 38, 0.767);
+    min-width: 100%;
+}
+
+main {
+    background-color: rgba(219, 214, 215, 0.116);
+    border-radius: 10px;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+.form-signin {
+    max-width: 33em;
+    padding: 15px;
+}
+  
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+h1 {
+    font-size: 5pt;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+}
+
+form > * {
+    margin-bottom: 1em;
+}
+
+.selections {
+    width: 75%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: stretch;
+}
+
+.selection {
+    max-height: 3em;
+}
+
+.huntdetails {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: stretch;
+    gap: 1em 0em;
+}
+
+.detail {
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: stretch;
+}
+
+#increment {
+    max-width: 22%;
+}
+
+.charmcontainer {
+    max-width: 5em;
+}
+
+.datecontainer {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: stretch;
+}
+
+.bottomin {
+    max-width: 25%;
+}
+
+#startbutton {
+    background-color: red;
+    border-color: black;
+    color: black;
+    font-size: 2em;
+  }
