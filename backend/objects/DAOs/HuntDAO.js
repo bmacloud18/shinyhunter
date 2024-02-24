@@ -1,5 +1,8 @@
-const query = require('../DBConnection.js').query;
-const Hunt = require('../models/Hunt');
+// const query = require('../DBConnection.js').query;
+// const Hunt = require('../models/Hunt');
+
+import {query} from '../DBConnection.js';
+import Hunt from '../models/Hunt.js';
 
 //unfinished
 function validateEndDate(date_string) {
@@ -17,6 +20,19 @@ function validateStartDate(date_string) {
 
     return date_string;
 }
+
+//get all hunts
+async function getAllHunts() {
+    return query('SELECT * FROM hunt').then(({results}) => {
+        const hunts = results.map(h => new Hunt(h));
+        if (hunts.length > 0) {
+            return hunts;
+        }
+        else {
+            throw new Error("No Hunts Found");
+        }
+    });
+};
 
 //get hunt by id
 async function getHuntById(id) {
@@ -76,7 +92,8 @@ async function updateHunt(id, start_date, count, increment, nickname) {
     })
 }
 
-module.exports = {
+export {
+    getAllHunts,
     getHuntById,
     getHuntsByUser,
     createNewHunt,

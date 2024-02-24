@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
     signin.addEventListener('click', e => {
         api.login(username.value, password.value).then(user => {
             localStorage.setItem('user', JSON.stringify(user));
-            document.location = "./userprofile";
+            const id = user.id;
+            document.location = './userprofile?id=' + id;
             username.setCustomValidity('');
             username.reportValidity();
         }).catch((err) => {

@@ -1,4 +1,4 @@
-module.exports = class Hunt {
+export default class Hunt {
     id = null;
     pkm = null;
     nickname = null;
@@ -17,46 +17,55 @@ module.exports = class Hunt {
 
     constructor (data) {
         this.id = data.hnt_id;
-        this.pkm = data.pkm_id;
-        this.nickname = data.hnt_nnm;
+        this.pkm = data.pkm_name;
         this.user = data.usr_id;
-        this.game = data.gam_id;
+        this.game = data.gam_name;
+        //dates stored as ISO 8601 string for some functions and also converted to a display string field
         this.start_date_string = data.hnt_start_date_string;
         this.start_date_display = convertDate(data.hnt_start_date_string);
         this.end_date_string = data.hnt_end_date_string;
         this.end_date_display = convertDate(data.hnt_end_date_string);
-        this.hunt_time = data.hnt_time_ms;
-        this.hunt_time_display = convertTime(data.hnt_time_ms);
+        //time stored in seconds
+        this.hunt_time = data.hnt_time_s;
+        this.hunt_time_display = convertTime(data.hnt_time_s);
         this.count = data.hnt_count;
+        //limit count to 1 million
+        if (this.count > 100000) {
+            this.count = 99999;
+        }
         this.increment = data.hnt_inc;
         this.charm = data.hnt_charm;
+        this.nickname = data.hnt_nnm;
+        if (this.nickname == null) {
+            this.nickname = this.pkm;
+        }
     }
 };
 
-function convertTime(ms) {
+function convertTime(s) {
     // Ensure the input is a non-negative number
-    if (!Number.isFinite(ms) || ms < 0) {
+    if (!Number.isFinite(s) || s < 0) {
         return 'Invalid input';
     }
 
     // Calculate hours, minutes, and seconds
-    const hours = Math.floor(ms / 3600000); // 1 hour = 60 minutes * 60 seconds * 1000 milliseconds
-    const minutes = Math.floor((ms % 3600000) / 60000); // 1 minute = 60 seconds * 1000 milliseconds
-    const seconds = Math.floor((ms % 60000) / 1000);
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
 
     // Construct the formatted string
     const formattedTime = [];
 
     if (hours > 0) {
-        formattedTime.push(`${hours} ${hours === 1 ? 'hour' : 'hours'}`);
+        formattedTime.push(`${hours}h`);
     }
 
     if (minutes > 0) {
-        formattedTime.push(`${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`);
+        formattedTime.push(`${minutes}m`);
     }
 
     if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds} ${seconds === 1 ? 'second' : 'seconds'}`);
+        formattedTime.push(`${seconds}s`);
     }
 
     return formattedTime.join(', ');
