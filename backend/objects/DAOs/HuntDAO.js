@@ -73,8 +73,8 @@ async function createNewHunt(user, pokemon, game, method, start_date, end_date, 
 
     console.log(user, pokemon, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname);
 
-    return query('INSERT INTO hunt (pkm_name, usr_id, gam_name, mtd_id, hnt_start_date_string, hnt_time_s, hnt_count, hnt_inc, hnt_charm, hnt_nnm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [pokemon, user, game, method, start_date_string, time, count, increment, charm, nickname]).then(({results}) => {
+    return query('INSERT INTO hunt (pkm_name, usr_id, gam_name, mtd_id, hnt_start_date_string, hnt_end_date_string, hnt_time_s, hnt_count, hnt_inc, hnt_charm, hnt_nnm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    [pokemon, user, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname]).then(({results}) => {
         if (results.insertId) {
             return getHuntById(results.insertId);
         }
