@@ -16,7 +16,9 @@ api.getCurrentUser().then(currentuser => {
         currentuserprofile = true;
         const newhunt = document.getElementById('huntbtndiv');
         newhunt.style.visibility = 'visible';
-        newhunt.addEventListener('click', (e) => {
+
+        const newhuntbtn = document.getElementById('huntbutton');
+        newhuntbtn.addEventListener('click', (e) => {
             document.location = './newhunt';
         });
         profileDetails(currentuser, currentuser);
@@ -60,7 +62,7 @@ function createHunt(hunt, pkm, active) {
     else {
         spritelink.href = './hunt?id=' + hunt.id;
     }
-    sprite.src = pkm.avatar;
+    sprite.src = pkm.sprite;
     sprite.classList.add('pkm_pic')
     spritelink.append(sprite);
     const elapsed_time = document.createElement('span');

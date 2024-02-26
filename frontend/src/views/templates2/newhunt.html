@@ -31,8 +31,23 @@
 
         <main class="form-signin vw-100 m-auto">
             <form>
-                <div class="huntheader" id="huntheader">
-                    <h1 class="h3 mb-3 fw-normal text-center" id="title">Hunt Settings</h1>
+                <div class="huntheader">
+                    <h1 class="h3 mb-3 fw-normal text-center">New Hunt</h1>
+                </div>
+
+                <div class="selections" id="selections">
+                    <div class="selection">
+                        <select id="pokemonSelect"></select>
+                        <label for="nickname">Pokemon</label>
+                    </div>
+                    <div class="selection">
+                        <select id="gameSelect"></select>
+                        <label for="nickname">Game</label>
+                    </div>
+                    <div class="selection">
+                        <select id="methodSelect"></select>
+                        <label for="methodSelect">Method</label>
+                    </div>
                 </div>
 
                 <div class="form-floating">
@@ -56,7 +71,7 @@
             
                 <div class="checkbox mb-3">
                 </div>
-                <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Update Hunt</button>
+                <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Start Hunt</button>
             </form>
         </main>
     </body>

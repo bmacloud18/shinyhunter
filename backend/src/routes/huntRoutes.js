@@ -12,9 +12,8 @@ router.use(express.json());
 // const HuntDAO = require('../../objects/DAOs/HuntDAO.js')
 // const {tokenMiddleware} = require('../middleware/tokenMiddleware.js');
 
-//get a hunt by its id
+//get all hunts
 router.get('/hunt', tokenMiddleware, (req, res) => {
-    console.log('hunt point hit');
     HuntDAO.getAllHunts().then(hunts => {
         res.json(sortHunts(hunts));
     });
@@ -51,19 +50,24 @@ router.get('/hunt/users/current', tokenMiddleware, (req, res) => {
 //by whether or not the end_date_string is null (active if null)
 router.post('/hunt', tokenMiddleware, (req, res) => {
 
-    const userId = req.user.id;
+    const userId = req.body.userId;
     const pkm = req.body.pkm;
     const game = req.body.game;
     const method = req.body.method;
     const start_date = req.body.start_date;
+    const end_date = req.body.end_date;
+    const time = req.body.time;
+    const count = req.body.count;
     const increment = req.body.increment;
-    const charm = req.body.charm;
+    const charm = req.body.charm == 'on' ? 1 : 0;
     const nickname = req.body.nickname;
 
-    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, count, increment, charm, nickname).then(hunt => {
+    
+
+    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
     }).catch(() => {
-        res.status(401).json({error: 'error creating hunt'});
+        res.status(404).json({error: 'error creating hunt'});
     })
 
 });
@@ -77,7 +81,7 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
     HuntDAO.completeHunt(huntId, end_date).then(hunt => {
         res.json(hunt);
     }).catch(() => {
-        res.status(401).json({error: 'error creating hunt'});
+        res.status(404).json({error: 'error creating hunt'});
     })
 });
 
@@ -95,7 +99,7 @@ router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     HuntDAO.updateHunt(huntId, pkm, game, method, start_date, end_date, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
     }).catch(() => {
-        res.status(401).json({error: 'error updating hunt'});
+        res.status(404).json({error: 'error updating hunt'});
     })
 });
 
@@ -110,7 +114,7 @@ function timeComparator(a, b) {
     let d1 = new Date(a.start_date_string);
     let d2 = new Date(b.start_date_string);
 
-    return d1.getTime() - d2.getTime();
+    return d2.getTime() - d1.getTime();
 }
 
 export default router;

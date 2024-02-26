@@ -98,7 +98,7 @@ main {
     border-radius: var(--bs-btn-border-radius);
     background-color: var(--bs-btn-bg);
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
-  }
+}
 
 @media (min-width: 878px) {
     .huntlists {

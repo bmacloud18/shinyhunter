@@ -103,21 +103,22 @@ export default {
         return HTTPclient.get(`hunt/users/id/${id}`)
     },
 
-    createHunt: async(userId, pkm, game, method, start_date, end_date, count, increment, charm, nickname) => {
+    createHunt: async(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname) => {
         const data = {
             userId: userId,
             pkm: pkm,
             game: game,
             method: method,
             start_date: start_date,
-            end_date, end_date,
+            end_date: end_date,
+            time: time,
             count: count,
             increment: increment,
             charm: charm,
             nickname: nickname
         };
 
-        return HTTPclient.post('/hunt', data);
+        return HTTPclient.post('hunt', data);
     },
 
     completeHunt: async(id, end_date) => {
@@ -139,6 +140,18 @@ export default {
         };
 
         return HTTPclient.put(`hunt/${id}`, data)
+    },
+
+    /*//////\\\\\\*\
+    //Method Routes\\
+    \*\\\\\\//////*/
+
+    getAllMethods: async() => {
+        return HTTPclient.get('method');
+    },
+
+    getMethodById: async(id) => {
+        return HTTPclient.get(`method/${id}`);
     }
 
 };
