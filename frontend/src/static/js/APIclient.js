@@ -2,30 +2,12 @@
 //Defines a clean pokemon object for frontend use
 import HTTPclient from './HTTPclient.js';
 
-function getGames(pokemon) {
-    let ret = [];
-    for (g in pokemon.game_indices)
-    {
-        ret.push(g.version.name);
-    }
-    return ret;
-}
-
-//cleans up the types array from PokeAPI
-function getTypes(pokemon) {
-    let ret = [];
-    for (t in pokemon.types)
-    {
-        ret.push(t.type.name);
-    }
-    return ret;
-}
-
 export default {
 
     /*//////\\\\\\*\
     //User Routes\\
     \*\\\\\////////*/
+
     login: async (username, password) => {
         const data = {
             username: username,
@@ -49,7 +31,7 @@ export default {
     },
 
     // current user
-    getUser: async () => {
+    getCurrentUser: async () => {
         return HTTPclient.get('currentuser');
     },
 
@@ -105,33 +87,38 @@ export default {
     //Hunt Routes\\
     \*\\\\\///////*/
 
+    getAllHunts: async() => {
+        return HTTPclient.get('hunt');
+    },
+
     getCurrentUserHunts: async() => {
         return HTTPclient.get('hunt/users/current');
     },
 
-    getHuntById: async() => {
+    getHuntById: async(id) => {
         return HTTPclient.get(`hunt/${id}`);
     },
 
-    getHuntsByUser: async() => {
+    getHuntsByUser: async(id) => {
         return HTTPclient.get(`hunt/users/id/${id}`)
     },
 
-    createHunt: async(userId, pkm, game, method, start_date, end_date, count, increment, charm, nickname) => {
+    createHunt: async(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname) => {
         const data = {
             userId: userId,
             pkm: pkm,
             game: game,
             method: method,
             start_date: start_date,
-            end_date, end_date,
+            end_date: end_date,
+            time: time,
             count: count,
             increment: increment,
             charm: charm,
             nickname: nickname
         };
 
-        return HTTPclient.post('/hunt', data);
+        return HTTPclient.post('hunt', data);
     },
 
     completeHunt: async(id, end_date) => {
@@ -153,6 +140,18 @@ export default {
         };
 
         return HTTPclient.put(`hunt/${id}`, data)
+    },
+
+    /*//////\\\\\\*\
+    //Method Routes\\
+    \*\\\\\\//////*/
+
+    getAllMethods: async() => {
+        return HTTPclient.get('method');
+    },
+
+    getMethodById: async(id) => {
+        return HTTPclient.get(`method/${id}`);
     }
 
 };

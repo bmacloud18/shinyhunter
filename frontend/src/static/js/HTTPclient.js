@@ -2,11 +2,18 @@
 const API_BASE = './api/';
 
 const handleError = (res) => {
-    if(res.ok)
-        return res;
-    let error = new Error(res.statusText);
-    error.status = res.status;
-    throw error;
+    if(!res.ok) {
+        if(res.status == 401) {
+            localStorage.removeItem('user');
+            document.location = './login';
+            throw new Error("Unauthenticated");
+        }
+        else {
+            throw new Error(res.status);
+        }
+    }
+    
+    return res;
 };
 
 export default {

@@ -1,8 +1,9 @@
-const mysql = require('mysql');
+// const mysql = require('mysql');
+import mysql from 'mysql';
 
 let connection;
 
-exports.getDatabaseConnection = () => {
+const getDatabaseConnection = () => {
   if(!connection) {
     connection = mysql.createPool({
       host: process.env.DB_HOST,
@@ -16,10 +17,10 @@ exports.getDatabaseConnection = () => {
   return connection;
 };
 
-exports.query = (query, params = []) => {
+const query = (query, params = []) => {
   return new Promise((resolve, reject) => {
     if(!connection) {
-      connection = exports.getDatabaseConnection();
+      connection = getDatabaseConnection();
     }
     connection.query(query, params, (err, results, fields) => {
       if(err) {
@@ -34,9 +35,15 @@ exports.query = (query, params = []) => {
   });
 };
 
-exports.close = () => {
+const close = () => {
   if(connection) {
     connection.end();
     connection = null;
   }
 };
+
+export {
+  getDatabaseConnection,
+  query,
+  close
+}

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>New Hunt</title>
+        <title>Import Hunt</title>
         <link rel="stylesheet" href="css/huntsettings.css"/>
         <link rel="stylesheet" href="css/header.css"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -31,8 +31,23 @@
 
         <main class="form-signin vw-100 m-auto">
             <form>
-                <div class="huntheader" id="huntheader">
-                    <h1 class="h3 mb-3 fw-normal text-center" id="title">Hunt Settings</h1>
+                <div class="huntheader">
+                    <h1 class="h3 mb-3 fw-normal text-center">Import Hunt</h1>
+                </div>
+
+                <div class="selections" id="selections">
+                    <div class="selection">
+                        <select id="pokemonSelect"></select>
+                        <label for="nickname">Pokemon</label>
+                    </div>
+                    <div class="selection">
+                        <select id="gameSelect"></select>
+                        <label for="nickname">Game</label>
+                    </div>
+                    <div class="selection">
+                        <select id="methodSelect"></select>
+                        <label for="methodSelect">Method</label>
+                    </div>
                 </div>
 
                 <div class="form-floating">
@@ -48,6 +63,16 @@
                             <label for="charm">Charm?</label>
                         </div>
                     </div>
+                    <div class="detail" id="middle">
+                        <div class="datecontainer">
+                            <input type="date" class="middlein" id="startdate">
+                            <label for="startdate">Start</label>
+                        </div>
+                        <div class="datecontainer">
+                            <input type="date" class="middlein" id="enddate">
+                            <label for="enddate">End</label>
+                        </div>
+                    </div>
                     <div class="detail" id="bottom">
                         <input type="number" class="bottomin" id="count" placeholder="Count">
                         <input type="number" class="bottomin" id="time" placeholder="Time (in sec)">
@@ -56,7 +81,7 @@
             
                 <div class="checkbox mb-3">
                 </div>
-                <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Update Hunt</button>
+                <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Import Hunt</button>
             </form>
         </main>
     </body>
