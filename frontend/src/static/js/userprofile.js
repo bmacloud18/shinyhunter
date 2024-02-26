@@ -62,7 +62,7 @@ function createHunt(hunt, pkm, active) {
     else {
         spritelink.href = './hunt?id=' + hunt.id;
     }
-    sprite.src = pkm.avatar;
+    sprite.src = pkm.sprite;
     sprite.classList.add('pkm_pic')
     spritelink.append(sprite);
     const elapsed_time = document.createElement('span');

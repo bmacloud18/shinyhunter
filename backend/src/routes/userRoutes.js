@@ -48,7 +48,7 @@ router.post('/login', (req, res) => {
             generateToken(req, res, user);
             res.json(user);
         }).catch( (err) => {
-            res.status( 401 ).json( {error: 'Oops! Invalid username or password.'} );
+            res.status( 404 ).json( {error: 'Oops! Invalid username or password.'} );
         });
     }
     else

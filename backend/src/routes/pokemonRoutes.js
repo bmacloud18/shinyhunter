@@ -38,7 +38,7 @@ function cleanMon(pokemon, species) {
     return {
       id: pokemon.order,
       name: pokemon.name,
-      avatar: pokemon.sprites.front_shiny,
+      sprite: pokemon.sprites.front_shiny,
       types: getTypes(pokemon),
       games: getGames(pokemon),
       color: species.color.name

@@ -51,7 +51,7 @@ const generateToken = (req, res, user) => {
         httpOnly: true,
         sameSite: 'lax',
         secure: true,
-        maxAge: 2 * 60 * 1000 // 2 minute session
+        maxAge: 10 * 60 * 1000 // 2 minute session
     });
 };
 
