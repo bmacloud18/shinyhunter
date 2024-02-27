@@ -10,7 +10,7 @@ export default class Hunt {
     end_date_string = null;
     end_date_display = null;
     hunt_time = null;
-    hunt_time_converted = null;
+    hunt_time_display = null;
     count = null;
     increment = null;
     charm = null;
@@ -57,18 +57,18 @@ function convertTime(s) {
     const formattedTime = [];
 
     if (hours > 0) {
-        formattedTime.push(`${hours}h`);
+        formattedTime.push(`${hours}`);
     }
 
     if (minutes > 0) {
-        formattedTime.push(`${minutes}m`);
+        formattedTime.push(`${minutes}`);
     }
 
     if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds}s`);
+        formattedTime.push(`${seconds}`);
     }
 
-    return formattedTime.join(', ');
+    return formattedTime.join(':');
 }
 
 function convertDate(date) {

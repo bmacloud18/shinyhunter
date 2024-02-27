@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
 import * as HuntDAO from '../../objects/DAOs/HuntDAO.js';
 
+import {Timer} from "easytimer.js";
+
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
@@ -103,6 +105,19 @@ router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     })
 });
 
+router.get('/timer', tokenMiddleware, (req, res) => {
+    const seconds = req.body.sec;
+    let timer = new Timer();
+    timer.start({
+        precision: 'seconds',
+        startValues: {
+            seconds: seconds
+        }
+    });
+
+    res.send(timer);
+});
+
 
 //sorts hunts by date
 function sortHunts(hunts) {
@@ -116,5 +131,7 @@ function timeComparator(a, b) {
 
     return d2.getTime() - d1.getTime();
 }
+
+
 
 export default router;

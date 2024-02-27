@@ -142,6 +142,14 @@ export default {
         return HTTPclient.put(`hunt/${id}`, data)
     },
 
+    getTimer: async(seconds) => {
+        const data = {
+            sec: seconds
+        }
+
+        return HTTPclient.get('timer', data);
+    },
+
     /*//////\\\\\\*\
     //Method Routes\\
     \*\\\\\\//////*/

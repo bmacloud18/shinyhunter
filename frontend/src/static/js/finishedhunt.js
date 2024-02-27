@@ -1,3 +1,5 @@
+//script for viewing a completed hunt or another user's active hunt
+
 import api from './APIclient.js';
 import header from './header.js';
 import getPage from './getPage.js';

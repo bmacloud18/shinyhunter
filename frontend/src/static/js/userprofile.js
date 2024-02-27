@@ -1,6 +1,7 @@
 //This script will fill out the general profile page, along with the userhunts script
 
 import api from './APIclient.js';
+import header from './header.js'
 
 const query = window.location.search;
 let parameters = new URLSearchParams(query);
@@ -55,16 +56,8 @@ function createHunt(hunt, pkm, active) {
     div.classList.add('hunt_details');
     const sprite = document.createElement('img');
     sprite.alt = 'Shiny Sprite';
-    const spritelink = document.createElement('a');
-    if(active && currentuserprofile) {
-        spritelink.href = './activehunt?id=' + hunt.id;
-    }
-    else {
-        spritelink.href = './hunt?id=' + hunt.id;
-    }
     sprite.src = pkm.sprite;
     sprite.classList.add('pkm_pic')
-    spritelink.append(sprite);
     const elapsed_time = document.createElement('span');
     elapsed_time.textContent = hunt.hunt_time_display;
     elapsed_time.classList.add('time_display');
@@ -89,48 +82,18 @@ function createHunt(hunt, pkm, active) {
     main.append(name_header, date_header, elapsed_time, div);
 
     main.addEventListener('click', (e) => {
-        document.location = './hunt?id=' + hunt.id;;
+        if(active && currentuserprofile) {
+            document.location = './activehunt?id=' + hunt.id;
+        }
+        else {
+            document.location = './finishedhunt?id=' + hunt.id;
+        }
     });
 
     section.append(main);
     section.style.color = pkm.color;
     return section;
 }
-
-
-//generate header
-function header(user) {
-    let logoutlink = document.createElement('button');
-    logoutlink.innerHTML = "Logout";
-    logoutlink.classList.add('button');
-
-    let logo = document.querySelector('.hheader');
-    logo.addEventListener('click', e => {
-        document.location = './login';
-    });
-    
-    logoutlink.addEventListener("click", e => {
-        e.preventDefault();
-        api.logout().then(() => {
-            localStorage.removeItem('user');
-            document.location = './login';
-        });
-    });
-
-
-    let imglink = document.querySelector('.pfp')
-    imglink.href = './userprofile?id=' + user.id;
-    const img = document.createElement('img');
-    img.src = user.avatar;
-    img.classList.add('howlpfpheader')
-    imglink.append(img);
-
-
-    document.querySelector('.firstname').innerHTML = `${user.first_name}`;
-    document.querySelector('.lastname').innerHTML = `${user.last_name}`;
-    document.querySelector('.logoutbutton').appendChild(logoutlink)
-}
-
 
 async function profileDetails(currentuser, user) {
     //setting profile details left side
