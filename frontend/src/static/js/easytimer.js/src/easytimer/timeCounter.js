@@ -23,7 +23,11 @@ TimeCounter.prototype.toString = function (units = ['hours', 'minutes', 'seconds
     if (this[units[i]] !== undefined) {
       if (units[i] === 'secondTenths') {
         arrayTime.push(this[units[i]]);
-      } else {
+      } 
+      else if (units[i] === 'hours') {
+        arrayTime.push(leftPadding(this[units[i]] + 24 * this['days'], leftZeroPadding, '0'));
+      }
+      else {
         arrayTime.push(leftPadding(this[units[i]], leftZeroPadding, '0'));
       }
     }
