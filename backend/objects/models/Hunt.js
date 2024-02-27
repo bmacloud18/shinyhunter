@@ -42,37 +42,9 @@ export default class Hunt {
     }
 };
 
-function convertTime(s) {
-    // Ensure the input is a non-negative number
-    if (!Number.isFinite(s) || s < 0) {
-        return 'Invalid input';
-    }
 
-    // Calculate hours, minutes, and seconds
-    const hours = Math.floor(s / 3600);
-    const minutes = Math.floor((s % 3600) / 60);
-    const seconds = s % 60;
-
-    // Construct the formatted string
-    const formattedTime = [];
-
-    if (hours > 0) {
-        formattedTime.push(`${hours}`);
-    }
-
-    if (minutes > 0) {
-        formattedTime.push(`${minutes}`);
-    }
-
-    if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds}`);
-    }
-
-    return formattedTime.join(':');
-}
 
 function convertDate(date) {
-    console.log(date);
     if (date != null) {
         let eventdate = new Date(date)
         let datestring = eventdate.toDateString();
@@ -114,4 +86,33 @@ function convertDate(date) {
 
     return null;
 
+};
+
+function convertTime(s) {
+    // Ensure the input is a non-negative number
+    if (!Number.isFinite(s) || s < 0) {
+        return 'Invalid input';
+    }
+
+    // Calculate hours, minutes, and seconds
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
+
+    // Construct the formatted string
+    const formattedTime = [];
+
+    if (hours > 0) {
+        formattedTime.push(`${hours}`);
+    }
+
+    if (minutes > 0) {
+        formattedTime.push(`${minutes}`);
+    }
+
+    if (seconds > 0 || (hours === 0 && minutes === 0)) {
+        formattedTime.push(`${seconds}`);
+    }
+
+    return formattedTime.join(':');
 };
