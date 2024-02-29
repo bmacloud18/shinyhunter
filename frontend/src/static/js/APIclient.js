@@ -130,9 +130,9 @@ export default {
         return HTTPclient.put(`hunt/${id}/complete`, data)
     },
 
-    updateHunt: async(id, start_date, count, increment, nickname) => {
+    updateHunt: async(id, time, start_date, count, increment, nickname) => {
         const data = {
-            id: id,
+            time: time,
             start_date: start_date,
             count: count,
             increment: increment,
@@ -140,14 +140,6 @@ export default {
         };
 
         return HTTPclient.put(`hunt/${id}`, data)
-    },
-
-    getTimer: async(seconds) => {
-        const data = {
-            sec: seconds
-        }
-
-        return HTTPclient.get('timer', data);
     },
 
     /*//////\\\\\\*\

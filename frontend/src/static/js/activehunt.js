@@ -25,8 +25,12 @@ const body = document.getElementById('huntarea');
 const overlay = document.getElementById('overlay');
 const main = document.getElementById('mainarea');
 
+const plus = document.getElementById('plus');
+const minus = document.getElementById('minus');
+
 let active = false;
 let seconds = 0;
+let count;
 
 
 
@@ -39,6 +43,9 @@ api.getHuntById(page_id).then(async hunt => {
         seconds++;
         const newtime = hunt.hunt_time + seconds;
         sub.innerText = convertTime(newtime);
+        if (seconds % 120 == 0) {
+            api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname)
+        }
     }, precision: 'seconds'});
 
     const spritelink = document.createElement('img');
@@ -53,7 +60,18 @@ api.getHuntById(page_id).then(async hunt => {
         }
     })
 
-    countarea.innerText = hunt.count;
+    count = hunt.count;
+
+    countarea.innerText = count;
+    plus.addEventListener('click', e => {
+        count += 1;
+        countarea.innerText = count;
+    });
+
+    minus.addEventListener('click', e => {
+        count -= 1;
+        countarea.innerText = count;
+    });
 });
 
 function pause(timer) {
@@ -70,6 +88,8 @@ function resume(timer) {
     overlay.style.display = 'none'
 };
 
+
+// timer library not working correctly with start values, so need to calculate here
 function convertTime(s) {
     // Ensure the input is a non-negative number
     if (!Number.isFinite(s) || s < 0) {
@@ -85,15 +105,32 @@ function convertTime(s) {
     const formattedTime = [];
 
     if (hours > 0) {
-        formattedTime.push(`${hours}`);
+        if (hours < 10) {
+            formattedTime.push(`0${hours}`);
+        }
+        else {
+            formattedTime.push(`${hours}`);
+        }
+        
     }
 
     if (minutes > 0) {
-        formattedTime.push(`${minutes}`);
+        if (minutes < 10) {
+            formattedTime.push(`0${minutes}`);
+        }
+        else {
+            formattedTime.push(`${minutes}`);
+        }
+        
     }
 
     if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds}`);
+        if (seconds < 10) {
+            formattedTime.push(`0${seconds}`);
+        }
+        else {
+            formattedTime.push(`${seconds}`);
+        }
     }
 
     return formattedTime.join(':');

@@ -95,9 +95,9 @@ async function completeHunt(id, end_date) {
 };
 
 //update a hunt by providing it with hunt settings data
-async function updateHunt(id, count, increment, nickname) {
+async function updateHunt(id, time, start_date, count, increment, nickname) {
 
-    return query ('UPDATE hunt SET count=?, increment=?, nickname=? WHERE id=?', [count, increment, nickname, id]).then(({results}) => {
+    return query ('UPDATE hunt SET hunt_time=?, start_date=?, count=?, increment=?, nickname=? WHERE id=?', [time, start_date, count, increment, nickname, id]).then(({results}) => {
         return results;
     }).catch( () => {
         throw new Error("Oops! couldn't update hunt");

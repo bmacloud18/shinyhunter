@@ -5,8 +5,6 @@ import cookieParser from 'cookie-parser';
 import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
 import * as HuntDAO from '../../objects/DAOs/HuntDAO.js';
 
-import {Timer} from "easytimer.js";
-
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
@@ -90,32 +88,18 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
 router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     
     const huntId = req.params.id;
-    const pkm = req.body.pkm;
-    const game = req.body.game;
-    const method = req.body.method;
+    const time = req.params.time;
+    const count = req.params.count;
     const start_date = req.body.start_date;
     const increment = req.body.increment;
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHunt(huntId, pkm, game, method, start_date, end_date, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHunt(huntId, time, start_date, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
     }).catch(() => {
         res.status(404).json({error: 'error updating hunt'});
-    })
-});
-
-router.get('/timer', tokenMiddleware, (req, res) => {
-    const seconds = req.body.sec;
-    let timer = new Timer();
-    timer.start({
-        precision: 'seconds',
-        startValues: {
-            seconds: seconds
-        }
     });
-
-    res.send(timer);
 });
 
 
