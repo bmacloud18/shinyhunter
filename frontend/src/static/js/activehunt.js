@@ -28,6 +28,7 @@ const plus = document.getElementById('plus');
 const minus = document.getElementById('minus');
 
 const settings = document.getElementById('settings');
+const capture = document.getElementById('capture');
 
 let active = false;
 let seconds = 0;
@@ -38,7 +39,7 @@ let count;
 api.getHuntById(page_id).then(async hunt => {
     const pkm = await api.getPokemonByName(hunt.pkm.toLowerCase());
     title.innerText = hunt.nickname;
-    sub.innerText = hunt.hunt_time_display;
+    sub.innerText = convertTime(hunt.hunt_time);
 
     let timer = new Timer({callback: function (e) {
         seconds++;
@@ -76,8 +77,14 @@ api.getHuntById(page_id).then(async hunt => {
 
     settings.addEventListener('click', e => {
         document.location = './huntsettings?id=' + page_id;
-        pause();
-        
+        pause(); 
+    });
+
+    capture.addEventListener('click', e => {
+        const end_date = new Date();
+        api.completeHunt(hunt.id, end_date);
+        // document.location = './success'
+        document.location = './finishedhunt?id=' + page_id;
     });
 });
 
@@ -118,7 +125,9 @@ function convertTime(s) {
         else {
             formattedTime.push(`${hours}`);
         }
-        
+    }
+    else {
+        formattedTime.push('00');
     }
 
     if (minutes > 0) {
@@ -128,7 +137,9 @@ function convertTime(s) {
         else {
             formattedTime.push(`${minutes}`);
         }
-        
+    }
+    else {
+        formattedTime.push('00');
     }
 
     if (seconds > 0 || (hours === 0 && minutes === 0)) {
@@ -138,6 +149,9 @@ function convertTime(s) {
         else {
             formattedTime.push(`${seconds}`);
         }
+    }
+    else {
+        formattedTime.push('00');
     }
 
     return formattedTime.join(':');
