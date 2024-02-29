@@ -20,6 +20,7 @@ export default class Hunt {
         this.pkm = data.pkm_name;
         this.user = data.usr_id;
         this.game = data.gam_name;
+        this.method = data.mtd_id;
         //dates stored as ISO 8601 string for some functions and also converted to a display string field
         this.start_date_string = data.hnt_start_date_string;
         this.start_date_display = convertDate(data.hnt_start_date_string);

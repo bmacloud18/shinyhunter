@@ -1,3 +1,5 @@
+/* adapted from bootstrap's button classes */
+
 .button {
     --bs-btn-padding-y: 0.25rem;
     --bs-btn-padding-x: 0.5rem;

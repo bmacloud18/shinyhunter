@@ -81,10 +81,16 @@ api.getHuntById(page_id).then(async hunt => {
     });
 
     capture.addEventListener('click', e => {
-        const end_date = new Date();
-        api.completeHunt(hunt.id, end_date);
+        const end_date = new Date().toISOString();
+        console.log(hunt.id, hunt.hunt_time + seconds, hunt.start_date_string, end_date, count, hunt.increment, hunt.charm, hunt.nickname)
+        api.updateHunt(hunt.id, hunt.hunt_time + seconds, hunt.start_date_string, end_date, count, hunt.increment, hunt.charm, hunt.nickname).then(hunt => {
+            console.log(hunt);
+        }).catch(err => {
+            throw new Error(err.message);
+        });
         // document.location = './success'
-        document.location = './finishedhunt?id=' + page_id;
+        // document.location = './finishedhunt?id=' + page_id;
+        // document.location = './userprofile?id=' + user.id;
     });
 });
 

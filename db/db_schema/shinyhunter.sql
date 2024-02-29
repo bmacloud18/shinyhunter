@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_time_s` int(10) unsigned NOT NULL DEFAULT 0,
     `hnt_count` int(6) unsigned NOT NULL DEFAULT 0,
     `hnt_inc` int(2) unsigned NOT NULL DEFAULT 1,
-    `hnt_charm` bit NOT NULL DEFAULT 0,
+    `hnt_charm` int(1) NOT NULL DEFAULT 0,
     `hnt_nnm` varchar(18) DEFAULT NULL,
     KEY `FK_MTD_ID` (`mtd_id`),
     KEY `FK_USR_ID` (`usr_id`),

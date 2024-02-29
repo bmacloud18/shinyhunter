@@ -81,24 +81,25 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
     HuntDAO.completeHunt(huntId, end_date).then(hunt => {
         res.json(hunt);
     }).catch(() => {
-        res.status(404).json({error: 'error creating hunt'});
+        res.status(404).json({error: 'error completing hunt'});
     })
 });
 
 router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     
     const huntId = req.params.id;
-    const time = req.params.time;
-    const count = req.params.count;
+    const time = req.body.time;
+    const count = req.body.count;
     const start_date = req.body.start_date;
+    const end_date = req.body.end_date;
     const increment = req.body.increment;
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHunt(huntId, time, start_date, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHunt(huntId, time, start_date, end_date, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
-    }).catch(() => {
-        res.status(404).json({error: 'error updating hunt'});
+    }).catch(err => {
+        res.status(404).json(err.message);
     });
 });
 

@@ -130,12 +130,14 @@ export default {
         return HTTPclient.put(`hunt/${id}/complete`, data)
     },
 
-    updateHunt: async(id, time, start_date, count, increment, nickname) => {
+    updateHunt: async(id, time, start_date, end_date, count, increment, charm, nickname) => {
         const data = {
             time: time,
             start_date: start_date,
+            end_date: end_date,
             count: count,
             increment: increment,
+            charm: charm,
             nickname: nickname
         };
 
