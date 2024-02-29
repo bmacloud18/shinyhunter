@@ -123,6 +123,9 @@ else if (page == 'huntsettings') {
             sprite.src = pkm.sprite;
             hheader.append(sprite);
 
+            sprite.addEventListener('click', e => {
+                document.location = "./activehunt?id=" + page_id;
+            });
 
             submit.addEventListener('click', e => {
                 api.updateHunt(hunt.id, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {

@@ -11,6 +11,14 @@ body {
     height: 100%;
 }
 
+.main {
+    border: .2em solid black;
+    width: 70%;
+    height: 70%;
+    align-self: center;
+    margin-bottom: 1em;
+}
+
 .huntdetails {
     display: flex;
     flex-direction: column;
@@ -20,7 +28,7 @@ body {
 }
 
 #nickname {
-    font-size: 3em;
+    font-size: 2.5em;
 }
 
 #timeelapsed {
@@ -44,7 +52,7 @@ body {
 }
 
 #count {
-    font-size: 5em;
+    font-size: 3em;
 }
 
 .huntbuttons {
@@ -68,7 +76,7 @@ body {
 
     #minus {
         width: 2.5em;
-        height: 2.5m;
+        height: 2.5em;
         font-size: 2.5em;
     }
 }
@@ -86,4 +94,15 @@ body {
         height: 1.5em;
         font-size: 1.5em;
     }
+}
+
+.settingsbutton {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+#settings {
+    margin: .2em .2em .2em .2em;
 }

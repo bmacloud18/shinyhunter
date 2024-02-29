@@ -21,12 +21,13 @@ const sub = document.getElementById('timeelapsed');
 const sprite = document.getElementById('sprite');
 const countarea = document.getElementById('count');
 
-const body = document.getElementById('huntarea');
 const overlay = document.getElementById('overlay');
 const main = document.getElementById('mainarea');
 
 const plus = document.getElementById('plus');
 const minus = document.getElementById('minus');
+
+const settings = document.getElementById('settings');
 
 let active = false;
 let seconds = 0;
@@ -71,6 +72,12 @@ api.getHuntById(page_id).then(async hunt => {
     minus.addEventListener('click', e => {
         count -= 1;
         countarea.innerText = count;
+    });
+
+    settings.addEventListener('click', e => {
+        document.location = './huntsettings?id=' + page_id;
+        pause();
+        
     });
 });
 
