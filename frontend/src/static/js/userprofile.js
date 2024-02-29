@@ -29,7 +29,7 @@ api.getCurrentUser().then(currentuser => {
             // posts(user);
             profileDetails(currentuser, user);
         }).catch((err) => {
-            throw new Error("Error Occurred: " + err.message);
+            document.location = './userprofile?id=' + cid;
         });
     }
 }).catch((err) => {

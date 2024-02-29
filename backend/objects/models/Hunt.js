@@ -103,16 +103,16 @@ function convertTime(s) {
     const formattedTime = [];
 
     if (hours > 0) {
-        formattedTime.push(`${hours}`);
+        formattedTime.push(`${hours}h`);
     }
 
     if (minutes > 0) {
-        formattedTime.push(`${minutes}`);
+        formattedTime.push(`${minutes}m`);
     }
 
     if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds}`);
+        formattedTime.push(`${seconds}s`);
     }
 
-    return formattedTime.join(':');
+    return formattedTime.join(', ');
 };
