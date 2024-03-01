@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  background-color: rgba(156, 9, 38, 0.767);
 }
 
 .body {
@@ -13,10 +14,19 @@ body {
 
 .main {
     border: .2em solid black;
-    width: 70%;
-    height: 70%;
+    width: 60%;
+    height: 75%;
     align-self: center;
     margin-bottom: 1em;
+}
+
+.mainbody {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
 }
 
 .huntdetails {
@@ -39,7 +49,7 @@ body {
     display: none;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -55,6 +65,11 @@ body {
     font-size: 3em;
 }
 
+/* .huntarea {
+    display: flex;
+    justify-self: flex-end;
+} */
+
 .huntbuttons {
     display: flex;
     flex-direction: row;
@@ -69,30 +84,53 @@ body {
 @media (min-width: 425px) {
 
     #plus {
-        width: 4em;
-        height: 4em;
-        font-size: 4em;
-    }
-
-    #minus {
-        width: 2.5em;
-        height: 2.5em;
-        font-size: 2.5em;
-    }
-}
-
-@media (max-width: 424px) {
-
-    #plus {
         width: 3em;
         height: 3em;
         font-size: 3em;
     }
 
     #minus {
-        width: 1.5em;
-        height: 1.5em;
+        width: 2em;
+        height: 2em;
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 424px) {
+
+    #plus {
+        width: 2.5em;
+        height: 2.5em;
+        font-size: 2.5em;
+    }
+
+    #minus {
+        width: 2em;
+        height: 2em;
+        font-size: 2em;
+    }
+
+    #count {
         font-size: 1.5em;
+    }
+
+    #nickname {
+        font-size: 2em;
+    }
+
+    .main {
+        height: 60%;
+    }
+
+    .huntbuttons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1em 1em;
+        margin-top: .2em;
+        margin-bottom: .2em;
     }
 }
 
@@ -105,4 +143,9 @@ body {
 
 #settings {
     margin: .2em .2em .2em .2em;
+}
+
+.finishbutton {
+    margin-top: 2em;
+    margin-bottom: .25em;
 }

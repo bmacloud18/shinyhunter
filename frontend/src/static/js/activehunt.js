@@ -82,7 +82,7 @@ api.getHuntById(page_id).then(async hunt => {
 
     capture.addEventListener('click', e => {
         const end_date = new Date().toISOString();
-        console.log(hunt.id, hunt.hunt_time + seconds, hunt.start_date_string, end_date, count, hunt.increment, hunt.charm, hunt.nickname)
+        
         api.updateHunt(hunt.id, hunt.hunt_time + seconds, hunt.start_date_string, end_date, count, hunt.increment, hunt.charm, hunt.nickname).then(hunt => {
             console.log(hunt);
         }).catch(err => {
