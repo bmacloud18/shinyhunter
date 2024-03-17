@@ -33,6 +33,7 @@ const capture = document.getElementById('capture');
 let active = false;
 let seconds = 0;
 let count;
+let diff = 0;
 
 function saveDataToLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
@@ -41,6 +42,26 @@ function saveDataToLocalStorage(key, data) {
 function getDataFromLocalStorage(key) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
+}
+
+function saveTimeDataLocally(key) {
+    const data = {
+        elapsedTime: seconds,
+        isRunning: active
+    };
+    saveDataToLocalStorage(key, data);
+}
+
+function saveDataLocallyAndIncrement(key, data) {
+    saveDataToLocalStorage(key, data);
+    count++;
+    diff++;
+}
+
+function saveDataLocallyAndDeccrement(key, data) {
+    saveDataToLocalStorage(key, data);
+    count--;
+    diff--;
 }
 
 
@@ -69,9 +90,7 @@ api.getHuntById(page_id).then(async hunt => {
         seconds++;
         const newtime = hunt_time + seconds;
         sub.innerText = convertTime(newtime);
-        // if (seconds % 120 == 0) {
-        //     api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname)
-        // }
+        saveTimeDataLocally('stopwatchData');
     }, precision: 'seconds'});
 
     const spritelink = document.createElement('img');
@@ -94,12 +113,12 @@ api.getHuntById(page_id).then(async hunt => {
 
     countarea.innerText = count;
     plus.addEventListener('click', e => {
-        count += 1;
+        saveDataLocallyAndIncrement('counterData', { counter: count });
         countarea.innerText = count;
     });
 
     minus.addEventListener('click', e => {
-        count -= 1;
+        saveDataLocallyAndDecrement('counterData', { counter: count });
         countarea.innerText = count;
     });
 
@@ -193,21 +212,15 @@ function convertTime(s) {
     return formattedTime.join(':');
 };
 
-function saveTimeDataLocally(key) {
-    const data = {
-        elapsedTime: seconds,
-        isRunning: active
-    };
-    saveDataToLocalStorage(key, data);
-}
-
-function saveDataLocallyAndIncrement(key, data) {
-    saveDataToLocalStorage(key, data);
-    count++;
-}
-
 // Save stopwatch data and increment counter on window unload event
 window.onunload = function() {
-    saveTimeDataLocally('stopwatchData');
-    saveDataLocallyAndIncrement('counterData', { counter: count });
+    if (diff > 0 || seconds > 3 && navigator.onLine) {
+        const hunt = getDataFromLocalStorage('hunt');
+        const stopwatch = getDataFromLocalStorage('stopwatchData');
+        const counter = getDataFromLocalStorage('counterData');
+    
+        const newtime = hunt.hunt_time + stopwatch.elapsedTime;
+        const count = counter.counter;
+        api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname)
+    }
 };

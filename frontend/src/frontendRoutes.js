@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 // base
-router.get('/login', (req, res) => {
+router.get('/signin', (req, res) => {
     res.sendFile(`${html_dir}login.html`);
 });
 

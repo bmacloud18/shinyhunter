@@ -34,7 +34,7 @@ const assets = [
 ]
     
 self.addEventListener('install', e => {
-    e.waitUntil(caches.open(STATIC_CACHE_NAME).then( cache => {
+    e.waitUntil(caches.open(STATIC_CACHE_NAME).then(cache => {
         return cache.addAll(assets);
     }));
 });
@@ -75,7 +75,7 @@ async function fetchFirst(req) {
 }
 
 self.addEventListener('fetch', e => {
-    const requetURL = new URL(e.request.url);
+    const requestURL = new URL(e.request.url);
     if (requestURL.origin === location.origin && requestURL.pathname.startsWith('/api')) {
         if (e.request.method === 'GET') {
             e.respondWith(fetchFirst(e.request));
@@ -104,18 +104,20 @@ function sync() {
     const newtime = hunt.hunt_time + stopwatch.elapsedTime;
     const count = counter.counter;
 
-    api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
-        if (res.ok) {
-            removeDataFromLocalStorage('hunt');
-            removeDataFromLocalStorage('stopwatchData');
-            removeDataFromLocalStorage('counterData');
-        }
-        else {
-            console.error('Failed to sync data with server: ', response.status);
-        }
-    }).catch(err => {
-        console.error('Error syncing data with server: ', err);
-    });
+    if (hunt && stopwatch && counter) {
+        api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
+            if (res.ok) {
+                removeDataFromLocalStorage('hunt');
+                removeDataFromLocalStorage('stopwatchData');
+                removeDataFromLocalStorage('counterData');
+            }
+            else {
+                console.error('Failed to sync data with server: ', response.status);
+            }
+        }).catch(err => {
+            console.error('Error syncing data with server: ', err);
+        });
+    }
 }
 
 self.addEventListener('sync', e => {
