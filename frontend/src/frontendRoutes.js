@@ -62,6 +62,11 @@ router.get( '/success', ( req, res ) => {
     res.sendFile(`${html_dir}success.html`);
 });
 
+// offline page
+router.get( '/offline', ( req, res ) => {
+    res.sendFile(`${html_dir}offline.html`);
+});
+
 
 
 module.exports = router;

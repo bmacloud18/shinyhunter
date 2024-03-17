@@ -1,10 +1,10 @@
 const STATIC_CACHE_NAME = 'shiny-hunter-static-v0';
 const API_BASE = './api/';
 const assets = [
-    '/userprofile',
-    // '/huntsettings',
-    '/activehunt',
-    '/finishedhunt',
+    // '/userprofile',
+    // // '/huntsettings',
+    // '/activehunt',
+    // '/finishedhunt',
     //css
     '/css/activehunt.css',
     '/css/button.css',
@@ -19,13 +19,13 @@ const assets = [
     //javascript
     '/js/activehunt.js',
     '/js/APIclient.js',
-    '/js/finisedhunt.js',
+    '/js/finishedhunt.js',
     '/js/getPage.js',
     '/js/header.js',
     '/js/HTTPclient.js',
     '/js/huntsettings.js',
     '/js/login.js',
-    '/js/serviceWorker.js',
+    // '/js/serviceWorker.js',
     '/js/userprofile.js',
     '/js/usersettings.js',
     '/js/easytimer.js/src/easytimer/easytimer.js'
@@ -118,43 +118,39 @@ function sync() {
     const stopwatch = getDataFromLocalStorage('stopwatchData');
     const counter = getDataFromLocalStorage('counterData');
 
-    const newtime = hunt.hunt_time + stopwatch.elapsedTime;
-    const count = counter.counter;
-
-    const data = {
-        time: newtime,
-        start_date: hunt.start_date,
-        end_date: hunt.end_date,
-        count: count,
-        increment: hunt.increment,
-        charm: hunt.charm,
-        nickname: hunt.nickname
-    };
-
-    const url = `hunt/${hunt.id}`
-
-    fetch(API_BASE + url, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }).then(handleError).then(res => {
-        return res.json();
-    });
 
     if (hunt && stopwatch && counter) {
-        api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
+        const newtime = hunt.hunt_time + stopwatch.elapsedTime;
+        const count = counter.counter;
+
+        const data = {
+            time: newtime,
+            start_date: hunt.start_date_string,
+            end_date: hunt.end_date_string,
+            count: count,
+            increment: hunt.increment,
+            charm: hunt.charm,
+            nickname: hunt.nickname
+        };
+
+        const url = `hunt/${hunt.id}`
+
+        fetch(API_BASE + url, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(res => {
             if (res.ok) {
-                removeDataFromLocalStorage('hunt');
-                removeDataFromLocalStorage('stopwatchData');
-                removeDataFromLocalStorage('counterData');
+                localStorage.removeItem('hunt');
+                localStorage.removeItem('stopwatchData');
+                localStorage.removeItem('counterData');
+                console.log('update sent, local storage removed');
             }
             else {
-                console.error('Failed to sync data with server: ', response.status);
+                console.error('Failed to sync data with server: ', res.status);
             }
-        }).catch(err => {
-            console.error('Error syncing data with server: ', err);
         });
     }
 }

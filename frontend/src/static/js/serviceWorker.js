@@ -1,24 +1,5 @@
 function newServiceWorker(worker) {
-    const popup = document.createElement('div');
-    popup.className = 'popup';
-
-    const ok = document.createElement('button');
-    ok.innerText = 'update';
-    ok.addEventListener('click', e => {
-        worker.postMessage( {action: 'skipWaiting'});
-    });
-
-    popup.append(ok);
-
-    const cancel = document.createElement('button');
-    cancel.innerText = 'dimiss';
-    cancel.addEventListener('click', e => {
-        document.body.removeChild(popup);
-    });
-
-    popup.append(cancel);
-    document.body.append(popup);
-
+    worker.postMessage( {action: 'skipWaiting'});
 }
 
 function registerServiceWorker() {
@@ -32,7 +13,7 @@ function registerServiceWorker() {
                     newServiceWorker(reg.waiting);
                 }
                 else if (reg.active)
-                console.log('service worker active');
+                    console.log('service worker active');
 
                 reg.addEventListener('updatefound', () => {
                     console.log('SW update found', reg, navigator.serviceWorker.controller);
