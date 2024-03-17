@@ -74,7 +74,7 @@ if (page == 'importhunt') {
                 location = './activehunt?id='
             }
             else {
-                location = './hunt?id='
+                location = './finishedhunt?id='
             }
             api.createHunt(user.id, pokemon.value, game.value, method.value, startdate.value, enddate_input, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
                 const id = hunt.id;

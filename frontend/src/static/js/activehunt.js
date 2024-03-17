@@ -33,45 +33,128 @@ const capture = document.getElementById('capture');
 let active = false;
 let seconds = 0;
 let count;
+let diff = 0;
 
+function saveDataToLocalStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function getDataFromLocalStorage(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+}
+
+function saveTimeDataLocally(key) {
+    const data = {
+        elapsedTime: seconds,
+        isRunning: active
+    };
+    saveDataToLocalStorage(key, data);
+}
+
+function saveDataLocallyAndIncrement(key) {
+    count++;
+    diff++;
+    const data = {
+        counter: count
+    }
+    saveDataToLocalStorage(key, data);
+}
+
+function saveDataLocallyAndDecrement(key) {
+    count--;
+    diff--;
+    const data = {
+        counter: count
+    }
+    saveDataToLocalStorage(key, data);
+}
+
+function saveCurrentHunt() {
+    if ((diff != 0 || seconds > 3) && navigator.onLine) {
+        const hunt = getDataFromLocalStorage('hunt');
+        const stopwatch = getDataFromLocalStorage('stopwatchData');
+        const counter = getDataFromLocalStorage('counterData');
+
+        if (hunt && stopwatch && counter) {
+            const newtime = hunt.hunt_time + stopwatch.elapsedTime;
+            const count = counter.counter;
+            api.updateHunt(hunt.id, newtime, hunt.start_date_string, hunt.end_date_string, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
+                if (res.status == '200') {
+                    localStorage.removeItem('hunt');
+                    localStorage.removeItem('stopwatchData');
+                    localStorage.removeItem('counterData');
+                    console.log('update sent');
+                }
+                else {
+                    console.error('Failed to sync data with server: ', res.status);
+                }
+            }).catch(err => {
+                console.error('Error syncing data with server: ', err);
+            });
+        }
+    }
+}
 
 
 api.getHuntById(page_id).then(async hunt => {
+    saveDataToLocalStorage('hunt', hunt);
     const pkm = await api.getPokemonByName(hunt.pkm.toLowerCase());
     title.innerText = hunt.nickname;
     sub.innerText = convertTime(hunt.hunt_time);
 
+    const stopwatchData = getDataFromLocalStorage('stopwatchData');
+    const counterData = getDataFromLocalStorage('counterData');
+
+    let hunt_time = hunt.hunt_time;
+    
+
     let timer = new Timer({callback: function (e) {
         seconds++;
-        const newtime = hunt.hunt_time + seconds;
+        const newtime = hunt_time + seconds;
         sub.innerText = convertTime(newtime);
-        if (seconds % 120 == 0) {
-            api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname)
-        }
+        saveTimeDataLocally('stopwatchData');
     }, precision: 'seconds'});
+
+    if (stopwatchData) {
+        hunt_time += stopwatchData.elapsedTime;
+        if (stopwatchData.isRunning) {
+            resume(timer);
+        }
+        else {
+            pause(timer);
+        }
+    }
 
     const spritelink = document.createElement('img');
     spritelink.alt = 'Shiny Sprite';
     spritelink.src = pkm.sprite;
     sprite.append(spritelink);
     sprite.addEventListener('click', e => {
-        if (active)
+        if (active) {
             pause(timer);
+            saveTimeDataLocally('stopwatchData');
+        }
         else {
             resume(timer);
+            saveTimeDataLocally('stopwatchData');
         }
     })
 
     count = hunt.count;
 
+    if (counterData) {
+        count = counterData.counter;
+    }
+
     countarea.innerText = count;
     plus.addEventListener('click', e => {
-        count += 1;
+        saveDataLocallyAndIncrement('counterData');
         countarea.innerText = count;
     });
 
     minus.addEventListener('click', e => {
-        count -= 1;
+        saveDataLocallyAndDecrement('counterData');
         countarea.innerText = count;
     });
 
@@ -99,13 +182,16 @@ function pause(timer) {
     timer.pause();
     main.style.display = 'none';
     overlay.style.display = 'flex'
+    saveCurrentHunt();
 };
 
 function resume(timer) {
-    active = true;
-    timer.start();
-    main.style.display = 'flex';
-    overlay.style.display = 'none'
+    if (!active) {
+        active = true;
+        timer.start();
+        main.style.display = 'flex';
+        overlay.style.display = 'none'
+    }
 };
 
 
@@ -162,3 +248,13 @@ function convertTime(s) {
 
     return formattedTime.join(':');
 };
+
+// Save stopwatch data and increment counter on window unload event
+document.addEventListener('visibilitychange', e => {
+    saveCurrentHunt();
+    localStorage.removeItem('hunt');
+    localStorage.removeItem('stopwatchData');
+    localStorage.removeItem('counterData');
+});
+
+
