@@ -1,6 +1,5 @@
 const STATIC_CACHE_NAME = 'shiny-hunter-static-v0';
-import api from './js/APIclient.js';
-
+const API_BASE = './api/';
 const assets = [
     '/userprofile',
     // '/huntsettings',
@@ -29,9 +28,9 @@ const assets = [
     '/js/serviceWorker.js',
     '/js/userprofile.js',
     '/js/usersettings.js',
-    '/js/easytimer.js/src/easytimer/easytimer.js',
+    '/js/easytimer.js/src/easytimer/easytimer.js'
     //images
-]
+];
     
 self.addEventListener('install', e => {
     e.waitUntil(caches.open(STATIC_CACHE_NAME).then(cache => {
@@ -89,12 +88,30 @@ self.addEventListener('fetch', e => {
 self.addEventListener('message', e => {
     if (e.data.action === 'skipWaiting')
         self.skipWaiting();
+    else if (e.data.action === 'online') {
+        triggerSync();
+    }
 });
 
 function getDataFromLocalStorage(key) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
 }
+
+const handleError = (res) => {
+    if(!res.ok) {
+        if(res.status == 401) {
+            localStorage.removeItem('user');
+            document.location = './signin';
+            throw new Error("Unauthenticated");
+        }
+        else {
+            throw new Error(res.status);
+        }
+    }
+    
+    return res;
+};
 
 function sync() {
     const hunt = getDataFromLocalStorage('hunt');
@@ -103,6 +120,28 @@ function sync() {
 
     const newtime = hunt.hunt_time + stopwatch.elapsedTime;
     const count = counter.counter;
+
+    const data = {
+        time: newtime,
+        start_date: hunt.start_date,
+        end_date: hunt.end_date,
+        count: count,
+        increment: hunt.increment,
+        charm: hunt.charm,
+        nickname: hunt.nickname
+    };
+
+    const url = `hunt/${hunt.id}`
+
+    fetch(API_BASE + url, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }).then(handleError).then(res => {
+        return res.json();
+    });
 
     if (hunt && stopwatch && counter) {
         api.updateHunt(hunt.id, hunt.start_date, newtime, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
@@ -129,7 +168,3 @@ self.addEventListener('sync', e => {
 function triggerSync() {
     self.registration.sync.register('syncData');
 }
-
-window.addEventListener('online', () => {
-    triggerSync();
-});

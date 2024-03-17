@@ -23,7 +23,7 @@ function newServiceWorker(worker) {
 
 function registerServiceWorker() {
     if (navigator.serviceWorker) {
-        navigator.serviceWorker.register('/serviceWorker.js').then( reg => {
+        navigator.serviceWorker.register('/serviceWorker.js').then(reg => {
             if (navigator.serviceWorker.controller) {
                 if (reg.installing)
                     console.log('service worker installing...');
@@ -35,7 +35,7 @@ function registerServiceWorker() {
                 console.log('service worker active');
 
                 reg.addEventListener('updatefound', () => {
-                    console.log('SW update found', reg, navigaotr.serviceWOrker.controller);
+                    console.log('SW update found', reg, navigator.serviceWorker.controller);
                     newServiceWorker(reg.installing);
                 });
             }
@@ -53,5 +53,12 @@ function registerServiceWorker() {
         });
     }
 }
+
+// Listen for online event
+window.addEventListener('online', () => {
+    if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'online' });
+    }
+});
 
 registerServiceWorker();
