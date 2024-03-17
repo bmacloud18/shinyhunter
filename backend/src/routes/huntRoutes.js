@@ -81,26 +81,26 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
     HuntDAO.completeHunt(huntId, end_date).then(hunt => {
         res.json(hunt);
     }).catch(() => {
-        res.status(404).json({error: 'error creating hunt'});
+        res.status(404).json({error: 'error completing hunt'});
     })
 });
 
 router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     
     const huntId = req.params.id;
-    const pkm = req.body.pkm;
-    const game = req.body.game;
-    const method = req.body.method;
+    const time = req.body.time;
+    const count = req.body.count;
     const start_date = req.body.start_date;
+    const end_date = req.body.end_date;
     const increment = req.body.increment;
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHunt(huntId, pkm, game, method, start_date, end_date, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHunt(huntId, time, start_date, end_date, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
-    }).catch(() => {
-        res.status(404).json({error: 'error updating hunt'});
-    })
+    }).catch(err => {
+        res.status(404).json(err.message);
+    });
 });
 
 
@@ -116,5 +116,7 @@ function timeComparator(a, b) {
 
     return d2.getTime() - d1.getTime();
 }
+
+
 
 export default router;

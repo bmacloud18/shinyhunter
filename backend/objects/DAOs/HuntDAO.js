@@ -87,7 +87,7 @@ async function createNewHunt(user, pokemon, game, method, start_date, end_date, 
 async function completeHunt(id, end_date) {
     const end_date_string = new Date(end_date).toISOString();
 
-    return query ('UPDATE hunt SET end_date_string=? WHERE hnt_id=?', [end_date_string, id]).then(({results}) => {
+    return query('UPDATE hunt SET end_date_string=? WHERE hnt_id=?', [end_date_string, id]).then(({results}) => {
         return results;
     }).catch( () => {
         throw new Error("Oops! couldn't complete hunt");
@@ -95,13 +95,14 @@ async function completeHunt(id, end_date) {
 };
 
 //update a hunt by providing it with hunt settings data
-async function updateHunt(id, count, increment, nickname) {
+async function updateHunt(id, time, start_date, end_date, count, increment, charm, nickname) {
 
-    return query ('UPDATE hunt SET count=?, increment=?, nickname=? WHERE id=?', [count, increment, nickname, id]).then(({results}) => {
+    return query('UPDATE hunt SET hnt_time_s=?, hnt_start_date_string=?, hnt_end_date_string=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, start_date, end_date, count, increment, charm, nickname, id]).then(({results}) => {
         return results;
-    }).catch( () => {
-        throw new Error("Oops! couldn't update hunt");
-    })
+    }).catch(err => {
+        console.log(err.message);
+        throw new Error(err.message +  ': error updating hunt');
+    });
 }
 
 export {

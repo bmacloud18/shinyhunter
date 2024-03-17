@@ -1,12 +1,26 @@
 //This script will fill out the general profile page, along with the userhunts script
 
 import api from './APIclient.js';
+import header from './header.js'
 
 const query = window.location.search;
 let parameters = new URLSearchParams(query);
 let id = parameters.get('id');
 
 let currentuserprofile = false;
+
+//sorts hunts by date
+function sortByEnd(hunts) {
+    return hunts.sort(timeComparator);
+}
+
+//sort helper
+function timeComparator(a, b) {
+    let d1 = new Date(a.hunt.end_date_string);
+    let d2 = new Date(b.hunt.end_date_string);
+
+    return d2.getTime() - d1.getTime();
+}
 
 api.getCurrentUser().then(currentuser => {
     header(currentuser);
@@ -21,6 +35,11 @@ api.getCurrentUser().then(currentuser => {
         newhuntbtn.addEventListener('click', (e) => {
             document.location = './newhunt';
         });
+        const importbtn = document.getElementById('importbutton');
+        importbtn.addEventListener('click', (e) => {
+            document.location = './importhunt';
+        });
+        
         profileDetails(currentuser, currentuser);
     }
     else {
@@ -28,7 +47,7 @@ api.getCurrentUser().then(currentuser => {
             // posts(user);
             profileDetails(currentuser, user);
         }).catch((err) => {
-            throw new Error("Error Occurred: " + err.message);
+            document.location = './userprofile?id=' + cid;
         });
     }
 }).catch((err) => {
@@ -46,25 +65,14 @@ function createHunt(hunt, pkm, active) {
 
     const name_header = document.createElement('span');
     name_header.classList.add('name_display');
-    name_header.textContent = pkm.name;
-    if (hunt.nickname) {
-        name_header.textContent = hunt.nickname;
-    }
+    name_header.textContent = hunt.nickname || pkm.name.substring(0,1).toUpperCase() + pkm.name.substring(1);
 
     const div = document.createElement('div');
     div.classList.add('hunt_details');
     const sprite = document.createElement('img');
     sprite.alt = 'Shiny Sprite';
-    const spritelink = document.createElement('a');
-    if(active && currentuserprofile) {
-        spritelink.href = './activehunt?id=' + hunt.id;
-    }
-    else {
-        spritelink.href = './hunt?id=' + hunt.id;
-    }
     sprite.src = pkm.sprite;
     sprite.classList.add('pkm_pic')
-    spritelink.append(sprite);
     const elapsed_time = document.createElement('span');
     elapsed_time.textContent = hunt.hunt_time_display;
     elapsed_time.classList.add('time_display');
@@ -89,48 +97,18 @@ function createHunt(hunt, pkm, active) {
     main.append(name_header, date_header, elapsed_time, div);
 
     main.addEventListener('click', (e) => {
-        document.location = './hunt?id=' + hunt.id;;
+        if(active && currentuserprofile) {
+            document.location = './activehunt?id=' + hunt.id;
+        }
+        else {
+            document.location = './finishedhunt?id=' + hunt.id;
+        }
     });
 
     section.append(main);
     section.style.color = pkm.color;
     return section;
 }
-
-
-//generate header
-function header(user) {
-    let logoutlink = document.createElement('button');
-    logoutlink.innerHTML = "Logout";
-    logoutlink.classList.add('button');
-
-    let logo = document.querySelector('.hheader');
-    logo.addEventListener('click', e => {
-        document.location = './login';
-    });
-    
-    logoutlink.addEventListener("click", e => {
-        e.preventDefault();
-        api.logout().then(() => {
-            localStorage.removeItem('user');
-            document.location = './login';
-        });
-    });
-
-
-    let imglink = document.querySelector('.pfp')
-    imglink.href = './userprofile?id=' + user.id;
-    const img = document.createElement('img');
-    img.src = user.avatar;
-    img.classList.add('howlpfpheader')
-    imglink.append(img);
-
-
-    document.querySelector('.firstname').innerHTML = `${user.first_name}`;
-    document.querySelector('.lastname').innerHTML = `${user.last_name}`;
-    document.querySelector('.logoutbutton').appendChild(logoutlink)
-}
-
 
 async function profileDetails(currentuser, user) {
     //setting profile details left side
@@ -193,28 +171,55 @@ async function profileDetails(currentuser, user) {
             });
         });
 
+        
+
         // Wait for all promises to resolve
         Promise.all(huntPromises).then(results => {
+            let actives = [];
+            let completed = [];
             results.forEach(({ hunt, pkm }) => {
                 const active = hunt.end_date_string == null;
-
-                const section = createHunt(hunt, pkm, active);
+                const data = {
+                    hunt: hunt,
+                    pkm: pkm
+                }
 
                 if (active) {
-                    activehunts.appendChild(section);
+                    actives.push(data)
                 }
                 else {
-                    completedhunts.appendChild(section);
+                    completed.push(data);
                 }
             });
+
+            const data = {
+                actives: actives,
+                completed: completed
+            }
+            return(data);
         }).catch(err => {
             throw new Error("Error occurred: " + err.message);
+        }).then((data) => {
+            data.actives.forEach(d => {
+                const section = createHunt(d.hunt, d.pkm, true);
+                activehunts.appendChild(section);
+            });
+    
+            sortByEnd(data.completed);
+    
+            data.completed.forEach(d => {
+                const section = createHunt(d.hunt, d.pkm, false);
+                completedhunts.appendChild(section);
+            });
         });
+        
 
     }).catch((err) => {
         throw new Error("Error Occurred: " + err.message);
     });
 }
+
+
 
 
 

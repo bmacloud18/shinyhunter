@@ -1,6 +1,6 @@
 {
     "name": "ShinyHunter",
-    "short_name": "ShinyHunt",
+    "short_name": "Shiny",
     "scope": "/",
     "start_url": "/",
     "display": "standalone",
@@ -19,7 +19,7 @@
       }
     ],
     "id": "1",
-    "description": "Take advantage of PWA technology to save information for your next event.",
+    "description": "Take advantage of PWA technology to effectively shiny hunt in pokemon games",
     "dir": "ltr",
     "lang": "en",
     "orientation": "portrait",

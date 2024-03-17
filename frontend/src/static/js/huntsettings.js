@@ -2,31 +2,15 @@
 // Currently applies to three pages, newhunt, huntsettings, and importhunt
 
 import api from './APIclient.js';
+import header from './header.js'
+import getPage from './getPage.js';
 
 const url = window.location.href;
 
 const query = window.location.search;
 let parameters = new URLSearchParams(query);
 let page_id = parameters.get('id');
-
-
-function getPage(url) {
-    const lastSlash = url.lastIndexOf('/');
-    const q = url.lastIndexOf('?');
-    if (q > lastSlash && lastSlash !== -1) {
-        return url.slice(lastSlash + 1, q);
-    }
-    else if (lastSlash !== -1) {
-        return url.slice(lastSlash + 1);
-    }
-    else {
-        return url;
-    }
-}
-
 const page = getPage(url);
-console.log(page);
-
 
 const nickname = document.getElementById('nickname');
 
@@ -90,7 +74,7 @@ if (page == 'importhunt') {
                 location = './activehunt?id='
             }
             else {
-                location = './hunt?id='
+                location = './finishedhunt?id='
             }
             api.createHunt(user.id, pokemon.value, game.value, method.value, startdate.value, enddate_input, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
                 const id = hunt.id;
@@ -139,6 +123,9 @@ else if (page == 'huntsettings') {
             sprite.src = pkm.sprite;
             hheader.append(sprite);
 
+            sprite.addEventListener('click', e => {
+                document.location = "./activehunt?id=" + page_id;
+            });
 
             submit.addEventListener('click', e => {
                 api.updateHunt(hunt.id, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
@@ -157,36 +144,4 @@ else if (page == 'huntsettings') {
     });
     
     
-}
-
-function header(user) {
-    let logoutlink = document.createElement('button');
-    logoutlink.innerHTML = "Logout";
-    logoutlink.classList.add('button');
-
-    let logo = document.querySelector('.hheader');
-    logo.addEventListener('click', e => {
-        // document.location = './login';
-    });
-    
-    logoutlink.addEventListener("click", e => {
-        e.preventDefault();
-        api.logout().then(() => {
-            localStorage.removeItem('user');
-            // document.location = './login';
-        });
-    });
-
-
-    let imglink = document.querySelector('.pfp')
-    imglink.href = './userprofile?id=' + user.id;
-    const img = document.createElement('img');
-    img.src = user.avatar;
-    img.classList.add('howlpfpheader')
-    imglink.append(img);
-
-
-    document.querySelector('.firstname').innerHTML = `${user.first_name}`;
-    document.querySelector('.lastname').innerHTML = `${user.last_name}`;
-    document.querySelector('.logoutbutton').appendChild(logoutlink)
 }

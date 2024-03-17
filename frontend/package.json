@@ -21,6 +21,7 @@
     "define-data-property": "^1.1.4",
     "depd": "^2.0.0",
     "destroy": "^1.2.0",
+    "easytimer.js": "^4.6.0",
     "ecdsa-sig-formatter": "^1.0.11",
     "ee-first": "^1.1.1",
     "encodeurl": "^1.0.2",

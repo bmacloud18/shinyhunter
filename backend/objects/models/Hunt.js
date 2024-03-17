@@ -10,7 +10,7 @@ export default class Hunt {
     end_date_string = null;
     end_date_display = null;
     hunt_time = null;
-    hunt_time_converted = null;
+    hunt_time_display = null;
     count = null;
     increment = null;
     charm = null;
@@ -20,6 +20,7 @@ export default class Hunt {
         this.pkm = data.pkm_name;
         this.user = data.usr_id;
         this.game = data.gam_name;
+        this.method = data.mtd_id;
         //dates stored as ISO 8601 string for some functions and also converted to a display string field
         this.start_date_string = data.hnt_start_date_string;
         this.start_date_display = convertDate(data.hnt_start_date_string);
@@ -42,37 +43,9 @@ export default class Hunt {
     }
 };
 
-function convertTime(s) {
-    // Ensure the input is a non-negative number
-    if (!Number.isFinite(s) || s < 0) {
-        return 'Invalid input';
-    }
 
-    // Calculate hours, minutes, and seconds
-    const hours = Math.floor(s / 3600);
-    const minutes = Math.floor((s % 3600) / 60);
-    const seconds = s % 60;
-
-    // Construct the formatted string
-    const formattedTime = [];
-
-    if (hours > 0) {
-        formattedTime.push(`${hours}h`);
-    }
-
-    if (minutes > 0) {
-        formattedTime.push(`${minutes}m`);
-    }
-
-    if (seconds > 0 || (hours === 0 && minutes === 0)) {
-        formattedTime.push(`${seconds}s`);
-    }
-
-    return formattedTime.join(', ');
-}
 
 function convertDate(date) {
-    console.log(date);
     if (date != null) {
         let eventdate = new Date(date)
         let datestring = eventdate.toDateString();
@@ -114,4 +87,33 @@ function convertDate(date) {
 
     return null;
 
+};
+
+function convertTime(s) {
+    // Ensure the input is a non-negative number
+    if (!Number.isFinite(s) || s < 0) {
+        return 'Invalid input';
+    }
+
+    // Calculate hours, minutes, and seconds
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
+
+    // Construct the formatted string
+    const formattedTime = [];
+
+    if (hours > 0) {
+        formattedTime.push(`${hours}h`);
+    }
+
+    if (minutes > 0) {
+        formattedTime.push(`${minutes}m`);
+    }
+
+    if (seconds > 0 || (hours === 0 && minutes === 0)) {
+        formattedTime.push(`${seconds}s`);
+    }
+
+    return formattedTime.join(', ');
 };
