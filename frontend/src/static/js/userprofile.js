@@ -22,6 +22,11 @@ api.getCurrentUser().then(currentuser => {
         newhuntbtn.addEventListener('click', (e) => {
             document.location = './newhunt';
         });
+        const importbtn = document.getElementById('importbutton');
+        importbtn.addEventListener('click', (e) => {
+            document.location = './importhunt';
+        });
+        
         profileDetails(currentuser, currentuser);
     }
     else {

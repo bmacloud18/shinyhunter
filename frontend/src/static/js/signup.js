@@ -28,6 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     signin.addEventListener('click', e => {
-        document.location = "./login";
+        document.location = "./signin";
     });
 });

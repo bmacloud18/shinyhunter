@@ -1,4 +1,3 @@
-
 const express = require( 'express' );
 const router = express.Router();
 
@@ -14,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 // base
-router.get('/login', (req, res) => {
+router.get('/signin', (req, res) => {
     res.sendFile(`${html_dir}login.html`);
 });
 
@@ -34,8 +33,8 @@ router.get('/activehunt', (req, res) => {
 });
 
 // hunt (noninteractive)
-router.get( '/hunt', ( req, res ) => {
-    res.sendFile(`${html_dir}hunt.html`);
+router.get( '/finishedhunt', ( req, res ) => {
+    res.sendFile(`${html_dir}finishedhunt.html`);
 });
 
 // account settings
@@ -61,6 +60,11 @@ router.get( '/importhunt', ( req, res ) => {
 // successful hunt
 router.get( '/success', ( req, res ) => {
     res.sendFile(`${html_dir}success.html`);
+});
+
+// offline page
+router.get( '/offline', ( req, res ) => {
+    res.sendFile(`${html_dir}offline.html`);
 });
 
 

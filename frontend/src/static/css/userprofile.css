@@ -54,10 +54,24 @@ main {
     grid-area: 'newhunt';
     border-color: black;
     color: black;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: space-around;
+    gap: 0em 1em;
+
 }
 
 #huntbutton {
     padding: 1em;
+    width: 8em;
+}
+
+#importbutton {
+    padding: 1em;
+    width: 8em;
 }
 
 @media (min-width: 878px) {
