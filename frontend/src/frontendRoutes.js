@@ -34,8 +34,8 @@ router.get('/activehunt', (req, res) => {
 });
 
 // hunt (noninteractive)
-router.get( '/hunt', ( req, res ) => {
-    res.sendFile(`${html_dir}hunt.html`);
+router.get( '/finishedhunt', ( req, res ) => {
+    res.sendFile(`${html_dir}finishedhunt.html`);
 });
 
 // account settings
