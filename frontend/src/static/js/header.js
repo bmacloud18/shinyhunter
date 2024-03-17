@@ -16,7 +16,7 @@ export default function header(user) {
         e.preventDefault();
         api.logout().then(() => {
             localStorage.removeItem('user');
-            // document.location = './signin';
+            document.location = './signin';
         });
     });
 

@@ -49,17 +49,37 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 
-.overlay {
+
+.huntdetailsbtm > * {
+    min-width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.count {
+    justify-content: space-around;
     align-items: center;
 }
+
+/* .gamedetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+} */
+/* 
+.gamedetails > * {
+    width: 33%;
+} */
 
 #count {
     font-size: 3em;
@@ -69,7 +89,7 @@ body {
     display: flex;
     justify-self: flex-end;
 } */
-
+/* 
 .gamedetails {
     display: flex;
     flex-direction: row;
@@ -79,7 +99,7 @@ body {
     gap: 1em 3em;
     margin-top: 1em;
     margin-bottom: 1em;
-}
+} */
 
 .dates {
     display: flex;

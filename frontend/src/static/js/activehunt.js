@@ -100,7 +100,7 @@ function saveCurrentHunt() {
 api.getHuntById(page_id).then(async hunt => {
     saveDataToLocalStorage('hunt', hunt);
     const pkm = await api.getPokemonByName(hunt.pkm.toLowerCase());
-    title.innerText = hunt.nickname;
+    title.innerText = hunt.nickname || pkm.name.substring(0,1).toUpperCase() + pkm.name.substring(1);
     sub.innerText = convertTime(hunt.hunt_time);
 
     const stopwatchData = getDataFromLocalStorage('stopwatchData');
@@ -168,6 +168,7 @@ api.getHuntById(page_id).then(async hunt => {
         
         api.updateHunt(hunt.id, hunt.hunt_time + seconds, hunt.start_date_string, end_date, count, hunt.increment, hunt.charm, hunt.nickname).then(hunt => {
             console.log(hunt);
+            document.location = './finishedhunt?id=' + page_id;
         }).catch(err => {
             throw new Error(err.message);
         });

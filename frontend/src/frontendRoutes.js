@@ -33,37 +33,37 @@ router.get('/activehunt', (req, res) => {
 });
 
 // hunt (noninteractive)
-router.get( '/finishedhunt', ( req, res ) => {
+router.get('/finishedhunt', (req, res) => {
     res.sendFile(`${html_dir}finishedhunt.html`);
 });
 
 // account settings
-router.get( '/accountsettings', ( req, res ) => {
+router.get('/accountsettings', (req, res) => {
     res.sendFile(`${html_dir}accountsettings.html`);
 });
 
 // huntsettings
-router.get( '/huntsettings', ( req, res ) => {
+router.get('/huntsettings', (req, res) => {
     res.sendFile(`${html_dir}huntsettings.html`);
 });
 
 // new hunt page
-router.get( '/newhunt', ( req, res ) => {
+router.get('/newhunt', (req, res) => {
     res.sendFile(`${html_dir}newhunt.html`);
 });
 
 // import hunt page
-router.get( '/importhunt', ( req, res ) => {
+router.get('/importhunt', (req, res) => {
     res.sendFile(`${html_dir}importhunt.html`);
 });
 
 // successful hunt
-router.get( '/success', ( req, res ) => {
+router.get('/success', (req, res) => {
     res.sendFile(`${html_dir}success.html`);
 });
 
 // offline page
-router.get( '/offline', ( req, res ) => {
+router.get('/offline', (req, res) => {
     res.sendFile(`${html_dir}offline.html`);
 });
 

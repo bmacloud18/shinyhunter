@@ -53,7 +53,7 @@ async function fetchFirst(req) {
     return fetch(req).then(res => {
         if (res) {
             const requestURL = new URL(req.url);
-            if (res.ok && !requestURL.pathname.startsWith('/sign')) {
+            if (res.ok) {
                 caches.open(STATIC_CACHE_NAME).then(cache => {
                     //refresh specified cache
                     cache.delete(requestURL);

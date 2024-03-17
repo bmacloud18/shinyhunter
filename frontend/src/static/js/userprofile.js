@@ -65,10 +65,7 @@ function createHunt(hunt, pkm, active) {
 
     const name_header = document.createElement('span');
     name_header.classList.add('name_display');
-    name_header.textContent = pkm.name;
-    if (hunt.nickname) {
-        name_header.textContent = hunt.nickname;
-    }
+    name_header.textContent = hunt.nickname || pkm.name.substring(0,1).toUpperCase() + pkm.name.substring(1);
 
     const div = document.createElement('div');
     div.classList.add('hunt_details');
