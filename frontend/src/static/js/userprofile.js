@@ -9,6 +9,19 @@ let id = parameters.get('id');
 
 let currentuserprofile = false;
 
+//sorts hunts by date
+function sortByEnd(hunts) {
+    return hunts.sort(timeComparator);
+}
+
+//sort helper
+function timeComparator(a, b) {
+    let d1 = new Date(a.hunt.end_date_string);
+    let d2 = new Date(b.hunt.end_date_string);
+
+    return d2.getTime() - d1.getTime();
+}
+
 api.getCurrentUser().then(currentuser => {
     header(currentuser);
     const cid = currentuser.id;
@@ -156,28 +169,55 @@ async function profileDetails(currentuser, user) {
             });
         });
 
+        
+
         // Wait for all promises to resolve
         Promise.all(huntPromises).then(results => {
+            let actives = [];
+            let completed = [];
             results.forEach(({ hunt, pkm }) => {
                 const active = hunt.end_date_string == null;
-
-                const section = createHunt(hunt, pkm, active);
+                const data = {
+                    hunt: hunt,
+                    pkm: pkm
+                }
 
                 if (active) {
-                    activehunts.appendChild(section);
+                    actives.push(data)
                 }
                 else {
-                    completedhunts.appendChild(section);
+                    completed.push(data);
                 }
             });
+
+            const data = {
+                actives: actives,
+                completed: completed
+            }
+            return(data);
         }).catch(err => {
             throw new Error("Error occurred: " + err.message);
+        }).then((data) => {
+            data.actives.forEach(d => {
+                const section = createHunt(d.hunt, d.pkm, true);
+                activehunts.appendChild(section);
+            });
+    
+            sortByEnd(data.completed);
+    
+            data.completed.forEach(d => {
+                const section = createHunt(d.hunt, d.pkm, false);
+                completedhunts.appendChild(section);
+            });
         });
+        
 
     }).catch((err) => {
         throw new Error("Error Occurred: " + err.message);
     });
 }
+
+
 
 
 

@@ -1,0 +1,139 @@
+html,
+body {
+  height: 100%;
+  background-color: rgba(156, 9, 38, 0.767);
+}
+
+.body {
+    background-color: rgba(156, 9, 38, 0.767);
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.main {
+    border: .2em solid black;
+    width: 60%;
+    height: 75%;
+    align-self: center;
+    margin-bottom: 1em;
+}
+
+.mainbody {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+}
+
+.huntdetailstop {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#nickname {
+    font-size: 2.5em;
+}
+
+#timeelapsed {
+    font-size: 1.33em;
+}
+
+.huntdetailsbtm {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.overlay {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#count {
+    font-size: 3em;
+}
+
+/* .huntarea {
+    display: flex;
+    justify-self: flex-end;
+} */
+
+.gamedetails {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em 3em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.dates {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em 3em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+@media (min-width: 425px) {
+/*  */
+}
+
+@media (max-width: 424px) {
+
+    #count {
+        font-size: 1.5em;
+    }
+
+    #nickname {
+        font-size: 2em;
+    }
+
+    .main {
+        height: 60%;
+    }
+
+    .gamedetails {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1em 1em;
+        margin-top: .2em;
+        margin-bottom: .2em;
+    }
+
+    .dates {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1em 1em;
+        margin-top: .2em;
+        margin-bottom: .2em;
+    }
+}
+
+.reopenbutton {
+    margin-top: 2em;
+    margin-bottom: .25em;
+}
