@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `method` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `method`;
 
-INSERT INTO `method` (`mtd_name`, `mtd_odds`, `mtd_charm_odds`) VALUES ('Masuda', 683, 512);
+INSERT INTO `method` (`mtd_name`, `mtd_odds`, `mtd_charm_odds`) VALUES ('Masuda', 683, 512), ('Random Encounter', 8192, 2371), ('Soft Reset', 8192, 2371);
 
 
 CREATE TABLE IF NOT EXISTS `user` (
@@ -54,17 +54,6 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     PRIMARY KEY (`hnt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `hunt`;
-
-INSERT INTO `hunt` (`pkm_name`, `usr_id` , `gam_name`, `mtd_id`, `hnt_start_date_string`, `hnt_end_date_string`, `hnt_time_s`, `hnt_count`, `hnt_inc`, `hnt_charm`, `hnt_nnm`) VALUES
-    ('Pikachu', 1, 'Sun', 1, '2020-05-29T03:50:25Z', '2020-05-29T03:50:25Z', 123412, 150, 5, 1, 'testcompleted'),
-    ('Bulbasaur', 1, 'Sun', 1, '2023-03-26T03:50:25Z', null, 23, 50, 5, 1, 'test2'),
-    ('Chimchar', 1, 'X', 1, '2023-06-22T03:50:25Z', null, 124513, 15, 5, 1, 'test3'),
-    ('Jigglypuff', 1, 'Sun', 1, '2023-05-22T03:50:25Z', '2024-01-22T03:08:25Z', 666, 6000056, 5, 1, 'bigtests'),
-    ('Elekid', 1, 'Moon', 1, '2023-08-24T03:36:25Z', '2024-01-22T03:08:25Z', 7777, 1, 5, 1, 'test4'),
-    ('Magby', 1, 'Sun', 1, '2024-01-22T03:08:25Z', null, 2435, 50, 5, 1, 'nice'),
-    ('Squirtle', 1, 'Moon', 1, '2022-05-25T03:50:25Z', null, 1234123, 100000000000, 5, 1, 'maxtest'),
-    ('Turtwig', 1, 'Sun', 1, '2022-05-25T03:50:25Z', null, 27, 50, 5, 1, 'GOAT');
-    
 
 
 

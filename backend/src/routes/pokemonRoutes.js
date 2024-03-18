@@ -81,7 +81,8 @@ router.get('/pokemon/name/:name', tokenMiddleware, async (req, res) => {
     const name = req.params.name;
 
     const pokemon_obj = await pokedex.getPokemonByName(name);
-    const species_obj = await pokedex.getPokemonSpeciesByName(name);
+    const parts = name.split('-');
+    const species_obj = await pokedex.getPokemonSpeciesByName(parts[0]);
 
     res.json(cleanMon(pokemon_obj, species_obj));
 });

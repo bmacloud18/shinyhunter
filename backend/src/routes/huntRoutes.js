@@ -103,6 +103,13 @@ router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     });
 });
 
+router.delete('/hunt/:id', tokenMiddleware, (req, res) => {
+    const huntId = req.params.id;
+
+    HuntDAO.deleteHunt(huntId).then(msg => {
+        console.log(msg);
+    });
+});
 
 //sorts hunts by date
 function sortHunts(hunts) {

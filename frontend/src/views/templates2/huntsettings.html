@@ -13,52 +13,57 @@
         <script src="js/huntsettings.js" type="module"></script>
     </head>
 
-    <body class="body">
-        <div class="container">
-            <header id="mainheader" class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
-            <h1 class="hheader">
-                ShinyHunter
-            </h1>
-        
-            <div class="userdetails">
-                <a class="pfp"></a>
-                <div class = "fields">
-                    <div class="firstname"></div>
-                    <div class="lastname"></div>
-                </div>
-                <div class="logoutbutton"></div>
-                </div>
-            </header>
-        </div>
-
-        <main class="form-signin vw-100 m-auto">
-            <form>
-                <div class="huntheader" id="huntheader">
-                    <h1 class="h3 mb-3 fw-normal text-center" id="title">Hunt Settings</h1>
-                </div>
-
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nickname" placeholder="Nickname" required="true">
-                    <label for="nickname">Nickname</label>
-                </div>
-
-                <div class="huntdetails">
-                    <div class="detail" id="top">
-                        <input type="number" class="topin" id="increment" placeholder="Increment">
-                        <div class="charmcontainer">
-                            <input type="checkbox" class="topin" id="charm">
-                            <label for="charm">Charm?</label>
+    <body>
+        <div class="body">
+            <div class="container">
+                <header id="mainheader" class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+                <h1 class="hheader">
+                    ShinyHunter
+                </h1>
+            
+                <div class="userdetails">
+                    <a class="pfp"></a>
+                    <div class = "fields">
+                        <div class="firstname"></div>
+                        <div class="lastname"></div>
+                    </div>
+                    <div class="logoutbutton"></div>
+                    </div>
+                </header>
+            </div>
+    
+            <main class="form-signin vw-100 m-auto">
+                <form>
+                    <div class="huntheader" id="huntheader">
+                        <h1 class="h3 mb-3 fw-normal text-center" id="title">Hunt Settings</h1>
+                    </div>
+    
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="nickname" placeholder="Nickname" required="true">
+                        <label for="nickname">Nickname</label>
+                    </div>
+    
+                    <div class="huntdetails">
+                        <div class="detail" id="top">
+                            <input type="number" class="topin" id="increment" placeholder="Increment">
+                            <div class="charmcontainer">
+                                <input type="checkbox" class="topin" id="charm">
+                                <label for="charm">Charm?</label>
+                            </div>
+                        </div>
+                        <div class="detail" id="bottom">
+                            <input type="number" class="bottomin" id="count" placeholder="Count">
+                            <input type="number" class="bottomin" id="time" placeholder="Time (in sec)">
                         </div>
                     </div>
-                    <div class="detail" id="bottom">
-                        <input type="number" class="bottomin" id="count" placeholder="Count">
-                        <input type="number" class="bottomin" id="time" placeholder="Time (in sec)">
+                
+                    <div class="checkbox mb-3">
                     </div>
-                </div>
-            
-                <div class="checkbox mb-3">
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Update Hunt</button>
-            </form>
-        </main>
-    </body>
+                    <button class="w-100 btn btn-lg btn-primary" type="button" id="submitbutton">Update Hunt</button>
+                </form>
+            </main>
+            <div class="cancelbutton" id="cancelbutton">
+                <button class="button" id="cancel">Cancel Hunt</button>
+            </div>
+        </div>
+    </body> 

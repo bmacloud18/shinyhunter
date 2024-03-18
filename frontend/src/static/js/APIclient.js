@@ -144,6 +144,10 @@ export default {
         return HTTPclient.put(`hunt/${id}`, data)
     },
 
+    deleteHunt: async(id) => {
+        return HTTPclient.delete(`hunt/${id}`);
+    },
+
     /*//////\\\\\\*\
     //Method Routes\\
     \*\\\\\\//////*/

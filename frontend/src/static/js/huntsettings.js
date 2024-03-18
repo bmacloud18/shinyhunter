@@ -109,6 +109,16 @@ else if (page == 'huntsettings') {
     if (page_id == null) {
         document.location = './newhunt';
     }
+
+    const canceldisplay = document.getElementById('cancelbutton');
+    canceldisplay.style.display = 'flex';
+
+    const cancel = document.getElementById('cancel');
+    cancel.addEventListener('click', e => {
+        api.deleteHunt(page_id);
+        document.location = './userprofile?=' + user.id;
+    });
+
     api.getHuntById(page_id).then(hunt => {
         return api.getPokemonByName(hunt.pkm.toLowerCase()).then(pkm => {
             if (hunt.user != user.id) {
