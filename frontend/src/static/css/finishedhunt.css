@@ -157,3 +157,14 @@ body {
     margin-top: 2em;
     margin-bottom: .25em;
 }
+
+#remove {
+    margin: .4em .4em .4em .4em;
+}
+
+.removebutton {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}

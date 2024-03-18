@@ -55,4 +55,10 @@ api.getHuntById(page_id).then(async hunt => {
             throw new Error(err.message);
         });
     });
+
+    const remove = document.getElementById('remove');
+    remove.addEventListener('click', e => {
+        api.deleteHunt(page_id);
+        document.location = './userprofile?=' + user.id;
+    });
 });

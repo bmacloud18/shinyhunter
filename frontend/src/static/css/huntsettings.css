@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  background-color: rgba(156, 9, 38, 0.767);
 }
 
 .body {
@@ -8,20 +9,13 @@ body {
     min-width: 100%;
     display: flex;
     flex-direction: column;
-    
+    height: 100%;
 }
 
 main {
     background-color: rgba(219, 214, 215, 0.116);
-    border-radius: 10px;
+    margin-top: 2em;
 }
-
-body {
-    display: flex;
-    align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
 
 .form-signin {
     max-width: 33em;
@@ -125,3 +119,15 @@ select {
     color: black;
     font-size: 2em;
 }
+
+#cancel {
+    margin: .4em .4em .4em .4em;
+}
+
+.cancelbutton {
+    display: none;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+

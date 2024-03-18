@@ -105,11 +105,21 @@ async function updateHunt(id, time, start_date, end_date, count, increment, char
     });
 }
 
+async function deleteHunt(id) {
+    return query('DELETE FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
+        return 'hunt deleted';
+    }).catch(err => {
+        console.log(err.message);
+        throw new Error(err.message +  ': error deleting hunt');
+    });
+}
+
 export {
     getAllHunts,
     getHuntById,
     getHuntsByUser,
     createNewHunt,
     completeHunt,
-    updateHunt
+    updateHunt,
+    deleteHunt
 };
