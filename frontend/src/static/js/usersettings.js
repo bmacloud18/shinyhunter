@@ -31,6 +31,8 @@ cancel.addEventListener('click', e => {
 const userheader = document.getElementById('name');
 userheader.innerHTML = user.first_name + " " + user.last_name;
 
+let form_data = new FormData();
+
 const input = document.getElementById('image_up');
 const preview = document.getElementById('image_preview');
 const pfp = document.createElement('img');
@@ -50,6 +52,7 @@ input.addEventListener('change', e => {
             else {
                 pfp.src = e.target.result;
                 input.setCustomValidity('');
+                formdata.append('pfp', file);
             }
         }
     }   
@@ -59,7 +62,26 @@ input.addEventListener('change', e => {
 submit.addEventListener('click', e => {
     if (form_type == "details") {
         if (first_name.value.length > 1 && last_name.value.length > 1 && username.value.length > 4) {
-            api.updateCurrentUserSettings(first_name.value, last_name.value, username.value, avatar.value).then(() => {
+            formdata.append('first_name', first_name.value);
+            formdata.append('last_name', last_name.value);
+            formdata.append('username', username.value);
+            const url = 'api/currentuser';
+            fetch(url, {
+                method: 'PUT',
+                body: formdata
+            }).then(res => {
+                if(!res.ok) {
+                    if(res.status == 401) {
+                        localStorage.removeItem('user');
+                        document.location = './signin';
+                        throw new Error("Unauthenticated");
+                    }
+                    else {
+                        throw new Error(res.status);
+                    }
+                }
+                return res;
+            }).then(() => {
                 document.location = './userprofile?=' + user.id;
                 console.log('user updated');
             }).catch((err) => {

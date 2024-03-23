@@ -46,7 +46,7 @@ export default {
             username: username,
             avatar: avatar
         };
-        return HTTPclient.put( 'currentuser', data );
+        return HTTPclient.put('currentuser', data);
     },
 
     updatePassword: async ( password, updatedPassword ) => {
