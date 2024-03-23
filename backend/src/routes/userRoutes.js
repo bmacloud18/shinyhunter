@@ -10,6 +10,20 @@ const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
+import fs from 'fs';
+
+import multer from 'multer';
+let mstorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../uploads');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({storage: mstorage});
+
 // const UserDAO = require('../../objects/DAOs/UserDAO.js')
 // const {tokenMiddleware, generateToken, removeToken} = require('../middleware/tokenMiddleware');
 
@@ -73,23 +87,27 @@ router.get('/currentuser', tokenMiddleware, (req, res) => {
 });
 
 //update current user info
-router.put('/currentuser', tokenMiddleware, async (req, res) => {
+router.put('/currentuser', tokenMiddleware, upload.single('img'), async (req, res) => {
 
     // check if username is taken
-    if ( req.user.username !== req.body.username ) {
-        const user = await UserDAO.getUser( req.body.username ).catch( () => {
+    if (req.user.username !== req.body.username) {
+        const user = await UserDAO.getUser(req.body.username).catch( () => {
             return; // do nothing
         });
 
         // updated username exists
-        if ( user ) {
-            res.status( 403 ).json( {error: `Oops! Username ${user.username} is unavailable.`} );
+        if (user) {
+            res.status(403).json({error: `Oops! Username ${user.username} is unavailable.`});
             return;
         }
     }
 
+    if (req.file.mimetype,substring(0, 5) != 'image') {
+        const filePath = path.join(__dirname, )
+    }
+
     // update user information
-    UserDAO.updateUser( req.user.id, req.body ).then(user => {
+    UserDAO.updateUser(req.user.id, req.file, req.body).then(user => {
         res.json(user.username + ' updated');
     }).catch( () => {
         res.status( 401 ).json( {error: 'Oops! Not authenticated.'} );

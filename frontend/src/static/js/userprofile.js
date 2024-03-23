@@ -7,6 +7,7 @@ const query = window.location.search;
 let parameters = new URLSearchParams(query);
 let id = parameters.get('id');
 
+
 let currentuserprofile = false;
 
 //sorts hunts by date
@@ -120,6 +121,9 @@ async function profileDetails(currentuser, user) {
     if (currentuserprofile) {
         let editbutton = document.querySelector('#followbutton');
         editbutton.innerText = "Edit Profile";
+        editbutton.addEventListener('click', e => {
+            document.location = './usersettings';
+        });
     }
     else {
         api.getCurrentUserHunts().then(hunts => {

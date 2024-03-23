@@ -4,15 +4,18 @@
 import api from './APIclient.js';
 import header from './header.js'
 
+const form = document.getElementById('f');
+let form_type = "detail";
 
-const query = window.location.search;
-
-const username = document.getElementById('username');
-const password = document.getElementById('password');
 const first_name = document.getElementById('first_name');
 const last_name = document.getElementById('last_name');
+const username = document.getElementById('username');
+const current_password = document.getElementById('current_password');
+const new_password = document.getElementById('new_password');
+const confirm_password = document.getElementById('confirm_password');
 
-const submit = document.getElementById('submitbutton')
+const change = document.getElementById('changebutton');
+const submit = document.getElementById('submitbutton');
 
 const user = await api.getCurrentUser();
 header(user);
@@ -27,20 +30,114 @@ cancel.addEventListener('click', e => {
 
 const userheader = document.getElementById('name');
 userheader.innerHTML = user.first_name + " " + user.last_name;
-const hheader = document.getElementById('userheader')
+
+const input = document.getElementById('image_up');
+const preview = document.getElementById('image_preview');
 const pfp = document.createElement('img');
 pfp.alt = 'User PFP';
-pfp.src = pkm.pfp;
-hheader.append(pfp);
+pfp.src = user.avatar;
+preview.append(pfp);
+
+input.addEventListener('change', e => {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            if (file.type.substring(0, 5) != 'image') {
+                input.setCustomValidity('File not a valid image');
+            }
+            else {
+                pfp.src = e.target.result;
+                input.setCustomValidity('');
+            }
+        }
+    }   
+});
+
 
 submit.addEventListener('click', e => {
-    api.updateHunt(hunt.id, time.value, count.value, increment.value, charm.value, nickname.value).then(hunt => {
-        const id = hunt.id;
-        document.location = './activehunt?id=' + id;
-        console.log('hunt updated');
-    }).catch((err) => {
-        throw new Error('Error Occurred Updating Hunt: ' + err.message)
-    });
-}).catch((err) => {
-    throw new Error('Error Occurred Getting Hunt: ' + err.message)
+    if (form_type == "details") {
+        if (first_name.value.length > 1 && last_name.value.length > 1 && username.value.length > 4) {
+            api.updateCurrentUserSettings(first_name.value, last_name.value, username.value, avatar.value).then(() => {
+                document.location = './userprofile?=' + user.id;
+                console.log('user updated');
+            }).catch((err) => {
+                username.setCustomValidity('Username may be taken');
+                username.reportValidity();
+                throw new Error('Error Occurred Updating User: ' + err.message)
+            });
+        }
+        else if (first_name.value.length <= 1) {
+            first_name.setCustomValidity('Please enter a name');
+            first_name.reportValidity();
+        }
+        else if (last_name.value.length <= 1) {
+            last_name.setCustomValidity('Please enter a name');
+            last_name.reportValidity();
+        }
+        else if (username.value.length <= 4) {
+            username.setCustomValidity('Please enter a longer username');
+            username.reportValidity();
+        }
+        
+    }
+    else if (form_type =="password") {
+        if (new_password.value.length > 3) {
+            if (confirm_password.value == new_password.value) {
+                api.updatePassword(current_password.value, new_password.value).then(() => {
+                    document.location = './userprofile?=' + user.id;
+                    console.log('user updated');
+                }).catch(err => {
+                    current_password.setCustomValidity('Password Invalid');
+                    current_password.reportValidity();
+                    throw new Error('Password Invalid: ' + err.message);
+                });
+            }
+            else {
+                confirm_password.setCustomValidity('Passwords do not match');
+                confirm_password.reportValidity();
+            }
+        }
+        else if (password.value.length <= 3) {
+            password.setCustomValidity('Please enter a longer password');
+            password.reportValidity();
+        }
+    }
 });
+
+change.addEventListener('click', e => {
+    console.log('change clicked');
+    const p_list = document.getElementsByClassName('password_display');
+    const d_list = document.getElementsByClassName('detail_display');
+    console.log(p_list, d_list);
+    console.log(form_type);
+    if (form_type === "detail") {
+        form_type = "password";
+        for (let i = 0; i < p_list.length; i++) {
+            p_list[i].style.display = 'flex';
+            console.log(i);
+        }
+        for (let i = 0; i < d_list.length; i++) {
+            d_list[i].style.display = 'none';
+            console.log(i);
+        }
+
+        change.innerText = 'Change Settings';
+        submit.innerText = 'Update Password'
+    }
+    else if (form_type === "password") {
+        form_type = "detail";
+        for (let i = 0; i < p_list.length; i++) {
+            p_list[i].style.display = 'none';
+            console.log(i);
+        }
+        for (let i = 0; i < d_list.length; i++) {
+            d_list[i].style.display = 'flex';
+            console.log(i);
+        }
+
+        change.innerText = 'Change Password';
+        submit.innerText = 'Update Settings'
+    }
+})

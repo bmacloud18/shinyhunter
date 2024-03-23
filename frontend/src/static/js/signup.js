@@ -26,6 +26,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log(err);
             });
         }
+        else if (first_name.value.length <= 1) {
+            first_name.setCustomValidity('Please enter a name');
+            first_name.reportValidity();
+        }
+        else if (last_name.value.length <= 1) {
+            last_name.setCustomValidity('Please enter a name');
+            last_name.reportValidity();
+        }
+        else if (username.value.length <= 4) {
+            username.setCustomValidity('Please enter a username');
+            username.reportValidity();
+        }
+        else if (password.value.length <= 3) {
+            password.setCustomValidity('Please enter a password');
+            password.reportValidity();
+        }
     });
     signin.addEventListener('click', e => {
         document.location = "./signin";
