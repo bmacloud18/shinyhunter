@@ -44,14 +44,17 @@ let file_name;
 input.addEventListener('change', e => {
     const file = input.files[0];
     file_name = file.name;
+    console.log(file_name);
     if (file != null) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
+        console.log(reader);
         reader.onload = function(e) {
             if (file.type.substring(0, 5) != 'image') {
                 input.setCustomValidity('File not a valid image');
             }
             else {
+                console.log(file_name);
                 pfp.src = e.target.result;
                 input.setCustomValidity('');
                 formdata.append('pfp', file);
@@ -87,21 +90,24 @@ submit.addEventListener('click', e => {
         if (file_name != null) {
             const url = 'images/';
             avatar_string = 'images/' + file_name;
+            fetch(url + user.avatar, {
+                method: 'DELETE'
+            });
             fetch(url, {
                 method: 'POST',
                 body: formdata
             }).then(res => {
                 if(!res.ok) {
                     if(res.status == 401) {
-                        throw new Error("Someting wrong");
+                        throw new Error("Unauthenticated");
                     }
                     else {
                         throw new Error(res.status);
                     }
                 }
                 return res;
-            }).then(() => {
-                console.log('img uploaded');
+            }).then((res) => {
+                console.log(res.json());
             }).catch((err) => {
                 input.setCustomValidity('Problem uploading image');
                 input.reportValidity();
@@ -114,8 +120,8 @@ submit.addEventListener('click', e => {
             username.reportValidity();
         }
         else {
-            api.updateCurrentUserSettings(first_name.value, last_name.value, username.value, avatar_string).then(() => {
-                document.location = './userprofile?id=' + user.id;
+            api.updateCurrentUserSettings(first_val, last_val, user_val, avatar_string).then(() => {
+                //document.location = './userprofile?id=' + user.id;
             }).catch((err) => {
                 username.setCustomValidity('Username may be taken');
                 username.reportValidity();

@@ -53,7 +53,7 @@ async function fetchFirst(req) {
     return fetch(req).then(res => {
         if (res) {
             const requestURL = new URL(req.url);
-            if (res.ok) {
+            if (res.ok && req.method === 'GET') {
                 caches.open(STATIC_CACHE_NAME).then(cache => {
                     //refresh specified cache
                     cache.delete(requestURL);
@@ -80,7 +80,7 @@ self.addEventListener('fetch', e => {
             e.respondWith(fetchFirst(e.request));
         }
     }
-    else {
+    else if (e.request.method !== 'POST' || 'PUT'){
         e.respondWith(fetchFirst(e.request));
     }
 });

@@ -25,7 +25,7 @@ export default function header(user) {
     imglink.href = './userprofile?id=' + user.id;
     const img = document.createElement('img');
     img.src = user.avatar;
-    img.classList.add('howlpfpheader')
+    img.classList.add('pfpheader')
     imglink.append(img);
 
 
