@@ -1,6 +1,3 @@
-// const express = require('express');
-// const cookieParser = require('cookie-parser');
-
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import {tokenMiddleware, generateToken, removeToken} from '../middleware/tokenMiddleware.js';
@@ -9,27 +6,6 @@ import * as UserDAO from '../../objects/DAOs/UserDAO.js';
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-
-import fs from 'fs';
-import path from 'path';
-
-const dirname = dirname(fileURLToPath(import.meta.url));
-
-import multer from 'multer';
-let mstorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(dirname, '../backend/objects/uploads'));
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
-
-const upload = multer({storage: mstorage});
-
-// const UserDAO = require('../../objects/DAOs/UserDAO.js')
-// const {tokenMiddleware, generateToken, removeToken} = require('../middleware/tokenMiddleware');
-
 //get user by their id
 router.get('/users/:userId', tokenMiddleware, (req, res) => {
     const userId = req.params.userId;
@@ -90,7 +66,7 @@ router.get('/currentuser', tokenMiddleware, (req, res) => {
 });
 
 //update current user info
-router.put('/currentuser', tokenMiddleware, upload.single('img'), async (req, res) => {
+router.put('/currentuser', tokenMiddleware, async (req, res) => {
 
     // check if username is taken
     if (req.user.username !== req.body.username) {
@@ -104,16 +80,8 @@ router.put('/currentuser', tokenMiddleware, upload.single('img'), async (req, re
             return;
         }
     }
-
-    if (req.file.mimetype,substring(0, 5) != 'image') {
-        const filePath = path.join(dirname, '../backend/objects/uploads', req.file.originalname);
-        fs.unlink(filePath, (err) => {
-            throw new Error('Error deleting file: ' + err.message);
-        });
-    }
-
     // update user information
-    UserDAO.updateUser(req.user.id, req.file.originalname, req.body).then(user => {
+    UserDAO.updateUser(req.user.id, req.body).then(user => {
         res.json(user.username + ' updated');
     }).catch( () => {
         res.status( 401 ).json( {error: 'Oops! Not authenticated.'} );

@@ -77,3 +77,8 @@ h1 {
     align-items: center;
     margin-bottom: 1em;
 }
+
+.new_pfp {
+    width: 5em;
+    height: 5em;
+}

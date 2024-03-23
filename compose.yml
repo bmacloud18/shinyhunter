@@ -37,3 +37,10 @@ services:
       - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
     env_file:
       - .env
+  images:
+    build: ./images
+    restart: unless-stopped
+    volumes:
+      - ./images/:/app/
+    env_file:
+      - .env

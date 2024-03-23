@@ -1,5 +1,3 @@
-// const express = require('express');
-// const cookieParser = require('cookie-parser');
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import {tokenMiddleware} from '../middleware/tokenMiddleware.js';
@@ -8,9 +6,6 @@ import * as HuntDAO from '../../objects/DAOs/HuntDAO.js';
 const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
-
-// const HuntDAO = require('../../objects/DAOs/HuntDAO.js')
-// const {tokenMiddleware} = require('../middleware/tokenMiddleware.js');
 
 //get all hunts
 router.get('/hunt', tokenMiddleware, (req, res) => {
@@ -123,7 +118,6 @@ function timeComparator(a, b) {
 
     return d2.getTime() - d1.getTime();
 }
-
 
 
 export default router;

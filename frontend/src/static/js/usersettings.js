@@ -31,18 +31,20 @@ cancel.addEventListener('click', e => {
 const userheader = document.getElementById('name');
 userheader.innerHTML = user.first_name + " " + user.last_name;
 
-let form_data = new FormData();
-
 const input = document.getElementById('image_up');
 const preview = document.getElementById('image_preview');
 const pfp = document.createElement('img');
 pfp.alt = 'User PFP';
+pfp.classList.add('new_pfp');
 pfp.src = user.avatar;
 preview.append(pfp);
+let formdata = new FormData();
+let file_name;
 
 input.addEventListener('change', e => {
     const file = input.files[0];
-    if (file) {
+    file_name = file.name;
+    if (file != null) {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = function(e) {
@@ -55,26 +57,43 @@ input.addEventListener('change', e => {
                 formdata.append('pfp', file);
             }
         }
-    }   
+    }
 });
 
 
 submit.addEventListener('click', e => {
-    if (form_type == "details") {
-        if (first_name.value.length > 1 && last_name.value.length > 1 && username.value.length > 4) {
-            formdata.append('first_name', first_name.value);
-            formdata.append('last_name', last_name.value);
-            formdata.append('username', username.value);
-            const url = 'api/currentuser';
+    console.log('submit clicked');
+    if (form_type == "detail") {
+        let first_val = first_name.value;
+        let last_val = last_name.value;
+        let user_val = username.value;
+        if (first_val.length <= 1) {
+            first_val = user.first_name;
+        }
+        if (last_val.length <= 1) {
+            last_val = user.last_name;
+        }
+        if (user_val.length <= 4) {
+            if (user_val.length != 0) {
+                username.setCustomValidity('Please enter a longer username');
+                username.reportValidity();
+            }
+            else {
+                user_val = user.username;
+            }
+        }
+        
+        let avatar_string = user.avatar;
+        if (file_name != null) {
+            const url = 'images';
+            avatar_string = 'images/' + file_name;
             fetch(url, {
-                method: 'PUT',
+                method: 'POST',
                 body: formdata
             }).then(res => {
                 if(!res.ok) {
                     if(res.status == 401) {
-                        localStorage.removeItem('user');
-                        document.location = './signin';
-                        throw new Error("Unauthenticated");
+                        throw new Error("Someting wrong");
                     }
                     else {
                         throw new Error(res.status);
@@ -82,27 +101,27 @@ submit.addEventListener('click', e => {
                 }
                 return res;
             }).then(() => {
-                document.location = './userprofile?=' + user.id;
-                console.log('user updated');
+                console.log('img uploaded');
+            }).catch((err) => {
+                input.setCustomValidity('Problem uploading image');
+                input.reportValidity();
+                throw new Error('Error Occurred Uploading Image: ' + err.message)
+            });
+        }
+
+        if (first_val.length <= 1 && last_val.length <= 1 && user_val.length <= 4 && file_name == null) {
+            username.setCustomValidity('Nothing to update');
+            username.reportValidity();
+        }
+        else {
+            api.updateCurrentUserSettings(first_name.value, last_name.value, username.value, avatar_string).then(() => {
+                document.location = './userprofile?id=' + user.id;
             }).catch((err) => {
                 username.setCustomValidity('Username may be taken');
                 username.reportValidity();
                 throw new Error('Error Occurred Updating User: ' + err.message)
             });
         }
-        else if (first_name.value.length <= 1) {
-            first_name.setCustomValidity('Please enter a name');
-            first_name.reportValidity();
-        }
-        else if (last_name.value.length <= 1) {
-            last_name.setCustomValidity('Please enter a name');
-            last_name.reportValidity();
-        }
-        else if (username.value.length <= 4) {
-            username.setCustomValidity('Please enter a longer username');
-            username.reportValidity();
-        }
-        
     }
     else if (form_type =="password") {
         if (new_password.value.length > 3) {
