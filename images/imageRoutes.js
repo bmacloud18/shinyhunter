@@ -59,20 +59,18 @@ router.post('/', upload.single('pfp'), (req, res) => {
     if (req.file.mimetype.substring(0, 5) != 'image') {
         const filePath = image_path + req.file.originalname;
         fs.unlink(filePath, (err) => {
-            throw new Error('Error deleting file: ' + err.message);
+            throw new Error('Error deleting file after post: ' + err.message);
         });
     }
-    else {
-        res.json('Image uploaded');
-    }
+    res.json('image uploaded');
 });
 
 router.delete('/:filename', (req, res) => {
-    const filePath = image_path + req.file.originalname;
-    fs.unlink(filePath, (err) => {
-        throw new Error('Error deleting file: ' + err.message);
+    const name = req.params.filename;
+    const filePath = path.join(image_path, name);
+    fs.unlink(filePath, () => {
+        res.json('Image deleted');
     });
-    res.json('Image uploaded');
 });
 
 

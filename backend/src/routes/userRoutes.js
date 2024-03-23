@@ -82,7 +82,7 @@ router.put('/currentuser', tokenMiddleware, async (req, res) => {
     }
     // update user information
     UserDAO.updateUser(req.user.id, req.body).then(user => {
-        res.json(user.username + ' updated');
+        res.json(user);
     }).catch( () => {
         res.status(404).json( {error: 'Oops! Not authenticated.'} );
     });

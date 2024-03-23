@@ -12,7 +12,7 @@ let page_id = parameters.get('id');
 const page = getPage(url);
 
 const user = await api.getCurrentUser();
-header(user);
+header.generate(user);
 
 const title = document.getElementById('nickname');
 const sub = document.getElementById('timeelapsed');

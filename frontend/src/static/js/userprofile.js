@@ -24,7 +24,7 @@ function timeComparator(a, b) {
 }
 
 api.getCurrentUser().then(currentuser => {
-    header(currentuser);
+    header.generate(currentuser);
     const cid = currentuser.id;
     if (cid == id) {
         // posts(currentuser);

@@ -80,7 +80,7 @@ self.addEventListener('fetch', e => {
             e.respondWith(fetchFirst(e.request));
         }
     }
-    else if (e.request.method !== 'POST' || 'PUT'){
+    else if (e.request.method !== 'POST' || e.request.method !== 'PUT'){
         e.respondWith(fetchFirst(e.request));
     }
 });

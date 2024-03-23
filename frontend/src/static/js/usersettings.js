@@ -17,8 +17,8 @@ const confirm_password = document.getElementById('confirm_password');
 const change = document.getElementById('changebutton');
 const submit = document.getElementById('submitbutton');
 
-const user = await api.getCurrentUser();
-header(user);
+let user = await api.getCurrentUser();
+header.generate(user);
 
 const canceldisplay = document.getElementById('cancelbutton');
 canceldisplay.style.display = 'flex';
@@ -44,9 +44,9 @@ let file_name;
 input.addEventListener('change', e => {
     const file = input.files[0];
     file_name = file.name;
-    console.log(file_name);
     if (file != null) {
         const reader = new FileReader();
+        formdata = new FormData();
         reader.readAsDataURL(file);
         console.log(reader);
         reader.onload = function(e) {
@@ -54,26 +54,39 @@ input.addEventListener('change', e => {
                 input.setCustomValidity('File not a valid image');
             }
             else {
-                console.log(file_name);
                 pfp.src = e.target.result;
                 input.setCustomValidity('');
                 formdata.append('pfp', file);
             }
         }
     }
+
+    console.log(formdata, file_name, user.avatar);
 });
 
 
-submit.addEventListener('click', e => {
+submit.addEventListener('click', async e => {
     console.log('submit clicked');
     if (form_type == "detail") {
+
+        //check for which details have been changed
         let first_val = first_name.value;
         let last_val = last_name.value;
         let user_val = username.value;
-        if (first_val.length <= 1) {
+        if (first_val.length == 1) {
+            first_val = user.first_name;
+            first_name.setCustomValidity('Please enter a longer first name');
+            first_name.reportValidity();
+        }
+        if (first_val.length == 0) {
             first_val = user.first_name;
         }
-        if (last_val.length <= 1) {
+        if (last_val.length == 1) {
+            last_val = user.last_name;
+            last_name.setCustomValidity('Please enter a longer last name');
+            last_name.reportValidity();
+        }
+        if (last_val.length == 0) {
             last_val = user.last_name;
         }
         if (user_val.length <= 4) {
@@ -86,47 +99,67 @@ submit.addEventListener('click', e => {
             }
         }
         
+        //uploaded changed image file, delete old image file if exists
         let avatar_string = user.avatar;
+        console.log(avatar_string);
         if (file_name != null) {
             const url = 'images/';
             avatar_string = 'images/' + file_name;
-            fetch(url + user.avatar, {
-                method: 'DELETE'
-            });
-            fetch(url, {
-                method: 'POST',
-                body: formdata
-            }).then(res => {
-                if(!res.ok) {
-                    if(res.status == 401) {
-                        throw new Error("Unauthenticated");
-                    }
-                    else {
-                        throw new Error(res.status);
+            file_name = null;
+            try {
+                const res = await fetch(user.avatar, {
+                    method: 'GET'
+                });
+
+                if (res.status == 404) {
+                    const err = new Error("404");
+                    throw err;
+                }
+
+                if (res.status == 200) {
+                    const deleteres = await fetch(user.avatar, {
+                        method: 'DELETE'
+                    });
+
+                    if (deleteres.status == 200) {
+                        await fetch(url, {
+                            method: 'POST',
+                            body: formdata
+                        })
+                        .catch((err) => {
+                            input.setCustomValidity('Problem changing pfp image');
+                            input.reportValidity();
+                            throw new Error('Error Uploading Image: ' + err);
+                        });
                     }
                 }
-                return res;
-            }).then((res) => {
-                console.log(res.json());
-            }).catch((err) => {
-                input.setCustomValidity('Problem uploading image');
-                input.reportValidity();
-                throw new Error('Error Occurred Uploading Image: ' + err.message)
-            });
+            } catch (err) {
+                if (err.message == "404") {
+                    await fetch(url, {
+                        method: 'POST',
+                        body: formdata
+                    })
+                    .catch((err) => {
+                        input.setCustomValidity('Problem changing pfp image');
+                        input.reportValidity();
+                        throw new Error('Error Uploading Image (no delete): ' + err);
+                    });
+                }
+                else {
+                    throw new Error('Something wrong with get');
+                }
+            }
         }
 
-        if (first_val.length <= 1 && last_val.length <= 1 && user_val.length <= 4 && file_name == null) {
-            username.setCustomValidity('Nothing to update');
+        //update any values that have changed
+        try {
+            const update = await api.updateCurrentUserSettings(first_val, last_val, user_val, avatar_string);
+            user = update;
+            header.update(user);
+        } catch (err){
+            username.setCustomValidity('Username may be taken');
             username.reportValidity();
-        }
-        else {
-            api.updateCurrentUserSettings(first_val, last_val, user_val, avatar_string).then(() => {
-                //document.location = './userprofile?id=' + user.id;
-            }).catch((err) => {
-                username.setCustomValidity('Username may be taken');
-                username.reportValidity();
-                throw new Error('Error Occurred Updating User: ' + err.message)
-            });
+            throw new Error('Error Occurred Updating User: ' + err.message)
         }
     }
     else if (form_type =="password") {
