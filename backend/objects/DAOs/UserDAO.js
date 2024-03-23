@@ -78,9 +78,8 @@ async function signup(user) {
     });
 };
 
-async function updateUser(id, avatar_src, updatedUser) {
-    const avatar_string = "uploads/" + avatar_src;
-    return query('UPDATE user SET usr_username=?, usr_first_name=?, usr_last_name=?, usr_avatar=? WHERE usr_id=?', [updatedUser.username, updatedUser.first_name, updatedUser.last_name, avatar_string, id])
+async function updateUser(id, updatedUser) {
+    return query('UPDATE user SET usr_username=?, usr_first_name=?, usr_last_name=?, usr_avatar=? WHERE usr_id=?', [updatedUser.username, updatedUser.first_name, updatedUser.last_name, updatedUser.avatar, id])
         .then( ({results}) => {
             if ( results.affectedRows == 1 && results.warningCount == 0 )
                 return getUserById( id );

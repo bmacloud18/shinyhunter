@@ -85,7 +85,7 @@ submit.addEventListener('click', e => {
         
         let avatar_string = user.avatar;
         if (file_name != null) {
-            const url = 'images';
+            const url = 'images/';
             avatar_string = 'images/' + file_name;
             fetch(url, {
                 method: 'POST',
