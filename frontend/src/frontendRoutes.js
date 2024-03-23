@@ -22,9 +22,14 @@ router.get('/signup', (req, res) => {
     res.sendFile(`${html_dir}signup.html`);
 });
 
-// userprofile
+// user profile
 router.get('/userprofile', (req, res) => {
     res.sendFile(`${html_dir}userprofile.html`);
+});
+
+// user settings
+router.get('/usersettings', (req, res) => {
+    res.sendFile(`${html_dir}usersettings.html`);
 });
 
 // user active hunt (interactive)

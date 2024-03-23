@@ -48,6 +48,11 @@
   margin-right: 1em;
 }
 
+.pfpheader {
+  height: 4em;
+  width: 4em;
+}
+
 .fields {
   grid-area: fields;
   grid-template-columns: 1fr;

@@ -5,7 +5,7 @@ import routes from './apiRoutes.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
-const PORT = 80;
+const PORT = process.env.PORT;
 
 // const routes = require('./apiRoutes.js')
 

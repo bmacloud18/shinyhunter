@@ -1,0 +1,84 @@
+html,
+body {
+  height: 100%;
+}
+
+.body {
+    background-color: rgba(156, 9, 38, 0.767);
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+}
+
+main {
+    background-color: rgba(219, 214, 215, 0.116);
+    border-radius: 10px;
+}
+
+.password_display {
+    display: none;
+}
+
+.form-signin {
+    max-width: 33em;
+    padding: 15px;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: .5em;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nameinput {
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    gap: 1em 1em;
+    justify-content: center;
+}
+
+.nameinput > * {
+    flex-grow: 1;
+}
+
+h1 {
+    font-size: 5pt;
+}
+
+#changebutton, #submitbutton {
+    background-color: red;
+    border-color: black;
+    color: black;
+    font-size: 50%;
+    height: fit-content;
+    font-size: .75em;
+    margin-bottom: .5em;
+}
+
+.image_upload {
+    display: flex;
+    flex-direction: column;
+    gap: 1em 1em;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.new_pfp {
+    width: 5em;
+    height: 5em;
+}

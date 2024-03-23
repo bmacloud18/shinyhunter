@@ -6,7 +6,7 @@ const handleError = (res) => {
         if(res.status == 401) {
             localStorage.removeItem('user');
             document.location = './signin';
-            throw new Error("Unauthenticated");
+            throw new Error("Unauthenticated - bad api fetch");
         }
         else {
             throw new Error(res.status);
