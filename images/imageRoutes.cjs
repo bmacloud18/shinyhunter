@@ -75,3 +75,4 @@ router.delete('/:filename', (req, res) => {
 
 
 module.exports = router;
+export default router;

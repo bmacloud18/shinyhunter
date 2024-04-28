@@ -1,6 +1,5 @@
 {
   "name": "images",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "exports": "./server.js",
