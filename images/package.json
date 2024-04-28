@@ -2,10 +2,10 @@
   "name": "images",
   "version": "1.0.0",
   "description": "",
-  "exports": "./server.cjs",
+  "exports": "./server.js",
   "scripts": {
-    "start_dev": "nodemon -L ./server.cjs",
-    "start": "node ./server.cjs",
+    "start_dev": "nodemon -L ./server.js",
+    "start": "node ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
