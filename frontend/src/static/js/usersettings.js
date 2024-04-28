@@ -102,26 +102,43 @@ submit.addEventListener('click', async e => {
         //uploaded changed image file, delete old image file if exists
         let avatar_string = user.avatar;
         console.log(avatar_string);
+        const first_change = (avatar_string.length > 16 && avatar_string.substring(8, 16) === "robohash");
+        if (avatar_string.length > 16) 
+            console.log(avatar_string.substring(8, 16))
         if (file_name != null) {
             const url = 'images/';
             avatar_string = 'images/' + file_name;
             file_name = null;
-            try {
-                const res = await fetch(user.avatar, {
-                    method: 'GET'
-                });
-
-                if (res.status == 404) {
-                    const err = new Error("404");
-                    throw err;
-                }
-
-                if (res.status == 200) {
-                    const deleteres = await fetch(user.avatar, {
-                        method: 'DELETE'
+            if (!first_change) {
+                try {
+                    const res = await fetch(user.avatar, {
+                        method: 'GET'
                     });
-
-                    if (deleteres.status == 200) {
+    
+                    if (res.status == 404) {
+                        const err = new Error("404");
+                        throw err;
+                    }
+    
+                    if (res.status == 200) {
+                        const deleteres = await fetch(user.avatar, {
+                            method: 'DELETE'
+                        });
+    
+                        if (deleteres.status == 200) {
+                            await fetch(url, {
+                                method: 'POST',
+                                body: formdata
+                            })
+                            .catch((err) => {
+                                input.setCustomValidity('Problem changing pfp image');
+                                input.reportValidity();
+                                throw new Error('Error Uploading Image: ' + err);
+                            });
+                        }
+                    }
+                } catch (err) {
+                    if (err.message == "404") {
                         await fetch(url, {
                             method: 'POST',
                             body: formdata
@@ -129,25 +146,24 @@ submit.addEventListener('click', async e => {
                         .catch((err) => {
                             input.setCustomValidity('Problem changing pfp image');
                             input.reportValidity();
-                            throw new Error('Error Uploading Image: ' + err);
+                            throw new Error('Error Uploading Image (no delete): ' + err);
                         });
                     }
+                    else {
+                        throw new Error('Something wrong with get');
+                    }
                 }
-            } catch (err) {
-                if (err.message == "404") {
-                    await fetch(url, {
-                        method: 'POST',
-                        body: formdata
-                    })
-                    .catch((err) => {
-                        input.setCustomValidity('Problem changing pfp image');
-                        input.reportValidity();
-                        throw new Error('Error Uploading Image (no delete): ' + err);
-                    });
-                }
-                else {
-                    throw new Error('Something wrong with get');
-                }
+            }
+            else {
+                await fetch(url, {
+                    method: 'POST',
+                    body: formdata
+                })
+                .catch((err) => {
+                    input.setCustomValidity('Problem changing pfp image');
+                    input.reportValidity();
+                    throw new Error('Error Uploading Image (no delete): ' + err);
+                });
             }
         }
 
@@ -156,6 +172,7 @@ submit.addEventListener('click', async e => {
             const update = await api.updateCurrentUserSettings(first_val, last_val, user_val, avatar_string);
             user = update;
             header.update(user);
+            console.log(avatar_string);
         } catch (err){
             username.setCustomValidity('Username may be taken');
             username.reportValidity();
