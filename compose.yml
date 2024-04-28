@@ -44,5 +44,3 @@ services:
     restart: unless-stopped
     volumes:
       - ./images/:/app/
-    env_file:
-      - .env
