@@ -1,5 +1,8 @@
-const express = require('express');
-const routes = require('./imageRoutes.js');
+// const express = require('express');
+// const routes = require('./imageRoutes.js');
+
+import express from 'express';
+import routes from './imageRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT;
