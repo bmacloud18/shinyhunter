@@ -45,7 +45,7 @@ router.post('/login', (req, res) => {
         });
     }
     else
-        res.status(403).json( {error: 'Oops! Not authenticated.'} );
+        res.status(401).json( {error: 'Oops! Not authenticated.'} );
 });
 
 //logout
@@ -61,7 +61,7 @@ router.get('/currentuser', tokenMiddleware, (req, res) => {
     UserDAO.getUserById(req.user.id).then(user => {
         res.json(user);
     }).catch((err) => {
-        res.status( 404 ).json( {error: 'Oops! Not authenticated.'} );
+        res.status( 401 ).json( {error: 'Oops! Not authenticated.'} );
     });
 });
 
@@ -95,7 +95,7 @@ router.put('/currentuser/password', tokenMiddleware, (req, res) => {
     UserDAO.updatePassword(req.user.id, req.body?.password, req.body?.new_password).then(user => {
         res.json(user.username + ' updated');
     }).catch( () => {
-        res.status(403).json( {error: 'Oops! Not authenticated.'} );
+        res.status(401).json( {error: 'Oops! Not authenticated.'} );
     });
 
 });
