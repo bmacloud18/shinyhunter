@@ -52,7 +52,6 @@ const generateToken = (req, res, user) => {
     res.cookie( TOKEN_COOKIE_NAME, token, {
         httpOnly: true,
         sameSite: 'lax',
-        secure: true,
         maxAge: session_time
     });
 };
@@ -72,5 +71,4 @@ export {
     tokenMiddleware,
     generateToken,
     removeToken
-
 }
