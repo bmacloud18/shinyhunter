@@ -6,6 +6,8 @@ const TOKEN_COOKIE_NAME = 'ShinyHunter';
 // get the api secret
 const API_SECRET = process.env.API_SECRET_KEY;
 
+const session_time = 24 * 60 * 60 * 1000;
+
 // token middleware
 const tokenMiddleware = (req, res, next) => {
     let token = req.cookies[ TOKEN_COOKIE_NAME ];
@@ -40,7 +42,7 @@ const generateToken = (req, res, user) => {
     // store the sanitized user, and token expiration
     let data = {
         user: user,
-        exp: Math.floor( Date.now() / 1000 ) + ( 60 * 60 ) // 1 hour token
+        exp: Math.floor( Date.now() / 1000 ) + (session_time) 
     };
     
     // sign the token
@@ -51,7 +53,7 @@ const generateToken = (req, res, user) => {
         httpOnly: true,
         sameSite: 'lax',
         secure: true,
-        maxAge: 10 * 60 * 1000 // 2 minute session
+        maxAge: session_time
     });
 };
 

@@ -12,16 +12,12 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend/src:/app/src
-    env_file:
-      - .env
 
   frontend:
     build: ./frontend
     restart: unless-stopped
     volumes:
       - ./frontend/src:/app/src
-    env_file:
-      - .env
 
   database:
     image: mariadb:10.6
@@ -34,13 +30,9 @@ services:
       - "./db/data:/var/lib/mysql"
       # Mount the db_schema into the container to be auto-read and created in the new db
       - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
-    env_file:
-      - .env
 
   images:
     build: ./images
     restart: unless-stopped
     volumes:
       - ./images/:/app/
-    env_file:
-      - .env
