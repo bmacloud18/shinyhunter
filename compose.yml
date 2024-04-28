@@ -38,3 +38,11 @@ services:
     - MYSQL_ROOT_PASSWORD=shinyroot
     - MYSQL_DATABASE=shinyhunter
     - MYSQL_USER=shinyhunteruser
+
+  images:
+    build: ./images
+    restart: unless-stopped
+    volumes:
+      - ./images/:/app/
+    env_file:
+      - .env
