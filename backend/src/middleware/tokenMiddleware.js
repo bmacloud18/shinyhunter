@@ -19,7 +19,7 @@ const tokenMiddleware = (req, res, next) => {
             token = authHeader.slice( 7 );
         // no token
         else {
-            res.status( 401 ).json( {error: 'Oops! Not authenticated.'} );
+            res.status( 404 ).json( {error: 'Oops! Not authenticated.'} );
             return;
         }
     }
