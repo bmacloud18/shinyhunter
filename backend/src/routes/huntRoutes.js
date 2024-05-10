@@ -80,16 +80,17 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
     })
 });
 
-router.put('/hunt/:id', tokenMiddleware, (req, res) => {
-    
+router.put('/hunt/:id', tokenMiddleware, async (req, res) => {
     const huntId = req.params.id;
-    const time = req.body.time;
-    const count = req.body.count;
-    const start_date = req.body.start_date;
-    const end_date = req.body.end_date;
-    const increment = req.body.increment;
-    const charm = req.body.charm;
-    const nickname = req.body.nickname;
+    const hunt = await HuntDAO.getHuntById(huntId);
+
+    const time = req.body.time !== null ? req.body.time: hunt.time;
+    const count = req.body.count !== null ? req.body.count: hunt.count;
+    const start_date = req.body.start_date !== null ? req.body.start_date: hunt.start_date_string;
+    const end_date = req.body.end_date !== null ? req.body.end_date: hunt.end_date_string;
+    const increment = req.body.increment !== null ? req.body.increment: hunt.increment;
+    const charm = req.body.charm !== null ? req.body.charm: hunt.charm;
+    const nickname = req.body.nickname !== null ? req.body.nickname: hunt.nickname;
 
     HuntDAO.updateHunt(huntId, time, start_date, end_date, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
