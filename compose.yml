@@ -15,11 +15,11 @@ services:
     env_file:
       - .env
 
-  frontend:
-    build: ./frontend
+  reactf:
+    build: ./react
     restart: unless-stopped
     volumes:
-      - ./frontend/src:/app/src
+      - ./reactf/src:/app/src
     env_file:
       - .env
 
