@@ -16,7 +16,7 @@ services:
       - .env
 
   reactf:
-    build: ./react
+    build: ./reactf
     restart: unless-stopped
     volumes:
       - ./reactf/src:/app/src
