@@ -19,7 +19,8 @@ const config: Config = {
       current: 'currentColor',
       'green': '#14532d',
       'red': '#b91c1c',
-      'black': '#262626'
+      'black': '#262626',
+      'buttonwhite': '#d4d4d8'
     }
   },
   plugins: [],

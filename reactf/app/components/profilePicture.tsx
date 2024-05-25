@@ -5,6 +5,6 @@ export default function ProfilePicture({
     source:any;
 }) {
     return (
-      <img src={source} alt="Loading Icon" className="h-24 w-24 fill-green" />
+      <img src={source} alt="Profile Picture" className="h-24 w-24 fill-green" />
     );
 }

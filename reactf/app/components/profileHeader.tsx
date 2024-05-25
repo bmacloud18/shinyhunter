@@ -5,12 +5,13 @@ export default function ProfileHeader({
 } : {
     user: any
 }) {
+    console.log(user);
     return (
         <div>
-            <ProfilePicture source="next.svg"></ProfilePicture>
+            <ProfilePicture source={user.avatar}></ProfilePicture>
             <div>
-                <p>User Name</p>
-                <p>@username</p>
+                <p>{user.first_name} {user.last_name}</p>
+                <p>{user.username}</p>
             </div>
         </div>
     )

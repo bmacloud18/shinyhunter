@@ -1,49 +1,22 @@
 "use client"
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import BigButton from "@/app/components/bigButton";
-import ProfilePicture from "@/app/components/profilePicture";
 import HuntTile from "@/app/components/huntTile";
 import Grid from "@/app/components/tileGrid";
 import ProfileHeader from "@/app/components/profileHeader";
 import api from "@/app/APIclient";
 
-export default async function Profile() {
+export default function Profile() {
     const [hunts, setHunts] = useState([]);
-    let currentUser;
+    const { id } = useParams();
+    console.log(id);
+    let profileUser;
 
-    useEffect(() => {
-        api.getCurrentUser().then(user => {
-            currentUser = user;
-            api.getHuntsByUser(user.id).then(res => {
-                // let huntPromises = res.map((hunt: { pkm: any; }) => {
-                //     const name = hunt.pkm;
-                //     return api.getPokemonByName(name.toLowerCase()).then(pkm => {
-                //         return {hunt, pkm};
-                //     }).catch(err => {
-                //         console.log('API error');
-                //         throw new Error("couldn't find pokemon - " + err.message);
-                //     });
-                // });
-
-                // Promise.all(huntPromises).then(results => {
-                //     results.forEach(({hunt, pkm}) => {
-                //         const isactive = hunt.end_date_string == null;
-                //         const data = {
-                //             hunt: hunt,
-                //             pkm: pkm,
-                //             active: isactive
-                //         }
-                //         if (isactive) {
-                //             a.push(data)
-                //         }
-                //         else {
-                //             c.push(data);
-                //         }
-                //     });
-                // })
-
-                setHunts(res);
-            });
+    api.getUserById(id).then(res => {
+        profileUser = res;
+        api.getHuntsByUser(res.id).then(reshunts => {
+            setHunts(reshunts);
         });
     });
 
@@ -81,7 +54,7 @@ export default async function Profile() {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <ProfileHeader user={currentUser}></ProfileHeader>
+                        <ProfileHeader user={profileUser}></ProfileHeader>
                     </a>
                 </div>
                 <BigButton text="Edit Profile"></BigButton>
