@@ -1,10 +1,12 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import BigButton from "@/app/components/bigButton";
 import api from "@/app/APIclient";
 export default function Signin() {
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
+
+    console.log('signin', typeof window !== 'undefined');
 
     const usernameChange = (event: any) => {
         setUsernameValue(event.target.value)
@@ -20,7 +22,7 @@ export default function Signin() {
                 api.login(usernameValue, passwordValue).then(user => {
                     localStorage.setItem('user', JSON.stringify(user));
                     const id = user.id;
-                    document.location = './profile:' + id;
+                    document.location = './profile/' + id;
                 }).catch((err) => {
                     console.log('Username or Password Invalid - ' + err.message);
                 })

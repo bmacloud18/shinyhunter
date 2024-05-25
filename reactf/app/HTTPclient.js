@@ -1,4 +1,13 @@
 //Basic HTTP Client, fulfills requests which come from the API client
+// const getBase = () => {
+//     if (typeof window ==='undefined') {
+//         return 
+//     }
+//     else {
+//         return './api/'
+//     }
+// };
+
 const API_BASE = './api/';
 
 const handleError = (res) => {
@@ -9,7 +18,7 @@ const handleError = (res) => {
             throw new Error("Unauthenticated - bad api fetch");
         }
         else {
-            throw new Error(res.status);
+            throw new Error(res.status, res.message);
         }
     }
     
@@ -17,6 +26,7 @@ const handleError = (res) => {
 };
 
 export default {
+    
     get: async (url) => {
         return fetch(API_BASE + url, {
             headers: {
