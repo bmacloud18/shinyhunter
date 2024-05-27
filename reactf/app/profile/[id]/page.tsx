@@ -11,7 +11,7 @@ interface Hunt {
     pkm: String;
     nickname: String;
     user: number;
-    game: number;
+    game: String;
     method: number;
     start_date_string: String;
     start_date_display: String;
@@ -21,14 +21,33 @@ interface Hunt {
     hunt_time_display: String;
     count: number;
     increment: number;
-    charm: boolean;
+    charm: String;
+    sprite: String;
 }
 
 export default function Profile({params}: {params: {id: number}}) {
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
     const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
     const [profileUser, setProfileUser] = useState('');
-
+    const sample: Hunt = {
+        id: 66,
+        pkm: "pikcahu",
+        nickname: "sample",
+        user: 1,
+        game: "Pokemon Black",
+        method: 1,
+        start_date_string: "2020-05-11T00:00:00.000Z",
+        start_date_display: "Tue May 11, 2020",
+        end_date_string: "2020-05-15T00:00:00.000Z",
+        end_date_display: "Sat May 15, 2020",
+        hunt_time: 5,
+        hunt_time_display: "5s",
+        count: 5000,
+        increment: 5,
+        charm: "no",
+        sprite: "/images/bleachg2.png"
+    }
+    //fetch user and hunt data for profile display
     useEffect(() => {
 
         Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
@@ -37,7 +56,7 @@ export default function Profile({params}: {params: {id: number}}) {
 
             const hunts = res[1];
             const activeHunts = hunts.filter((hunt: { end_date_display: String; }) => hunt.end_date_display !== null);
-            const completedHunts = hunts.filter((hunt: { end_date_display: null; }) => hunt.end_date_display === null);
+            const completedHunts = hunts.filter((hunt: { end_date_display: String; }) => hunt.end_date_display === null);
 
 
             const active = activeHunts.map((hunt: Hunt) => {
@@ -51,11 +70,24 @@ export default function Profile({params}: {params: {id: number}}) {
             setActiveItems(completed);
             setCompletedItems(active);
         });
+        // const hunts = [sample];
+        // const activeHunts = hunts.filter((hunt: { end_date_display: String; }) => hunt.end_date_display !== null);
+        // const completedHunts = hunts.filter((hunt: { end_date_display: String; }) => hunt.end_date_display === null);
+        // const active = activeHunts.map((hunt: Hunt) => {
+        //     return <HuntTile hunt={hunt}/>
+        // });
+        // const completed = completedHunts.map((hunt: Hunt) => {
+        //     return <HuntTile hunt={hunt}/>
+        // });
+
+
+        // setActiveItems(completed);
+        // setCompletedItems(active);
 
     }, [params.id]);
 
 
-
+    //set hunt displays based on what hunts users have 
     let content;
     if (activeItems.length > 0 && completedItems.length > 0) {
         content = (
@@ -122,6 +154,7 @@ export default function Profile({params}: {params: {id: number}}) {
         );
     }
 
+    //change to loading screen later
     return profileUser != null ? (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
             <div className="border-solid border-2 border-black mt-8 w-full items-center justify-between font-mono text-sm lg:flex">
