@@ -20,7 +20,7 @@ export default {
         return HTTPclient.post('logout', {});
     },
 
-    register: async ( first, last, username, password ) => {
+    register: async (username, password, first, last) => {
         const data = {
             first_name: first,
             last_name: last,

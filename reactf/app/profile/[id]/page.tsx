@@ -91,7 +91,7 @@ export default function Profile({params}: {params: {id: number}}) {
     let content;
     if (activeItems.length > 0 && completedItems.length > 0) {
         content = (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2">
                 <div>
                     <p>Active</p>
                     <Grid>
@@ -109,12 +109,12 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else if (activeItems.length == 0 && completedItems.length > 0) {
         content = (
-            <div className="flex flex-col gap-2">
-                <div>
+            <div className="flex flex-row gap-2 w-full m-4">
+                <div className="w-64 border-solid border-4 border-black">
                     <p>Active</p>
-                    <span>Begin Hunting with the New Hunt Button ^</span>
+                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div>
+                <div className="w-64 border-solid border-4 border-black">
                     <p>Complete</p>
                     <Grid>
                         {completedItems}
@@ -125,30 +125,30 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else if (activeItems.length > 0 && completedItems.length == 0) {
         content = (
-            <div className="flex flex-col gap-2">
-                <div>
+            <div className="flex flex-row gap-2">
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Active</p>
                     <Grid>
                         {activeItems}
                     </Grid>
                 </div>
-                <div>
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Complete</p>
-                    <span>Keep Working on Those Hunts!</span>
+                    <span className="border-solid border-black border-2">Keep Working on Those Hunts!</span>
                 </div>
             </div>
         );
     }
     else {
         content = (
-            <div className="flex flex-col gap-2">
-                <div>
+            <div className="flex flex-row gap-2">
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Active</p>
-                    <span>Begin Hunting with the New Hunt Button ^</span>
+                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div>
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Complete</p>
-                    <span>Begin Hunting with the New Hunt Button ^</span>
+                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
             </div>
         );
@@ -200,7 +200,7 @@ export default function Profile({params}: {params: {id: number}}) {
                 <BigButton text="Import Hunt"></BigButton>
             </div>
 
-            <div>
+            <div className="w-full">
                 {content} 
             </div>
         </main>
