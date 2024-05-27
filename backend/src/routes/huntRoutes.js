@@ -62,8 +62,8 @@ router.post('/hunt', tokenMiddleware, (req, res) => {
 
     HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite).then(hunt => {
         res.json(hunt);
-    }).catch(() => {
-        res.status(404).json({error: 'error creating hunt'});
+    }).catch((err) => {
+        res.status(404).json({error: 'error creating hunt' + err.message});
     })
 
 });

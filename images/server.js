@@ -2,7 +2,7 @@ const express = require('express');
 const routes = require('./imageRoutes.js');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.IMAGES_PORT;
 
 app.use(express.json());
 app.use(routes);

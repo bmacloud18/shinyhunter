@@ -8,7 +8,7 @@ FROM base AS dev-runner
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-EXPOSE 80
+EXPOSE 3000
 
-ENV PORT 80
+ENV PORT 3000
 CMD ["npm", "run", "dev"]

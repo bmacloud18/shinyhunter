@@ -1,11 +1,11 @@
 services:
-  proxy:
-    image: nginx:latest
-    restart: unless-stopped
-    volumes:
-      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
-    ports:
-      - "80:80"
+  # proxy:
+  #   image: nginx:latest
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
+  #   ports:
+  #     - "80:80"
 
   api:
     build: ./backend
@@ -14,6 +14,10 @@ services:
       - ./backend/src:/app/src
     env_file:
       - .env
+    ports:
+      - "80:80"
+    networks:
+      - shinyhunter-net
 
   reactf:
     build: ./reactf
@@ -22,6 +26,12 @@ services:
       - ./reactf/src:/app/src
     env_file:
       - .env
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_ADDRESS: http://api:80
+    networks:
+      - shinyhunter-net
 
   database:
     image: mariadb:10.6
@@ -36,6 +46,8 @@ services:
       - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
     env_file:
       - .env
+    networks:
+      - shinyhunter-net
 
   images:
     build: ./images
@@ -44,3 +56,8 @@ services:
       - ./images/:/app/
     env_file:
       - .env
+    networks:
+      - shinyhunter-net
+  
+networks:
+  shinyhunter-net:

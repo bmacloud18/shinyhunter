@@ -2,7 +2,7 @@ const express = require('express');
 // import hbs from 'hbs';
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.FRONTEND_PORT;
 
 // Designate the static folder as serving static resources
 app.use(express.static(__dirname + '/static'));

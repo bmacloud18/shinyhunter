@@ -56,9 +56,9 @@ CREATE TABLE IF NOT EXISTS `hunt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `hunt`;
 INSERT INTO `hunt` (`pkm_name`, `usr_id`, `gam_name`, `mtd_id`, `hnt_start_date_string`, `hnt_end_date_string`, `hnt_time_s`, `hnt_count`, `hnt_inc`, `hnt_charm`, `hnt_nnm`, `pkm_sprite`) 
-VALUES ('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test1', 'images/bleachg2.png'), 
-('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test2', 'images/bleachg2.png'),
-('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test3', 'images/bleachg2.png');
+VALUES ('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test1', '/images/bleachg2.png'), 
+('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test2', '/images/bleachg2.png'),
+('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test3', '/images/bleachg2.png');
 
 
 

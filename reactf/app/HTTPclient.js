@@ -8,13 +8,13 @@
 //     }
 // };
 
-const API_BASE = './api/';
+const API_BASE = '/api/';
 
 const handleError = (res) => {
     if(!res.ok) {
         if(res.status == 401) {
             localStorage.removeItem('user');
-            document.location = './signin';
+            document.location = '/signin';
             throw new Error("Unauthenticated - bad api fetch");
         }
         else {
