@@ -1,12 +1,11 @@
-import api from "@/app/APIclient";
-
 export default async function HuntTile({
-    hunt
+    hunt,
+    sprite
 } : {
-    hunt:any
+    hunt:any,
+    sprite:String
 }) {
     const active = hunt.end_date_display == null;
-    const pokemon = await api.getPokemonByName(hunt.pkm.toLowerCase());
     return (
         <div className="border-solid border-2 border-black flex flex-row w-full">
             <li>
@@ -26,7 +25,7 @@ export default async function HuntTile({
                     {hunt.hunt_time_display}
                 </span>
                 <div className="flex flex-col gap-10">
-                    <img src={pokemon.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
+                    <img src={sprite.toString()} alt="Loading Icon" className="h-24 w-24 fill-green" />
                     <span>{hunt.count}</span>
                 </div>
             </li>

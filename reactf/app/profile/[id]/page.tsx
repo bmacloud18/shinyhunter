@@ -6,48 +6,71 @@ import Grid from "@/app/components/tileGrid";
 import ProfileHeader from "@/app/components/profileHeader";
 import api from "@/app/APIclient";
 
+interface Hunt {
+    id: number;
+    pkm: String;
+    nickname: String;
+    user: number;
+    game: number;
+    method: number;
+    start_date_string: String;
+    start_date_display: String;
+    end_date_string: String;
+    end_date_display: String;
+    hunt_time: number;
+    hunt_time_display: String;
+    count: number;
+    increment: number;
+    charm: boolean;
+    sprite: String;
+}
+
 export default function Profile({params}: {params: {id: number}}) {
-    const [hunts, setHunts] = useState([]);
-    let profileUser;
-    console.log('profile', typeof window !== 'undefined');
+    const [hunts, setHunts] = useState<Hunt[]>([]);
+    const [profileUser, setProfileUser] = useState('');
+    let activeItems: React.ReactNode[] | undefined = [];
+    let completedItems: React.ReactNode[] | undefined  = [];
+
     useEffect(() => {
-        api.getUserById(params.id).then(res => {
-            profileUser = res;
-            api.getHuntsByUser(res.id).then(reshunts => {
-                setHunts(reshunts);
-            });
+
+        Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( async (res) => {
+            const user = await res[0];
+            const hunts = await res[1];
+            const data = {
+                user: user,
+                hunts: hunts
+            }
+
+            return data;
+        }).then((data) => {
+            setProfileUser(data.user);
+            setHunts(data.hunts);
         }).catch((err) => {
-            throw new Error('Error retrieving user' + err.message);
+            throw new Error("error setting metadata - " + err.message);
         });
-    });
 
-    // let url = `/api/users/${params.id}`;
-    // fetch(url).then((user) => {
-    //     profileUser = user;
-    //     url = `/api/hunts/${params.id}`;
-    //     fetch(url).then((res) => {
-    //         return res.json();
-    //     }).then((data) => {
-    //         let n = data.length;
-    //         if (n > 0) {
-    //             setHunts(data);
-    //         }
-    //     }).catch((error) => {
-    //         throw new Error('Error getting user' + error.message);
-    //     });
-    // })
-    
+    }, [params.id]);
 
+    let sum = 0;
 
-    const activeItems = hunts.filter((hunt: any) => hunt.end_date_display === null).map((hunt: any) => {
-        return <HuntTile hunt={hunt}/>;
-    });
-    const completedItems = hunts.filter((hunt: any) => hunt.end_date_display !== null).map((hunt: any) => {
-        return <HuntTile hunt={hunt}/>;
-    });
-
+    if (hunts.length > 0) {
+        for (let i = 0; i < hunts.length; i++)
+        {
+            // const hunt = hunts[i];
+            // const sprite = "images/bleachg2.png";
+            // const item = <HuntTile hunt={hunt} sprite={sprite}/>;
+            // if (hunt.end_date_display !== null) {
+            //     activeItems.push(item);
+            // }
+            // else {
+            //     completedItems.push(item);
+            // }
+            sum+= 1;
+        }
+    }
+    console.log(sum);
     let content;
-    if (hunts != null && hunts.length != 0) {
+    if (activeItems.length > 0 && completedItems.length > 0) {
         content = (
             <div className="flex flex-col gap-2">
                 <div>
@@ -57,10 +80,42 @@ export default function Profile({params}: {params: {id: number}}) {
                     </Grid>
                 </div>
                 <div>
-                <p>Complete</p>
-                <Grid>
-                    {completedItems}
-                </Grid>
+                    <p>Complete</p>
+                    <Grid>
+                        {completedItems}
+                    </Grid>
+                </div>
+            </div>
+        );
+    }
+    else if (activeItems.length == 0 && completedItems.length > 0) {
+        content = (
+            <div className="flex flex-col gap-2">
+                <div>
+                    <p>Active</p>
+                    <span>Begin Hunting with the New Hunt Button ^</span>
+                </div>
+                <div>
+                    <p>Complete</p>
+                    <Grid>
+                        {completedItems}
+                    </Grid>
+                </div>
+            </div>
+        );
+    }
+    else if (activeItems.length > 0 && completedItems.length == 0) {
+        content = (
+            <div className="flex flex-col gap-2">
+                <div>
+                    <p>Active</p>
+                    <Grid>
+                        {activeItems}
+                    </Grid>
+                </div>
+                <div>
+                    <p>Complete</p>
+                    <span>Keep Working on Those Hunts!</span>
                 </div>
             </div>
         );
@@ -70,18 +125,14 @@ export default function Profile({params}: {params: {id: number}}) {
             <div className="flex flex-col gap-2">
                 <div>
                     <p>Active</p>
-                    <Grid>
-                        {activeItems}
-                    </Grid>
+                    <span>Begin Hunting with the New Hunt Button ^</span>
                 </div>
                 <div>
-                <p>Complete</p>
-                <Grid>
-                    {completedItems}
-                </Grid>
+                    <p>Complete</p>
+                    <span>Begin Hunting with the New Hunt Button ^</span>
                 </div>
             </div>
-        )
+        );
     }
 
     return profileUser != null ? (
@@ -119,7 +170,6 @@ export default function Profile({params}: {params: {id: number}}) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {/* <ProfileHeader user={profileUser}></ProfileHeader> */}
                     </a>
                 </div>
                 <BigButton text="Edit Profile"></BigButton>

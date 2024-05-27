@@ -5,7 +5,6 @@ export default function ProfileHeader({
 } : {
     user: any
 }) {
-    console.log(user);
     return (
         <div>
             <ProfilePicture source={user.avatar}></ProfilePicture>

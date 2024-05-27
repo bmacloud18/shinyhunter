@@ -12,7 +12,13 @@
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "cookie-parser": "^1.4.6",
+    "easytimer.js": "^4.6.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "pokedex-promise-v2": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -22,6 +28,12 @@
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "cookie-parser": "^1.4.6",
+    "easytimer.js": "^4.6.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "pokedex-promise-v2": "^4.2.0"
   }
 }
