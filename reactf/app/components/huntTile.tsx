@@ -1,9 +1,7 @@
-export default async function HuntTile({
-    hunt,
-    sprite
+export default function HuntTile({
+    hunt
 } : {
-    hunt:any,
-    sprite:String
+    hunt:any
 }) {
     const active = hunt.end_date_display == null;
     return (
@@ -25,7 +23,7 @@ export default async function HuntTile({
                     {hunt.hunt_time_display}
                 </span>
                 <div className="flex flex-col gap-10">
-                    <img src={sprite.toString()} alt="Loading Icon" className="h-24 w-24 fill-green" />
+                    <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
                     <span>{hunt.count}</span>
                 </div>
             </li>

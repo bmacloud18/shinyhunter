@@ -14,6 +14,7 @@ export default class Hunt {
     count = null;
     increment = null;
     charm = null;
+    sprite = null;
 
     constructor (data) {
         this.id = data.hnt_id;
@@ -40,6 +41,7 @@ export default class Hunt {
         if (this.nickname == null) {
             this.nickname = this.pkm;
         }
+        this.sprite = data.pkm_sprite;
     }
 };
 

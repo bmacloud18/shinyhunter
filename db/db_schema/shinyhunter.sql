@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_inc` int(2) unsigned NOT NULL DEFAULT 1,
     `hnt_charm` int(1) NOT NULL DEFAULT 0,
     `hnt_nnm` varchar(18) DEFAULT NULL,
+    `pkm_sprite` varchar(60) NOT NULL,
     KEY `FK_MTD_ID` (`mtd_id`),
     KEY `FK_USR_ID` (`usr_id`),
     CONSTRAINT `FK_MTD_ID` FOREIGN KEY (`mtd_id`) REFERENCES `method` (`mtd_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -54,6 +55,10 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     PRIMARY KEY (`hnt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `hunt`;
+INSERT INTO `hunt` (`pkm_name`, `usr_id`, `gam_name`, `mtd_id`, `hnt_start_date_string`, `hnt_end_date_string`, `hnt_time_s`, `hnt_count`, `hnt_inc`, `hnt_charm`, `hnt_nnm`, `pkm_sprite`) 
+VALUES ('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test1', 'images/bleachg2.png'), 
+('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test2', 'images/bleachg2.png'),
+('pikachu', 1, 'Pokemon Black', '1', '2020-05-11T00:00:00.000Z', '2020-05-12T00:00:00.000Z', 500, 500, 5, 0, 'test3', 'images/bleachg2.png');
 
 
 

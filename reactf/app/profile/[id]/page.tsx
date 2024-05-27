@@ -22,53 +22,40 @@ interface Hunt {
     count: number;
     increment: number;
     charm: boolean;
-    sprite: String;
 }
 
 export default function Profile({params}: {params: {id: number}}) {
-    const [hunts, setHunts] = useState<Hunt[]>([]);
+    const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
+    const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
     const [profileUser, setProfileUser] = useState('');
-    let activeItems: React.ReactNode[] | undefined = [];
-    let completedItems: React.ReactNode[] | undefined  = [];
 
     useEffect(() => {
 
-        Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( async (res) => {
-            const user = await res[0];
-            const hunts = await res[1];
-            const data = {
-                user: user,
-                hunts: hunts
-            }
+        Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
+            const user = res[0];
+            setProfileUser(user);
 
-            return data;
-        }).then((data) => {
-            setProfileUser(data.user);
-            setHunts(data.hunts);
-        }).catch((err) => {
-            throw new Error("error setting metadata - " + err.message);
+            const hunts = res[1];
+            const activeHunts = hunts.filter((hunt: { end_date_display: String; }) => hunt.end_date_display !== null);
+            const completedHunts = hunts.filter((hunt: { end_date_display: null; }) => hunt.end_date_display === null);
+
+
+            const active = activeHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt}/>
+            });
+            const completed = completedHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt}/>
+            });
+
+
+            setActiveItems(completed);
+            setCompletedItems(active);
         });
 
     }, [params.id]);
 
-    let sum = 0;
 
-    if (hunts.length > 0) {
-        for (let i = 0; i < hunts.length; i++)
-        {
-            // const hunt = hunts[i];
-            // const sprite = "images/bleachg2.png";
-            // const item = <HuntTile hunt={hunt} sprite={sprite}/>;
-            // if (hunt.end_date_display !== null) {
-            //     activeItems.push(item);
-            // }
-            // else {
-            //     completedItems.push(item);
-            // }
-            sum+= 1;
-        }
-    }
-    console.log(sum);
+
     let content;
     if (activeItems.length > 0 && completedItems.length > 0) {
         content = (

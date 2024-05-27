@@ -56,10 +56,11 @@ router.post('/hunt', tokenMiddleware, (req, res) => {
     const increment = req.body.increment;
     const charm = req.body.charm == 'on' ? 1 : 0;
     const nickname = req.body.nickname;
+    const sprite = req.body.sprite;
 
     
 
-    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite).then(hunt => {
         res.json(hunt);
     }).catch(() => {
         res.status(404).json({error: 'error creating hunt'});
