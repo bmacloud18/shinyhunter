@@ -157,19 +157,8 @@ export default function Profile({params}: {params: {id: number}}) {
     //change to loading screen later
     return profileUser != null ? (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
-            <div className="border-solid border-2 border-black mt-8 w-full items-center justify-between font-mono text-sm lg:flex">
-                <div className="fixed top-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-                    <a
-                        className="pointer-events-none flex place-items-center gap-4 ml-2 p-8 lg:pointer-events-auto lg:p-0"
-                        href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <ProfileHeader user={profileUser}></ProfileHeader>
-                    </a>
-                </div>
-                <BigButton text="Edit Profile"></BigButton>
-            </div>
+            
+            <ProfileHeader user={profileUser}></ProfileHeader>
 
             <div className="flex flex-row justify-between gap-16 font-mono">
                 <BigButton text="New Hunt"></BigButton>
@@ -182,18 +171,6 @@ export default function Profile({params}: {params: {id: number}}) {
         </main>
     ) : (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
-            <div className="border-solid border-2 border-black mt-8 w-full items-center justify-between font-mono text-sm lg:flex">
-                <div className="fixed top-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-                    <a
-                        className="pointer-events-none flex place-items-center gap-4 ml-2 p-8 lg:pointer-events-auto lg:p-0"
-                        href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                    </a>
-                </div>
-                <BigButton text="Edit Profile"></BigButton>
-            </div>
 
             <div className="flex flex-row justify-between gap-16 font-mono">
                 <BigButton text="New Hunt"></BigButton>
