@@ -7,7 +7,7 @@ export default function ProfileHeader({
     user: any
 }) {
     return (
-        <form className="border-solid border-2 border-black mt-8 w-full items-center justify-between font-mono text-sm lg:flex">
+        <form className="border-solid border-2 border-black w-full items-center justify-between font-mono text-sm lg:flex">
             <div className="flex flex-row m-2">
                 <ProfilePicture source={user.avatar}></ProfilePicture>
                 <div>
