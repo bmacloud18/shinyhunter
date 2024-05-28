@@ -29,7 +29,7 @@ export default function Layout({
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <body className={inter.className}>
-        <header className="flex justify-center items-center fixed top-0 w-full bg-grey shadow-md">
+        <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
           <h1 className="flex-auto p-6 basis-4/6 text-4xl font-bold text-black">
             ShinyHunter
           </h1>
