@@ -91,7 +91,7 @@ export default function Profile({params}: {params: {id: number}}) {
     let content;
     if (activeItems.length > 0 && completedItems.length > 0) {
         content = (
-            <div className="flex flex-row gap-2">
+            <div>
                 <div>
                     <p>Active</p>
                     <Grid>
@@ -109,7 +109,7 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else if (activeItems.length == 0 && completedItems.length > 0) {
         content = (
-            <div className="flex flex-row gap-2 w-full m-4">
+            <div>
                 <div className="w-64 border-solid border-4 border-black">
                     <p>Active</p>
                     <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
@@ -125,7 +125,7 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else if (activeItems.length > 0 && completedItems.length == 0) {
         content = (
-            <div className="flex flex-row gap-2">
+            <div>
                 <div className="w-32 border-solid border-4 border-black">
                     <p>Active</p>
                     <Grid>
@@ -141,7 +141,7 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else {
         content = (
-            <div className="flex flex-row gap-2">
+            <div>
                 <div className="w-32 border-solid border-4 border-black">
                     <p>Active</p>
                     <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
@@ -165,9 +165,11 @@ export default function Profile({params}: {params: {id: number}}) {
                 <BigButton text="Import Hunt"></BigButton>
             </div>
 
-            <div>
+            <div className="w-full flex flex-row gap-2 w-full m-4">
                 {content} 
             </div>
+            
+
         </main>
     ) : (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
@@ -177,9 +179,10 @@ export default function Profile({params}: {params: {id: number}}) {
                 <BigButton text="Import Hunt"></BigButton>
             </div>
 
-            <div className="w-full">
+            <div className="w-full flex flex-col gap-2 w-full m-4">
                 {content} 
             </div>
+
         </main>
     );
 }
