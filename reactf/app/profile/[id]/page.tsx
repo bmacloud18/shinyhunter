@@ -91,7 +91,7 @@ export default function Profile({params}: {params: {id: number}}) {
     let content;
     if (activeItems.length > 0 && completedItems.length > 0) {
         content = (
-            <div className="flex flex-col gap-2">
+            <div>
                 <div>
                     <p>Active</p>
                     <Grid>
@@ -109,12 +109,12 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else if (activeItems.length == 0 && completedItems.length > 0) {
         content = (
-            <div className="flex flex-col gap-2">
-                <div>
+            <div>
+                <div className="w-64 border-solid border-4 border-black">
                     <p>Active</p>
-                    <span>Begin Hunting with the New Hunt Button ^</span>
+                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div>
+                <div className="w-64 border-solid border-4 border-black">
                     <p>Complete</p>
                     <Grid>
                         {completedItems}
@@ -125,30 +125,30 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     else if (activeItems.length > 0 && completedItems.length == 0) {
         content = (
-            <div className="flex flex-col gap-2">
-                <div>
+            <div>
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Active</p>
                     <Grid>
                         {activeItems}
                     </Grid>
                 </div>
-                <div>
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Complete</p>
-                    <span>Keep Working on Those Hunts!</span>
+                    <span className="border-solid border-black border-2">Keep Working on Those Hunts!</span>
                 </div>
             </div>
         );
     }
     else {
         content = (
-            <div className="flex flex-col gap-2">
-                <div>
+            <div>
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Active</p>
-                    <span>Begin Hunting with the New Hunt Button ^</span>
+                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div>
+                <div className="w-32 border-solid border-4 border-black">
                     <p>Complete</p>
-                    <span>Begin Hunting with the New Hunt Button ^</span>
+                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
             </div>
         );
@@ -157,52 +157,32 @@ export default function Profile({params}: {params: {id: number}}) {
     //change to loading screen later
     return profileUser != null ? (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
-            <div className="border-solid border-2 border-black mt-8 w-full items-center justify-between font-mono text-sm lg:flex">
-                <div className="fixed top-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-                    <a
-                        className="pointer-events-none flex place-items-center gap-4 ml-2 p-8 lg:pointer-events-auto lg:p-0"
-                        href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <ProfileHeader user={profileUser}></ProfileHeader>
-                    </a>
-                </div>
-                <BigButton text="Edit Profile"></BigButton>
-            </div>
+            
+            <ProfileHeader user={profileUser}></ProfileHeader>
 
             <div className="flex flex-row justify-between gap-16 font-mono">
                 <BigButton text="New Hunt"></BigButton>
                 <BigButton text="Import Hunt"></BigButton>
             </div>
 
-            <div>
+            <div className="w-full flex flex-row gap-2 w-full m-4">
                 {content} 
             </div>
+            
+
         </main>
     ) : (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
-            <div className="border-solid border-2 border-black mt-8 w-full items-center justify-between font-mono text-sm lg:flex">
-                <div className="fixed top-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-                    <a
-                        className="pointer-events-none flex place-items-center gap-4 ml-2 p-8 lg:pointer-events-auto lg:p-0"
-                        href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                    </a>
-                </div>
-                <BigButton text="Edit Profile"></BigButton>
-            </div>
 
             <div className="flex flex-row justify-between gap-16 font-mono">
                 <BigButton text="New Hunt"></BigButton>
                 <BigButton text="Import Hunt"></BigButton>
             </div>
 
-            <div>
+            <div className="w-full flex flex-col gap-2 w-full m-4">
                 {content} 
             </div>
+
         </main>
     );
 }
