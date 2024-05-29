@@ -7,7 +7,7 @@ export default function HuntTile({
 }) {
     const active = hunt.end_date_display == null;
     return (
-        <Link href={`/hunt/${hunt.id}`}>
+        <Link href={`/shinyhunter/hunt/${hunt.id}`}>
             <div className="border-solid border-2 border-black p-2 rounded-2xl flex flex-col gap-6 m-2">
                 <div className="flex flex-col">
                     <span>

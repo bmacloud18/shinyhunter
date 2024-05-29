@@ -5,6 +5,14 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+interface User {
+  id: number;
+  avatar: String;
+  username: String;
+  first_name: String;
+  last_name: String;
+}
+
 export const metadata: Metadata = {
   title: "ShinyHunter",
   description: "web application for shiny hunters",
@@ -15,8 +23,8 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    
     <html lang="en">
       <Head>
         <link
@@ -29,7 +37,7 @@ export default function Layout({
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <body className={inter.className}>
-        <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
+        {/* <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
           <h1 className="flex-auto p-6 basis-4/6 text-4xl font-bold text-black">
             ShinyHunter
           </h1>
@@ -38,7 +46,7 @@ export default function Layout({
             src="/next.svg"
             alt="User PFP"
           />
-        </header>
+        </header> */}
         {children}
       </body>
     </html>

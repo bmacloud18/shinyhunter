@@ -32,9 +32,9 @@ export default function Signin() {
                 api.register(usernameValue, passwordValue, firstValue, lastValue).then(user => {
                     localStorage.setItem('user', JSON.stringify(user));
                     const id = user.id;
-                    document.location = '/profile/' + id;
+                    document.location = '/shinyhunter/profile/' + id;
                 }).catch((err) => {
-                    console.log('Username or Password Invalid - ' + err.message);
+                    console.log('Error with Signup- ' + err.message);
                 })
             }
         } catch (error: any) {

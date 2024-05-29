@@ -68,38 +68,37 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     //fetch user and hunt data for profile display
     useEffect(() => {
-        const hunts = [sample, sample2, sample, sample2, sample, sample2, sample];
-        const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-        const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-        const active = activeHunts.map((hunt: Hunt) => {
-            return <HuntTile hunt={hunt}/>
-        });
-        const completed = completedHunts.map((hunt: Hunt) => {
-            return <HuntTile hunt={hunt}/>
-        });
-
-        setActiveItems(completed);
-        setCompletedItems(active);
-
-        // Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
-        //     // const user = res[0];
-        //     // setProfileUser(user);
-
-        //     const hunts = [sample];
-
-
-
-        //     const active = activeHunts.map((hunt: Hunt) => {
-        //         return <HuntTile hunt={hunt}/>
-        //     });
-        //     const completed = completedHunts.map((hunt: Hunt) => {
-        //         return <HuntTile hunt={hunt}/>
-        //     });
-
-
-        //     setActiveItems(completed);
-        //     setCompletedItems(active);
+        // const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+        // const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+        // const active = activeHunts.map((hunt: Hunt) => {
+        //     return <HuntTile hunt={hunt}/>
         // });
+        // const completed = completedHunts.map((hunt: Hunt) => {
+        //     return <HuntTile hunt={hunt}/>
+        // });
+
+        // setActiveItems(completed);
+        // setCompletedItems(active);
+
+        Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
+            const user = res[0];
+            setProfileUser(user);
+
+            const hunts = res[1];
+            const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+            const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+
+            const active = activeHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt}/>
+            });
+            const completed = completedHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt}/>
+            });
+
+
+            setActiveItems(completed);
+            setCompletedItems(active);
+        });
 
     }, [params.id]);
 

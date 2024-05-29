@@ -26,7 +26,6 @@ interface Hunt {
 export default function Hunt({params}: {params: {id: number}}) {
     const [hunt, setHunt] = useState<Hunt>();
     //will need for display logic
-    const [user, setUser] = useState('');
     const sample: Hunt = {
         id: 66,
         pkm: "pikcahu",
@@ -48,11 +47,9 @@ export default function Hunt({params}: {params: {id: number}}) {
     //fetch hunt data
     useEffect(() => {
 
-        Promise.all([api.getHuntById(params.id), api.getCurrentUser()]).then( (res) => {
+        Promise.all([api.getHuntById(params.id)]).then( (res) => {
             const h = res[0];
-            const u = res[1].username;
             setHunt(h);
-            setUser(u);
         });
 
     }, [params.id]);

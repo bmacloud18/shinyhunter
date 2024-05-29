@@ -40,11 +40,15 @@ export default function HuntTile({
             </div>
             <div className="flex flex-row justify-between w-full">
                 <span className="justify-self-end self-end font-sans text-xl m-8">{hunt.count}</span>
-                <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
-                    <button className="">{"+"}</button>
+            </div>
+            <div>
+                <div>
+                    <span>Game: {hunt.game}</span>
+                    <span>Method: {hunt.game}</span>
                 </div>
-                <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
-                    <button className="">{"-"}</button>
+                <div>
+                    <span>Start: {hunt.start_date_display}</span>
+                    <span>End: {hunt.end_date_display}</span>
                 </div>
             </div>
         </div>
