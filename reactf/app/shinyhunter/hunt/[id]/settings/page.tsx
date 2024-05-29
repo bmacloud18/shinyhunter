@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 import BigButton from "@/app/components/bigButton";
 import api from "@/app/APIclient";
-export default function Signin() {
+import User from "@/app/interfaces/user";
+import Hunt from "@/app/interfaces/hunt";
+import Pokemon from "@/app/interfaces/pokemon";
+
+export default function HuntSettings() {
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
 

@@ -1,11 +1,17 @@
 import ProfilePicture from "@/app/components/profilePicture";
 import BigButton from "@/app/components/bigButton";
+import User from "@/app/interfaces/user";
 
 export default function ProfileHeader({
     user
 } : {
-    user: any
+    user: User
 }) {
+    const handleSettings = async (event: any) => {
+        event.preventDefault();
+        document.location = '/shinyhunter/profile/' + user.id + '/settings';
+    }
+
     return (
         <form className="border-solid border-2 border-black w-full items-center justify-between font-mono text-sm lg:flex">
             <div className="flex flex-row m-2">
@@ -16,7 +22,7 @@ export default function ProfileHeader({
                 </div>
             </div>
             <div>
-                <BigButton text="Edit Profile"></BigButton>
+                <BigButton onClick={handleSettings} text="Edit Profile"></BigButton>
             </div>
         </form>
     )

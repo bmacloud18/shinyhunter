@@ -55,20 +55,35 @@ export default function Hunt({params}: {params: {id: number}}) {
     }, [params.id]);
 
 
+    let handleSettings = async (event: any) => {
+        event.preventDefault();
+        document.location = '/shinyhunter/hunt/new';
+    }
+
+
     //setup Hunt Display
     let content;
+    let button;
     if (hunt != null) {
         content = (
             <BigHunt hunt={hunt}/>
         );
+        button = hunt.end_date_display === null ? (
+            <BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>
+        ) : (
+            <span></span>
+        )
+        handleSettings = async (event: any) => {
+            event.preventDefault();
+            document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
+        }
     }
 
     //full page with Hunt
     return (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
             <div className="flex flex-row justify-between gap-16 font-mono">
-                <BigButton text="Home"></BigButton>
-                <BigButton text="Hunt Settings"></BigButton>
+                {button}
             </div>
 
             <div>

@@ -6,30 +6,13 @@ import TileGrid from "@/app/components/tileGrid";
 import Grid from "@/app/components/fullGrid";
 import ProfileHeader from "@/app/components/profileHeader";
 import api from "@/app/APIclient";
-
-interface Hunt {
-    id: number;
-    pkm: String;
-    nickname: String;
-    user: number;
-    game: String;
-    method: number;
-    start_date_string: String;
-    start_date_display: String;
-    end_date_string: String | null;
-    end_date_display: String | null;
-    hunt_time: number;
-    hunt_time_display: String;
-    count: number;
-    increment: number;
-    charm: String;
-    sprite: String;
-}
+import User from "@/app/interfaces/user";
+import Hunt from "@/app/interfaces/hunt";
 
 export default function Profile({params}: {params: {id: number}}) {
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
     const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
-    const [profileUser, setProfileUser] = useState('');
+    const [profileUser, setProfileUser] = useState<User>();
     const sample: Hunt = {
         id: 66,
         pkm: "pikcahu",
@@ -68,6 +51,7 @@ export default function Profile({params}: {params: {id: number}}) {
     }
     //fetch user and hunt data for profile display
     useEffect(() => {
+        // const hunts = [sample, sample2, sample, sample2, sample, sample, sample, sample]
         // const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
         // const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
         // const active = activeHunts.map((hunt: Hunt) => {
@@ -101,6 +85,13 @@ export default function Profile({params}: {params: {id: number}}) {
         });
 
     }, [params.id]);
+
+
+    const handleNew = async (event: any) => {
+        event.preventDefault();
+        document.location = '../hunt/new';
+    }
+
 
 
     //set hunt displays based on what hunts users have 
@@ -177,8 +168,7 @@ export default function Profile({params}: {params: {id: number}}) {
             <ProfileHeader user={profileUser}></ProfileHeader>
 
             <div className="mt-16 flex flex-row justify-between gap-16 font-mono">
-                <BigButton text="New Hunt"></BigButton>
-                <BigButton text="Import Hunt"></BigButton>
+                <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
             {content} 
@@ -189,8 +179,7 @@ export default function Profile({params}: {params: {id: number}}) {
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
 
             <div className="mt-16 flex flex-row justify-between gap-16 font-mono">
-                <BigButton text="New Hunt"></BigButton>
-                <BigButton text="Import Hunt"></BigButton>
+                <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
             {content} 

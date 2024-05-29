@@ -4,16 +4,9 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import api from "../APIclient";
 import { useState, useEffect } from "react";
+import User from "@/app/interfaces/user";
 
 const inter = Inter({ subsets: ["latin"] });
-
-interface User {
-  id: number;
-  avatar: String;
-  username: String;
-  first_name: String;
-  last_name: String;
-}
 
 export default function Layout({
   children,
@@ -44,6 +37,12 @@ export default function Layout({
     })
   });
 
+  let href = "/";
+
+  if (user !== undefined) {
+    href = "/shinyhunter/profile/" + user.id;
+  }
+
   return user !== undefined ? (
     <html lang="en">
         <Head>
@@ -69,10 +68,15 @@ export default function Layout({
                   <span>{user.first_name.toString()}</span>
                   <span>{user.last_name.toString()}</span>
                 </div>
-                <img
-                  className="max-h-16 max-w-24 px-4"
-                  src={user.avatar.toString()}
-                  alt="User PFP"
+                <a href={href}>
+                    <img 
+                        className="max-h-16 max-w-24 px-4"
+                        src={user.avatar.toString()}
+                        alt="User PFP"/>
+                </a>
+                <a
+                  
+                  href={href}
                 />
               </div>
               <form onSubmit={handleLogout}>
