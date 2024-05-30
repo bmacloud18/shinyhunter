@@ -1,23 +1,28 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select'
 import BigButton from "@/app/components/bigButton";
 import api from "@/app/APIclient";
-import Hunt from "@/app/interfaces/hunt";
+import User from "@/app/interfaces/user";
 import Pokemon from "@/app/interfaces/pokemon";
 
+
 export default function NewHunt() {
-    const [pokemonOptions, setPokemonOptions] = useState([]);
-    const [gameOptions, setGaneOptions] = useState([]);
+    const [user, setUser] = useState<User>();
+    const [pokemonOptions, setPokemonOptions] = useState<Pokemon[]>([]);
+    const [gameOptions, setGameOptions] = useState([]);
     const [methodOptions, setMethodOptions] = useState([]);
     const [pokemonValue, setPokemon] = useState('');
     const [gameValue, setGame] = useState('');
     const [methodValue, setMethod] = useState('');
     const [nicknameValue, setNickname] = useState('');
-    const [incrementValue, setIncrement] = useState('');
-    const [charmValue, setCharm] = useState('');
-    const [countValue, setCount] = useState('');
-    const [timeValue, setTime] = useState('');
+    const [incrementValue, setIncrement] = useState<number>();
+    const [charmValue, setCharm] = useState<boolean>(false);
+    const [countValue, setCount] = useState<number>();
+    const [timeValue, setTime] = useState<number>();
+    const [importValue, setImport] = useState<boolean>(false);
+    const [startValue, setStart] = useState<Date>();
+    const [endValue, setEnd] = useState<Date | undefined>();
 
     console.log('signin', typeof window !== 'undefined');
 
@@ -45,15 +50,37 @@ export default function NewHunt() {
     const timeChange = (event: any) => {
         setTime(event.target.value)
     }
+    const importChange = (event: any) => {
+        setImport(event.target.value)
+    }
+    const startChange = (event: any) => {
+        setStart(event.target.value)
+    }
+    const endChange = (event: any) => {
+        setEnd(event.target.value)
+    }
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            if (gameValue.length > 4 && pokemonValue.length > 3) {
-                console.log(gameValue, pokemonValue);
-                api.login(gameValue, pokemonValue).then(user => {
-                    localStorage.setItem('user', JSON.stringify(user));
-                    const id = user.id;
-                    document.location = '/shinyhunter/profile/' + id;
+            if (user && pokemonValue && gameValue && methodValue && nicknameValue && incrementValue && charmValue) {
+                console.log(pokemonValue, gameValue, methodValue, nicknameValue);
+                let start_date = new Date();
+                let end_date = null; 
+                let time = 0;
+                let count = 0;
+
+                if (importValue && startValue && timeValue && countValue) {
+                    start_date = startValue;
+                    if (endValue) {
+                        end_date = endValue;
+                    }
+                    time = timeValue;
+
+                }
+
+                api.createHunt(user.id, pokemonValue, gameValue, methodValue, start_date, end_date, time, count, incrementValue, charmValue, nicknameValue).then(hunt => {
+                    document.location = '/shinyhunter/hunt/' + hunt.id;
                 }).catch((err) => {
                     console.log('Username or Password Invalid - ' + err.message);
                 })
@@ -63,18 +90,34 @@ export default function NewHunt() {
         }
     }
 
-    let po = [];
-    let go;
-    let mo;
+    useEffect(() => {
+        try {
+            Promise.all([api.getCurrentUser(), api.getAllGames(), api.getAllMethods(), api.getAllMons()]).then((res) => {
+                setUser(res[0]);
+                setGameOptions(res[1]);
+                setMethodOptions(res[2]);
+                setPokemonOptions(res[3]);
+            })
+        } catch (error: any) {
+            console.log("unable to communicate with api");
+        }
+    });
+
+    let po: any[] = [];
+    let go: String[] = [];
+    let mo: String[] = [];
 
     
     if (pokemonOptions !== undefined) {
         po = pokemonOptions.map((pkm: Pokemon) => {
             return {
                 value: pkm.name,
-                label:pkm.name
+                label:pkm.name,
+                image: pkm.sprite
             }
-        })
+        });
+
+        
     }
     if (gameOptions !== undefined) {
 
@@ -83,19 +126,74 @@ export default function NewHunt() {
 
     }
 
-    return (
+    let main = (
+        <div className="border-solid border-2 border-black p-10 flex flex-col gap-2">
+            <Select onChange={pokemonChange} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
+                    <div className="pkm-option">
+                        <img src={pkm.image} alt="pkm-image" />
+                        <span>{pkm.label}</span>
+                    </div>
+                )}
+            />
+            <div className="flex flex-row"> 
+                <Select onChange={gameChange} value={gameValue} options={po} formatOptionLabel={(pkm: any) => (
+                        <div className="pkm-option">
+                            <img src={pkm.image} alt="pkm-image" />
+                            <span>{pkm.label}</span>
+                        </div>
+                    )}
+                />
+                <Select onChange={methodChange} value={methodValue} options={po} formatOptionLabel={(pkm: any) => (
+                        <div className="pkm-option">
+                            <img src={pkm.image} alt="pkm-image" />
+                            <span>{pkm.label}</span>
+                        </div>
+                    )}
+                />
+            </div>
+            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
+            <div>
+                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" value={incrementValue} placeholder="Increment" required={true} onChange={incrementChange}></input>
+                <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Charm" required={true} onChange={charmChange}></input>
+            </div>
+            <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Importing Hunt?" required={true} onChange={importChange}></input>
+        </div>
+    );
+
+    let importContent = (
+        <div className="flex flex-col">
+            <div>
+                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" value={countValue} placeholder="Increment" required={true} onChange={countChange}></input>
+                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" value={timeValue} placeholder="Increment" required={true} onChange={timeChange}></input>
+            </div>
+            <div className="flex flex-row">
+                <div className="flex flex-col">
+                    <input type="date" onChange={startChange}></input>
+                    <button className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Use Today</button>
+                </div>
+                <div>
+                    <input type="date" onChange={endChange}></input>
+                    <button className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Not Complete</button>
+                </div>
+            </div>
+        </div>
+    )
+
+    return !importValue ? (
         <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
             <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
             <form className="w-96 h-48 mb-24 flex flex-col items-center justify-around gap-8" onSubmit={handleSubmit}>
-              <div className="border-solid border-2 border-black p-10 flex flex-col gap-2">
-                <Select value={pokemonValue} options={po} formatOptionLabel={(pkm) => (
-                    
-                    )}
-                />
-                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={gameValue} placeholder="Username" required={true} onChange={gameChange}/>
-                <input type="pokemon" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={pokemonValue} placeholder="Password" required={true} onChange={pokemonChange}></input>
-              </div>
-              <BigButton text="Submit Hunt"></BigButton>
+                {main}
+                <button className="border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>
+            </form>
+        </main>
+    ) : (
+        <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
+            <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
+            <form className="w-96 h-48 mb-24 flex flex-col items-center justify-around gap-8" onSubmit={handleSubmit}>
+                {main}
+                {importContent}
+                <button className="border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>
             </form>
         </main>
     );

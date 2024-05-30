@@ -1,9 +1,10 @@
 import Link from "next/link";
+import Hunt from "@/app/interfaces/hunt";
 
 export default function HuntTile({
     hunt
 } : {
-    hunt:any
+    hunt:Hunt
 }) {
     const active = hunt.end_date_display == null;
     return (
@@ -27,7 +28,7 @@ export default function HuntTile({
                     </span>
                 </div>
                 <div className="flex flex-row justify-between w-full">
-                    <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
+                    <img src={hunt.sprite.toString()} alt="pkm sprite" className="h-24 w-24 fill-green" />
                     <span className="justify-self-end self-end font-sans text-xl m-8">{hunt.count}</span>
                 </div>
             </div>

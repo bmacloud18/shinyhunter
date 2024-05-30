@@ -8,47 +8,13 @@ import ProfileHeader from "@/app/components/profileHeader";
 import api from "@/app/APIclient";
 import User from "@/app/interfaces/user";
 import Hunt from "@/app/interfaces/hunt";
+import sample from "@/app/samples/completedHunt"
+import sample2 from "@/app/samples/activeHunt";
 
 export default function Profile({params}: {params: {id: number}}) {
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
     const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
     const [profileUser, setProfileUser] = useState<User>();
-    const sample: Hunt = {
-        id: 66,
-        pkm: "pikcahu",
-        nickname: "sample",
-        user: 1,
-        game: "Pokemon Black",
-        method: 1,
-        start_date_string: "2020-05-11T00:00:00.000Z",
-        start_date_display: "Tue May 11, 2020",
-        end_date_string: "2020-05-15T00:00:00.000Z",
-        end_date_display: "Sat May 15, 2020",
-        hunt_time: 5,
-        hunt_time_display: "5s",
-        count: 5000,
-        increment: 5,
-        charm: "no",
-        sprite: "/images/bleachg2.png"
-    }    
-    const sample2: Hunt = {
-        id: 66,
-        pkm: "pikcahu",
-        nickname: "sample",
-        user: 1,
-        game: "Pokemon Black",
-        method: 1,
-        start_date_string: "2020-05-11T00:00:00.000Z",
-        start_date_display: "Tue May 11, 2020",
-        end_date_string:  null,
-        end_date_display: null,
-        hunt_time: 5,
-        hunt_time_display: "5s",
-        count: 5000,
-        increment: 5,
-        charm: "no",
-        sprite: "/images/bleachg2.png"
-    }
     //fetch user and hunt data for profile display
     useEffect(() => {
         // const hunts = [sample, sample2, sample, sample2, sample, sample, sample, sample]
