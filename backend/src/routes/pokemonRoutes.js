@@ -50,7 +50,7 @@ function minMon(pokemon) {
     return {
         id: pokemon.order,
         name: pokemon.name,
-        avatar: pokemon.sprites.front_shiny,
+        sprite: pokemon.sprites.front_shiny,
       }
 }
 

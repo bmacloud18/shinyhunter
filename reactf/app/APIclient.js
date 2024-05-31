@@ -76,7 +76,10 @@ export default {
     },
 
     getAllGames: async() => {
-        return HTTPclient.get('pokemon/games');
+        const gameObjects = await HTTPclient.get('pokemon/games');
+        return gameObjects.map((game) => {
+            return game.name;
+        });
     },
 
     getAllMons: async() => {
