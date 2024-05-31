@@ -10,6 +10,7 @@ import User from "@/app/interfaces/user";
 import Hunt from "@/app/interfaces/hunt";
 import sample from "@/app/samples/completedHunt"
 import sample2 from "@/app/samples/activeHunt";
+import sampleuser from "@/app/samples/user";
 
 export default function Profile({params}: {params: {id: number}}) {
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
@@ -29,6 +30,8 @@ export default function Profile({params}: {params: {id: number}}) {
 
         // setActiveItems(completed);
         // setCompletedItems(active);
+
+        // setProfileUser(sampleuser);
 
         Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
             const user = res[0];

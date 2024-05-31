@@ -113,7 +113,7 @@ export default function NewHunt() {
     if (pokemonOptions !== undefined) {
         po = pokemonOptions.map((pkm: Pokemon) => {
             return {
-                value: pkm.name,
+                value: pkm.id,
                 label:pkm.name
             }
         });
