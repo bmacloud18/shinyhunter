@@ -106,7 +106,7 @@ export default {
         return HTTPclient.get(`hunt/users/id/${id}`)
     },
 
-    createHunt: async(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname) => {
+    createHunt: async(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite) => {
         const data = {
             userId: userId,
             pkm: pkm,
@@ -118,8 +118,11 @@ export default {
             count: count,
             increment: increment,
             charm: charm,
-            nickname: nickname
+            nickname: nickname,
+            sprite: sprite
         };
+
+        console.log(data);
 
         return HTTPclient.post('hunt', data);
     },
@@ -133,11 +136,9 @@ export default {
         return HTTPclient.put(`hunt/${id}/complete`, data)
     },
 
-    updateHunt: async(id, time, start_date, end_date, count, increment, charm, nickname) => {
+    updateHunt: async(id, time, count, increment, charm, nickname) => {
         const data = {
             time: time,
-            start_date: start_date,
-            end_date: end_date,
             count: count,
             increment: increment,
             charm: charm,

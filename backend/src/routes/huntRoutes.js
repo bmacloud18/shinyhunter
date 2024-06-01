@@ -86,13 +86,11 @@ router.put('/hunt/:id', tokenMiddleware, (req, res) => {
     const huntId = req.params.id;
     const time = req.body.time;
     const count = req.body.count;
-    const start_date = req.body.start_date;
-    const end_date = req.body.end_date;
     const increment = req.body.increment;
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHunt(huntId, time, start_date, end_date, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHunt(huntId, time, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
     }).catch(err => {
         res.status(404).json(err.message);

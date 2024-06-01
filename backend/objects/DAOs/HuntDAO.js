@@ -79,6 +79,7 @@ async function createNewHunt(user, pokemon, game, method, start_date, end_date, 
             return getHuntById(results.insertId);
         }
     }).catch( (err) => {
+        console.log(err.message);
         throw new Error("Oops! error occurred: " + err.message);
     });
 };
@@ -95,9 +96,9 @@ async function completeHunt(id, end_date) {
 };
 
 //update a hunt by providing it with hunt settings data
-async function updateHunt(id, time, start_date, end_date, count, increment, charm, nickname) {
+async function updateHunt(id, time, count, increment, charm, nickname) {
 
-    return query('UPDATE hunt SET hnt_time_s=?, hnt_start_date_string=?, hnt_end_date_string=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, start_date, end_date, count, increment, charm, nickname, id]).then(({results}) => {
+    return query('UPDATE hunt SET hnt_time_s=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, count, increment, charm, nickname, id]).then(({results}) => {
         return results;
     }).catch(err => {
         console.log(err.message);

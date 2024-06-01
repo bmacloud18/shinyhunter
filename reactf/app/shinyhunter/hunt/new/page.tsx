@@ -13,15 +13,15 @@ export default function NewHunt() {
     const [pokemonOptions, setPokemonOptions] = useState<Pokemon[]>([]);
     const [gameOptions, setGameOptions] = useState([]);
     const [methodOptions, setMethodOptions] = useState([]);
-    const [pokemonValue, setPokemon] = useState('');
-    const [gameValue, setGame] = useState('');
-    const [methodValue, setMethod] = useState('');
+    const [pokemonValue, setPokemon] = useState<any>();
+    const [gameValue, setGame] = useState<any>();
+    const [methodValue, setMethod] = useState<any>();
     const [nicknameValue, setNickname] = useState('');
     const [incrementValue, setIncrement] = useState<number>();
     const [charmValue, setCharm] = useState<boolean>(false);
     const [countValue, setCount] = useState<number>();
     const [timeValue, setTime] = useState<number>();
-    const [importValue, setImport] = useState<boolean>(false);
+    const [importValue, setImport] = useState('');
     const [startValue, setStart] = useState<Date>();
     const [endValue, setEnd] = useState<Date | undefined>();
 
@@ -61,8 +61,10 @@ export default function NewHunt() {
                 let end_date = null; 
                 let time = 0;
                 let count = 0;
+                let pkm = pokemonOptions[pokemonValue.value].name;
+                let sprite = pokemonOptions[pokemonValue.value].sprite
 
-                if (importValue && startValue && timeValue && countValue) {
+                if (importValue == 'on' && startValue && timeValue && countValue) {
                     start_date = startValue;
                     if (endValue) {
                         end_date = endValue;
@@ -71,7 +73,7 @@ export default function NewHunt() {
 
                 }
 
-                api.createHunt(user.id, pokemonValue, gameValue, methodValue, start_date, end_date, time, count, incrementValue, charmValue, nicknameValue).then(hunt => {
+                api.createHunt(user.id, pkm, gameValue.value, methodValue.value, start_date, end_date, time, count, incrementValue, charmValue, nicknameValue, sprite).then(hunt => {
                     document.location = '/shinyhunter/hunt/' + hunt.id;
                 }).catch((err) => {
                     console.log('Unable to create Hunt - ' + err.message);
@@ -114,7 +116,8 @@ export default function NewHunt() {
         po = pokemonOptions.map((pkm: Pokemon) => {
             return {
                 value: pkm.id,
-                label:pkm.name
+                label: pkm.name,
+                image: pkm.sprite
             }
         });
 
@@ -142,19 +145,20 @@ export default function NewHunt() {
         <div className="border-solid border-2 border-black p-10 flex flex-col gap-2">
             <Select onChange={setPokemon} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
                     <div className="pkm-option">
+                        <img src={pkm.image} alt="pkm-image" />
                         <span>{pkm.label}</span>
                     </div>
                 )}
             />
             <div className="flex flex-row"> 
-                <Select onChange={setGame} value={gameValue} options={go} formatOptionLabel={(pkm: any) => (
-                    <div className="pkm-option">
-                        <span>{pkm.label}</span>
+                <Select onChange={setGame} value={gameValue} options={go} formatOptionLabel={(game: any) => (
+                    <div className="game-option">
+                        <span>{game.label}</span>
                     </div>
                 )}
             />
                 <Select onChange={setMethod} value={methodValue} options={mo} formatOptionLabel={(mtd: any) => (
-                        <div className="pkm-option">
+                        <div className="mtd-option">
                             <span>{mtd.label}</span>
                         </div>
                     )}
@@ -197,7 +201,7 @@ export default function NewHunt() {
     )
 
     //return page based on importing checkbox value
-    return !importValue ? (
+    return importValue != undefined || importValue != 'on' ? (
         <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
             <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
             <form className="w-96 h-48 mb-24 flex flex-col items-center justify-around gap-8" onSubmit={handleSubmit}>
