@@ -47,10 +47,15 @@ function cleanMon(pokemon, species) {
 
 //used for full pokemon list
 function minMon(pokemon) {
+    const n = pokemon.url.length;
+    const pre = 34;
+    const id = pokemon.url.slice(pre, n-1);
+    
+    const sprite = "/images/sprites/" + id + ".png"
     return {
-        id: pokemon.order,
+        id: parseInt(id),
         name: pokemon.name,
-        avatar: pokemon.sprites.front_shiny,
+        sprite: sprite
       }
 }
 
@@ -94,7 +99,7 @@ router.get('/pokemon', tokenMiddleware, async (req, res) => {
     }
 
     pokedex.getPokemonsList(interval).then(results => {
-        res.json((results.results));
+        res.json(cleanMons(results.results));
     });
 });
 

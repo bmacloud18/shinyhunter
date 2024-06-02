@@ -1,36 +1,37 @@
 services:
-  proxy:
-    image: nginx:latest
-    restart: unless-stopped
-    volumes:
-      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
-    ports:
-      - "80:80"
+  # proxy:
+  #   image: nginx:latest
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
+  #   ports:
+  #     - "80:80"
 
   api:
     build: ./backend
     restart: unless-stopped
     volumes:
       - ./backend/src:/app/src
-    environment:
-    - DB_ENGINE=mysql
-    - DB_HOST=database
-    - DB_PORT=3306
-    - DB_CHARSET=utf8mb4
-    - MYSQL_ROOT_PASSWORD=shinyroot
-    - MYSQL_DATABASE=shinyhunter
-    - MYSQL_USER=shinyhunteruser
-    - MYSQL_PASSWORD=shinyhunt123
-    - API_SECRET_KEY=258aseufjhnaj5zxcmvn7z8enanl3m4hnaj962mlxbsusw8df9a7hn3j33fd8
-    - BACKEND_PORT=80
-    - FRONTEND_PORT=80
-    - IMAGES_PORT=80
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    networks:
+      - shinyhunter-net
 
-  frontend:
-    build: ./frontend
+  reactf:
+    build: ./reactf
     restart: unless-stopped
     volumes:
-      - ./frontend/src:/app/src
+      - ./reactf/src:/app/src
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_ADDRESS: http://api:80
+    networks:
+      - shinyhunter-net
 
   database:
     image: mariadb:10.6
@@ -43,17 +44,20 @@ services:
       - "./db/data:/var/lib/mysql"
       # Mount the db_schema into the container to be auto-read and created in the new db
       - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
-    environment:
-    - DB_ENGINE=mysql
-    - DB_HOST=database
-    - DB_PORT=3306
-    - DB_CHARSET=utf8mb4
-    - MYSQL_PASSWORD=shinyhunt123
-    - MYSQL_ROOT_PASSWORD=shinyroot
-    - MYSQL_DATABASE=shinyhunter
-    - MYSQL_USER=shinyhunteruser
+    env_file:
+      - .env
+    networks:
+      - shinyhunter-net
+
   images:
     build: ./images
     restart: unless-stopped
     volumes:
       - ./images/:/app/
+    env_file:
+      - .env
+    networks:
+      - shinyhunter-net
+  
+networks:
+  shinyhunter-net:

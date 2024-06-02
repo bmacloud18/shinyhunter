@@ -56,13 +56,14 @@ router.post('/hunt', tokenMiddleware, (req, res) => {
     const increment = req.body.increment;
     const charm = req.body.charm == 'on' ? 1 : 0;
     const nickname = req.body.nickname;
+    const sprite = req.body.sprite;
 
     
 
-    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite).then(hunt => {
         res.json(hunt);
-    }).catch(() => {
-        res.status(404).json({error: 'error creating hunt'});
+    }).catch((err) => {
+        res.status(404).json({error: 'error creating hunt' + err.message});
     })
 
 });
@@ -82,17 +83,13 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
 
 router.put('/hunt/:id', tokenMiddleware, async (req, res) => {
     const huntId = req.params.id;
-    const hunt = await HuntDAO.getHuntById(huntId);
+    const time = req.body.time;
+    const count = req.body.count;
+    const increment = req.body.increment;
+    const charm = req.body.charm;
+    const nickname = req.body.nickname;
 
-    const time = req.body.time !== null ? req.body.time: hunt.time;
-    const count = req.body.count !== null ? req.body.count: hunt.count;
-    const start_date = req.body.start_date !== null ? req.body.start_date: hunt.start_date_string;
-    const end_date = req.body.end_date !== null ? req.body.end_date: hunt.end_date_string;
-    const increment = req.body.increment !== null ? req.body.increment: hunt.increment;
-    const charm = req.body.charm !== null ? req.body.charm: hunt.charm;
-    const nickname = req.body.nickname !== null ? req.body.nickname: hunt.nickname;
-
-    HuntDAO.updateHunt(huntId, time, start_date, end_date, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHunt(huntId, time, count, increment, charm, nickname).then(hunt => {
         res.json(hunt);
     }).catch(err => {
         res.status(404).json(err.message);

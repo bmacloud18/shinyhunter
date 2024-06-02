@@ -1,3 +1,4 @@
+
 const express = require( 'express' );
 const router = express.Router();
 
@@ -8,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 // const gm = require('gm').subClass({ imageMagick: true });
 const image_path = path.join(__dirname, './uploads')
+const sprite_path = path.join(__dirname, './sprites');
 
 const multer = require('multer');
 let mstorage = multer.diskStorage({
@@ -41,9 +43,23 @@ const upload = multer({storage: mstorage});
 //         });
 // }
 
-router.get('/:filename', (req, res) => {
+router.get('/uploads/:filename', (req, res) => {
     const name = req.params.filename;
     const filePath = path.join(image_path, name);
+
+    fs.stat(filePath, (err, stat) => {
+        if (err) {
+            res.status(404).send('File not found');
+            return;
+        }
+
+        res.sendFile(filePath);
+    });
+});
+
+router.get('/sprites/:filename', (req, res) => {
+    const name = req.params.filename;
+    const filePath = path.join(sprite_path, name);
 
     fs.stat(filePath, (err, stat) => {
         if (err) {
