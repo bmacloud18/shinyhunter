@@ -28,8 +28,6 @@ services:
       - .env
     ports:
       - "3000:3000"
-    environment:
-      BACKEND_ADDRESS: http://api:80
     networks:
       - shinyhunter-net
 
@@ -58,6 +56,9 @@ services:
       - .env
     networks:
       - shinyhunter-net
+    ports:
+      # Make the service accessible from outside of the Docker network if needed
+      - 8080:8080
   
 networks:
   shinyhunter-net:
