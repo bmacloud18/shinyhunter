@@ -62,7 +62,7 @@ export default function NewHunt() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            if (user && pokemonValue && gameValue && methodValue && nicknameValue && incrementValue) {
+            if (user && pokemonValue && gameValue && methodValue && nicknameValue && incrementValue && incrementValue > 0) {
                 console.log(pokemonValue, gameValue, methodValue, nicknameValue);
                 let start_date = new Date();
                 let end_date = null; 
@@ -175,7 +175,7 @@ export default function NewHunt() {
             </div>
             <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
             <div>
-                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" value={incrementValue} placeholder="Increment" required={true} onChange={incrementChange}></input>
+                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={incrementValue} placeholder="Increment" required={true} onChange={incrementChange}></input>
                 <label>
                     <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
                     Charm?
@@ -193,8 +193,8 @@ export default function NewHunt() {
     let importContent = (
         <div className="flex flex-col">
             <div>
-                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" value={countValue} placeholder="Increment" required={true} onChange={countChange}></input>
-                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" value={timeValue} placeholder="Increment" required={true} onChange={timeChange}></input>
+                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={countValue} placeholder="Increment" required={true} onChange={countChange}></input>
+                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={timeValue} placeholder="Increment" required={true} onChange={timeChange}></input>
             </div>
             <div className="flex flex-row">
                 <div className="flex flex-col">
