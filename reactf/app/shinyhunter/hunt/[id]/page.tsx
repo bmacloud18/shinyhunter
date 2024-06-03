@@ -46,18 +46,20 @@ export default function Hunt({params}: {params: {id: number}}) {
     }
     //fetch hunt data
     useEffect(() => {
-
-        Promise.all([api.getHuntById(params.id)]).then( (res) => {
-            const h = res[0];
-            setHunt(h);
-        });
-
+        if (hunt === undefined) {
+            Promise.all([api.getHuntById(params.id)]).then( (res) => {
+                const h = res[0];
+                setHunt(h);
+            });
+        }
     }, [params.id]);
 
 
     let handleSettings = async (event: any) => {
         event.preventDefault();
-        document.location = '/shinyhunter/hunt/new';
+        if (hunt === undefined)
+            throw new Error('hunt not set')
+        document.location = './' + hunt.id + '/settings';
     }
 
 

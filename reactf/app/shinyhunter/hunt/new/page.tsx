@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select'
-import BigButton from "@/app/components/bigButton";
+import Form from "@/app/components/form";
 import api from "@/app/APIclient";
 import User from "@/app/interfaces/user";
 import Pokemon from "@/app/interfaces/pokemon";
@@ -18,12 +18,13 @@ export default function NewHunt() {
     const [methodValue, setMethod] = useState<any>();
     const [nicknameValue, setNickname] = useState('');
     const [incrementValue, setIncrement] = useState<number>();
-    const [charmValue, setCharm] = useState<boolean>(false);
+    const [charmValue, setCharm] = useState('');
     const [countValue, setCount] = useState<number>();
     const [timeValue, setTime] = useState<number>();
     const [importValue, setImport] = useState('');
     const [startValue, setStart] = useState<Date>();
     const [endValue, setEnd] = useState<Date | undefined>();
+
 
     //functions for input change
     const nicknameChange = (event: any) => {
@@ -33,7 +34,10 @@ export default function NewHunt() {
         setIncrement(event.target.value)
     }
     const charmChange = (event: any) => {
-        setCharm(event.target.value)
+        if (charmValue === undefined || charmValue === 'on')
+            setCharm('on');
+        else
+            setCharm('off');
     }
     const countChange = (event: any) => {
         setCount(event.target.value)
@@ -42,7 +46,10 @@ export default function NewHunt() {
         setTime(event.target.value)
     }
     const importChange = (event: any) => {
-        setImport(event.target.value)
+        if (importValue === undefined || importValue == 'on')
+            setImport('off');
+        else
+            setImport('on');
     }
     const startChange = (event: any) => {
         setStart(event.target.value)
@@ -61,8 +68,8 @@ export default function NewHunt() {
                 let end_date = null; 
                 let time = 0;
                 let count = 0;
-                let pkm = pokemonOptions[pokemonValue.value].name;
-                let sprite = pokemonOptions[pokemonValue.value].sprite
+                let pkm = pokemonOptions[Number(pokemonValue.value) - 1].name;
+                let sprite = pokemonOptions[Number(pokemonValue.value) - 1].sprite
 
                 if (importValue == 'on' && startValue && timeValue && countValue) {
                     start_date = startValue;
@@ -96,15 +103,17 @@ export default function NewHunt() {
 
     //fetch relevant data
     useEffect(() => {
-        try {
-            Promise.all([api.getCurrentUser(), api.getAllGames(), api.getAllMethods(), api.getAllMons()]).then((res) => {
-                setUser(res[0]);
-                setGameOptions(res[1]);
-                setMethodOptions(res[2]);
-                setPokemonOptions(res[3]);
-            })
-        } catch (error: any) {
-            console.log("unable to communicate with api");
+        if (user === undefined || gameOptions === undefined || methodOptions === undefined || pokemonOptions === undefined) {
+            try {
+                Promise.all([api.getCurrentUser(), api.getAllGames(), api.getAllMethods(), api.getAllMons()]).then((res) => {
+                    setUser(res[0]);
+                    setGameOptions(res[1]);
+                    setMethodOptions(res[2]);
+                    setPokemonOptions(res[3]);
+                })
+            } catch (error: any) {
+                console.log("unable to communicate with api");
+            }
         }
     });
     
@@ -142,7 +151,7 @@ export default function NewHunt() {
 
     //define main content (when a normal hunt is being started)
     let main = (
-        <div className="border-solid border-2 border-black p-10 flex flex-col gap-2">
+        <div>
             <Select onChange={setPokemon} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
                     <div className="pkm-option">
                         <img src={pkm.image} alt="pkm-image" />
@@ -174,7 +183,7 @@ export default function NewHunt() {
             </div>
             
             <label>
-                <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Importing Hunt?" id="import" required={false} onChange={importChange}></input>
+                <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Importing Hunt?" id="import" required={false} onChange={importChange} value={importValue}></input>
                 Importing Hunt?
             </label>
         </div>
@@ -201,22 +210,14 @@ export default function NewHunt() {
     )
 
     //return page based on importing checkbox value
-    return importValue != undefined || importValue != 'on' ? (
-        <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
-            <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
-            <form className="w-96 h-48 mb-24 flex flex-col items-center justify-around gap-8" onSubmit={handleSubmit}>
-                {main}
-                <button className="border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>
-            </form>
-        </main>
+    return (importValue != undefined && importValue != 'on') ? (
+        <Form handleSubmit={handleSubmit}>
+           {main}
+        </Form>
     ) : (
-        <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
-            <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
-            <form className="w-96 h-48 mb-24 flex flex-col items-center justify-around gap-8" onSubmit={handleSubmit}>
-                {main}
-                {importContent}
-                <button className="border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Create Hunt</button>
-            </form>
-        </main>
+        <Form handleSubmit={handleSubmit}>
+           {main}
+           {importContent}
+        </Form>
     );
 }

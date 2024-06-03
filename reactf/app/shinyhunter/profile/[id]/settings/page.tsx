@@ -1,34 +1,56 @@
 "use client";
-import React, { useState } from 'react';
-import BigButton from "@/app/components/bigButton";
+import React, { useState, useEffect } from 'react';
 import api from "@/app/APIclient";
+import Form from "@/app/components/form";
 import User from "@/app/interfaces/user";
-import Hunt from "@/app/interfaces/hunt";
-import Pokemon from "@/app/interfaces/pokemon";
 
-export default function ProfileSettings() {
-    const [usernameValue, setUsernameValue] = useState('');
-    const [passwordValue, setPasswordValue] = useState('');
 
-    console.log('signin', typeof window !== 'undefined');
+export default function UserSettings({params}: {params: {id: number}}) {
+    //constants for input values
+    const [user, setUser] = useState<User>();
+    const [username, setUsername] = useState('');
+    const [firstname, setFirst] = useState('');
+    const [lastname, setLast] = useState('');
+    const [currentPassword, setCurrent] = useState('');
+    const [newPassword, setNew] = useState('');
+    const [confirmPassword, setConfirm] = useState('');
+    const [avatar, setAvatar] = useState('');
 
+    //functions for input change
     const usernameChange = (event: any) => {
-        setUsernameValue(event.target.value)
+        setUsername(event.target.value)
     }
-    const passwordChange = (event: any) => {
-        setPasswordValue(event.target.value);
+    const firstChange = (event: any) => {
+        setFirst(event.target.value)
     }
+    const lastChange = (event: any) => {
+        setLast(event.target.value)
+    }
+    const currentChange = (event: any) => {
+        setCurrent(event.target.value)
+    }
+    const newChange = (event: any) => {
+        setNew(event.target.value)
+    }
+    const confirmChange = (event: any) => {
+        setConfirm(event.target.value)
+    }
+    //handle hunt creation/form submission
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            if (usernameValue.length > 4 && passwordValue.length > 3) {
-                console.log(usernameValue, passwordValue);
-                api.login(usernameValue, passwordValue).then(user => {
-                    localStorage.setItem('user', JSON.stringify(user));
-                    const id = user.id;
+            if (user && currentPassword.length > 3 && ((firstname.length > 2 && firstname !== user.first_name) || lastname.length > 2 && lastname !== user.last_name || 
+            newPassword.length > 3 && newPassword === confirmPassword)) {
+                //handle image change
+                const first_change = (avatar.length > 16 && avatar.substring(8, 16) === "robohash");
+                
+                //update user with changed values
+                api.updateCurrentUserSettings(firstname, lastname, username, newPassword).then(u => {
+                    localStorage.setItem('user', JSON.stringify(u));
+                    const id = u.id;
                     document.location = '/shinyhunter/profile/' + id;
                 }).catch((err) => {
-                    console.log('Username or Password Invalid - ' + err.message);
+                    console.log('Error updating user - ' + err.message);
                 })
             }
         } catch (error: any) {
@@ -36,16 +58,45 @@ export default function ProfileSettings() {
         }
     }
 
-    return (
-        <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
-            <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
-            <form className="w-96 h-48 mb-24 flex flex-col items-center justify-around gap-8" onSubmit={handleSubmit}>
-              <div className="border-solid border-2 border-black p-10 flex flex-col gap-2">
-                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={usernameValue} placeholder="Username" required={true} onChange={usernameChange}/>
-                <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={passwordValue} placeholder="Password" required={true} onChange={passwordChange}></input>
-              </div>
-              <BigButton text="Sign In"></BigButton>
-            </form>
-        </main>
+    //fetch relevant data
+    useEffect(() => {
+        if (user === undefined) {
+            try {
+                Promise.all([api.getCurrentUser(), api.getUserById(params.id)]).then((res) => {
+                    if (res[0] === res[1]) {
+                        const u = res[0];
+                        setUser(u);
+                        setUsername(u.username);
+                        setFirst(u.first_name);
+                        setLast(u.last_name);
+                        setAvatar(u.avatar);
+                    }
+                    else
+                        throw new Error('Cannot edit other users\' settings');
+                })
+            } catch (error: any) {
+                console.log("error occurred - " + error.message);
+            }
+        }
+    }, [params.id]);
+
+    //define settings content
+    let main = (
+        <div>
+            <div className="flex flex-row">
+                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
+                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
+            </div>
+            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>
+            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="New Password" onChange={newChange}></input>
+            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={confirmPassword} placeholder="Confirm Password" onChange={confirmChange}></input>
+            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" required={true} onChange={currentChange}></input>
+        </div>
     );
+
+    return (
+        <Form handleSubmit={handleSubmit}>
+            {main}
+        </Form>
+    )
 }

@@ -53,7 +53,7 @@ function minMon(pokemon) {
     
     const sprite = "/images/sprites/" + id + ".png"
     return {
-        id: parseInt(id),
+        id: id,
         name: pokemon.name,
         sprite: sprite
       }
@@ -95,7 +95,7 @@ router.get('/pokemon/name/:name', tokenMiddleware, async (req, res) => {
 router.get('/pokemon', tokenMiddleware, async (req, res) => {
     const interval = {
         offset: 0,
-        limit: 1100,
+        limit: 100,
     }
 
     pokedex.getPokemonsList(interval).then(results => {

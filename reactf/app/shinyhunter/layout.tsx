@@ -31,10 +31,12 @@ export default function Layout({
 }
 
   useEffect(() => {
-    Promise.all([api.getCurrentUser()]).then((res) => {
-      const u = res[0];
-      setUser(u);
-    })
+    if (user === undefined) {
+      Promise.all([api.getCurrentUser()]).then((res) => {
+        const u = res[0];
+        setUser(u);
+      });
+    }
   });
 
   let href = "/";

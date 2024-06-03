@@ -16,6 +16,7 @@ export default function Profile({params}: {params: {id: number}}) {
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
     const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
     const [profileUser, setProfileUser] = useState<User>();
+    const [user, setUser] = useState<User>();
     //fetch user and hunt data for profile display
     useEffect(() => {
         // const hunts = [sample, sample2, sample, sample2, sample, sample, sample, sample]
@@ -32,27 +33,27 @@ export default function Profile({params}: {params: {id: number}}) {
         // setCompletedItems(active);
 
         // setProfileUser(sampleuser);
-
-        Promise.all([api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
-            const user = res[0];
-            setProfileUser(user);
-
-            const hunts = res[1];
-            const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-            const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-
-            const active = activeHunts.map((hunt: Hunt) => {
-                return <HuntTile hunt={hunt}/>
+        if (user === undefined || activeItems === undefined || completedItems === undefined) {
+            Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
+                setUser(res[0]);
+                setProfileUser(res[1]);
+    
+                const hunts = res[2];
+                const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+                const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+    
+                const active = activeHunts.map((hunt: Hunt) => {
+                    return <HuntTile hunt={hunt}/>
+                });
+                const completed = completedHunts.map((hunt: Hunt) => {
+                    return <HuntTile hunt={hunt}/>
+                });
+    
+    
+                setActiveItems(completed);
+                setCompletedItems(active);
             });
-            const completed = completedHunts.map((hunt: Hunt) => {
-                return <HuntTile hunt={hunt}/>
-            });
-
-
-            setActiveItems(completed);
-            setCompletedItems(active);
-        });
-
+        }
     }, [params.id]);
 
 
@@ -60,8 +61,6 @@ export default function Profile({params}: {params: {id: number}}) {
         event.preventDefault();
         document.location = '../hunt/new';
     }
-
-
 
     //set hunt displays based on what hunts users have 
     let content;
