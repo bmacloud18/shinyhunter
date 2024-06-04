@@ -34,7 +34,7 @@ export default function NewHunt() {
         setIncrement(event.target.value)
     }
     const charmChange = (event: any) => {
-        if (charmValue === undefined || charmValue === 'on')
+        if (charmValue === undefined || charmValue === 'off')
             setCharm('on');
         else
             setCharm('off');
@@ -46,10 +46,10 @@ export default function NewHunt() {
         setTime(event.target.value)
     }
     const importChange = (event: any) => {
-        if (importValue === undefined || importValue == 'on')
-            setImport('off');
-        else
+        if (importValue === undefined || importValue == 'off')
             setImport('on');
+        else
+            setImport('off');
     }
     const startChange = (event: any) => {
         setStart(event.target.value)
@@ -150,72 +150,69 @@ export default function NewHunt() {
     }
 
     //define main content (when a normal hunt is being started)
-    let main = (
-        <div>
-            <Select onChange={setPokemon} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
-                    <div className="pkm-option">
-                        <img src={pkm.image} alt="pkm-image" />
-                        <span>{pkm.label}</span>
-                    </div>
-                )}
-            />
-            <div className="flex flex-row"> 
-                <Select onChange={setGame} value={gameValue} options={go} formatOptionLabel={(game: any) => (
-                    <div className="game-option">
-                        <span>{game.label}</span>
-                    </div>
-                )}
-            />
-                <Select onChange={setMethod} value={methodValue} options={mo} formatOptionLabel={(mtd: any) => (
-                        <div className="mtd-option">
-                            <span>{mtd.label}</span>
-                        </div>
-                    )}
-                />
+    const main = [
+        (<Select onChange={setPokemon} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
+            <div className="pkm-option">
+                <img src={pkm.image} alt="pkm-image" />
+                <span>{pkm.label}</span>
             </div>
-            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
-            <div>
-                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={incrementValue} placeholder="Increment" required={true} onChange={incrementChange}></input>
-                <label>
-                    <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
-                    Charm?
-                </label>
-            </div>
-            
-            <label>
-                <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Importing Hunt?" id="import" required={false} onChange={importChange} value={importValue}></input>
-                Importing Hunt?
+        )}
+    />),
+        (<div className="flex flex-row gap-2"> 
+            <Select onChange={setGame} value={gameValue} options={go} formatOptionLabel={(game: any) => (
+                <div className="game-option">
+                    <span>{game.label}</span>
+                </div>
+            )}
+            />
+            <Select onChange={setMethod} value={methodValue} options={mo} formatOptionLabel={(mtd: any) => (
+                <div className="mtd-option">
+                    <span>{mtd.label}</span>
+                </div>
+            )}
+            />
+        </div>),
+        (<div className="flex flex-row gap-2">
+        <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
+        <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={incrementValue} min="1" placeholder="Increment" required={true} onChange={incrementChange}></input>
+    </div>),
+        (<div className="flex flex-col gap-4">
+            <label className="flex flex-col items-center gap-2">
+                Charm?
+                <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
             </label>
-        </div>
-    );
+            <label className="flex flex-col items-center gap-2">
+                Importing Hunt?
+                <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Importing Hunt?" id="import" required={false} onChange={importChange} value={importValue}></input>
+            </label>
+        </div>)
 
-    //define extra content (when an existing hunt is being imported)
-    let importContent = (
-        <div className="flex flex-col">
-            <div>
-                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={countValue} placeholder="Increment" required={true} onChange={countChange}></input>
-                <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={timeValue} placeholder="Increment" required={true} onChange={timeChange}></input>
+    ]
+
+    const importContent = [
+        (<div>
+            <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={countValue} placeholder="Count" required={true} onChange={countChange}></input>
+            <input type="number" className="border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={timeValue} placeholder="Time" required={true} onChange={timeChange}></input>
+        </div>),
+        ( <div className="flex flex-row">
+            <div className="flex flex-col gap-2">
+                <input type="date" required={true} onChange={startChange}></input>
+                <button onClick={useToday} className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Use Today</button>
             </div>
-            <div className="flex flex-row">
-                <div className="flex flex-col">
-                    <input type="date" required={true} onChange={startChange}></input>
-                    <button onClick={useToday} className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Use Today</button>
-                </div>
-                <div>
-                    <input type="date" onChange={endChange}></input>
-                    <button onClick={notComplete} className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Not Complete</button>
-                </div>
+            <div className="flex flex-col gap-2">
+                <input type="date" onChange={endChange}></input>
+                <button onClick={notComplete} className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Not Complete</button>
             </div>
-        </div>
-    )
+        </div>)
+    ]
 
     //return page based on importing checkbox value
     return (importValue != undefined && importValue != 'on') ? (
-        <Form handleSubmit={handleSubmit}>
+        <Form formText="Enter Information for a New Hunt" buttonText="Create Hunt" handleSubmit={handleSubmit}>
            {main}
         </Form>
     ) : (
-        <Form handleSubmit={handleSubmit}>
+        <Form formText="Enter Information for a New Hunt" buttonText="Create Hunt" handleSubmit={handleSubmit}>
            {main}
            {importContent}
         </Form>

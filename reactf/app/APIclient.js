@@ -32,11 +32,21 @@ export default {
 
     // current user
     getCurrentUser: async () => {
-        return HTTPclient.get('currentuser');
+        try {
+            return HTTPclient.get('currentuser');
+        } catch (err) {
+            console.log(err.message);
+        }
+        
     },
 
     getUserById: async (id) => {
-        return HTTPclient.get(`users/${id}`);
+        try {
+            return HTTPclient.get(`users/${id}`);
+        } catch (err) {
+            console.log(err.message);
+        }
+        
     },
 
     updateCurrentUserSettings: async (first, last, username, avatar) => {
@@ -46,7 +56,12 @@ export default {
             username: username,
             avatar: avatar
         };
-        return HTTPclient.put('currentuser', data);
+        try {
+            return HTTPclient.put('currentuser', data);
+        } catch (err) {
+            console.log(err.message);
+        }
+        
     },
 
     updatePassword: async ( password, updatedPassword ) => {

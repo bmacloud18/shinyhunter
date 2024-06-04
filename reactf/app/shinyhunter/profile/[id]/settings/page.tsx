@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import api from "@/app/APIclient";
 import Form from "@/app/components/form";
 import User from "@/app/interfaces/user";
+import sampleuser from "@/app/samples/user";
 
 
 export default function UserSettings({params}: {params: {id: number}}) {
@@ -73,29 +74,30 @@ export default function UserSettings({params}: {params: {id: number}}) {
                     }
                     else
                         throw new Error('Cannot edit other users\' settings');
+                }).catch((err) => {
+                    console.error("error occurred - " + err.message);
                 })
             } catch (error: any) {
-                console.log("error occurred - " + error.message);
+                console.error("error occurred - " + error.message);
+                setUser(sampleuser);
             }
         }
     }, [params.id]);
 
     //define settings content
-    let main = (
-        <div>
-            <div className="flex flex-row">
-                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
-                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
-            </div>
-            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="New Password" onChange={newChange}></input>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={confirmPassword} placeholder="Confirm Password" onChange={confirmChange}></input>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" required={true} onChange={currentChange}></input>
-        </div>
-    );
 
+    let main = [
+        (<input type="file"></input>),
+        (<div className="flex flex-row gap-2">
+            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
+            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
+        </div>),
+        (<input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>),
+        (<input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={confirmPassword} placeholder="Confirm Password" onChange={confirmChange}></input>),
+        (<input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" required={true} onChange={currentChange}></input>),
+]
     return (
-        <Form handleSubmit={handleSubmit}>
+        <Form handleSubmit={handleSubmit} buttonText="Update Profile">
             {main}
         </Form>
     )
