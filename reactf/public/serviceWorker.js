@@ -2,7 +2,9 @@ const STATIC_CACHE_NAME = 'shiny-hunter-static-v2';
 const DYNAMIC_CACHE_NAME = 'shiny-hunter-dynamic-v2';
 const API_BASE = './api/';
 const assets = [
-    '/favicon.co',
+    '/next.svg',
+    '/vercel.svg',
+    'serviceWorker.js'
 ];
     
 self.addEventListener('install', e => {

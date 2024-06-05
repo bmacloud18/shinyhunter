@@ -1,10 +1,8 @@
 'use client';
-import Link from "next/link";
 import { useEffect, useState } from 'react';
 import api from "@/app/APIclient";
 import Timer from "easytimer.js";
 import convertTime from "@/app/util/convertTime";
-
 export default function HuntTile({
     hunt
 } : {
@@ -17,8 +15,18 @@ export default function HuntTile({
     const [count, setCount] = useState<number>(0);
     const [seconds, setSeconds] = useState<number>(0);
     const [diff, setDiff] = useState<number>(0);
-    const [timeDisplay, setTimeDisplay] = useState('');
+    const [timeDisplay, setTimeDisplay] = useState(convertTime(hunt.hunt_time));
 
+    document.addEventListener('visibilitychange', e => {
+        saveCurrentHunt();
+        localStorage.removeItem('hunt');
+        localStorage.removeItem('stopwatchData');
+        localStorage.removeItem('counterData');
+    });
+
+
+
+    //local storage functions
     function saveDataToLocalStorage(key: string, data: any) {
         localStorage.setItem(key, JSON.stringify(data));
     }
@@ -82,9 +90,11 @@ export default function HuntTile({
         }
     }
     
+    //Timer functions
     function pause(timer: Timer | undefined) {
         if (timer !== undefined) {
             setHunting(false);
+            
             timer.pause();
             saveCurrentHunt();
         }
@@ -100,7 +110,7 @@ export default function HuntTile({
     };
 
 
-
+    //onClick functions
     function spriteClick() {
         if (hunting) {
             pause(timer);
@@ -128,51 +138,51 @@ export default function HuntTile({
 
     const stopwatchData = getDataFromLocalStorage('stopwatchData');
     const counterData = getDataFromLocalStorage('counterData');
-
+    if (timer === undefined)
+        setTimer(new Timer());
 
 
     useEffect(() => {
-        document.addEventListener('visibilitychange', e => {
-            saveCurrentHunt();
-            localStorage.removeItem('hunt');
-            localStorage.removeItem('stopwatchData');
-            localStorage.removeItem('counterData');
-        });
-        try {
-            Promise.all([api.getMethodById(hunt.method)]).then((res) => {
-                setMethod(res[0].name);
-            
-                let hunt_time = hunt.hunt_time;
-                if (stopwatchData) {
-                    hunt_time += stopwatchData.elapsedTime;
-                    if (stopwatchData.isRunning) {
-                        resume(timer);
-                    }
-                    else {
-                        pause(timer);
-                    }
+        if (method.length < 1) {
+            let hunt_time = hunt.hunt_time;
+            if (stopwatchData) {
+                hunt_time += stopwatchData.elapsedTime;
+                if (stopwatchData.isRunning) {
+                    resume(timer);
                 }
-                setTimeDisplay(hunt.hunt_time_display);
-                setTimer(new Timer({callback: function (e) {
-                    setSeconds(seconds+1);
-                    const newtime = hunt_time + seconds;
-                    setTimeDisplay(convertTime(newtime));
-                    saveTimeDataLocally('stopwatchData');
-                }, precision: 'seconds'}));
+                else {
+                    pause(timer);
+                }
+            }
+            if (timer) {
+                timer.start({countdown: false, startValues: {seconds: hunt_time}});
+                timer.addEventListener('secondsUpdated', function (e) {
+                    console.log(timer.isPaused());
+                    if (!timer.isPaused()) {
+                        const s = timer.getTimeValues().seconds + hunt_time;
+                        setTimeDisplay(convertTime(s));
+                        setSeconds(s);
+                    }
+                });
+            }
 
-                let count = hunt.count;
-                if (counterData) {
-                    count = counterData.counter;
-                }
-                setCount(count);
-            });
-        } catch {
-            console.error("couldn't connect to API");
+            let count = hunt.count;
+            if (counterData) {
+                count = counterData.counter;
+            }
+            setCount(count);
+            try {
+                Promise.all([api.getMethodById(hunt.method)]).then((res) => {
+                    setMethod(res[0].name);
+                });
+            } catch {
+                console.error("couldn't connect to API");
+                setMethod('random');
+            }
         }
     });
 
     const active = hunt.end_date_display == null;
-
     let main = (
         <div className="flex flex-col w-full">
             <span>
@@ -195,7 +205,7 @@ export default function HuntTile({
                 <button onClick={plus} className="">{"+"}</button>
             </div>
             <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
-                <button onClick={minus} className="">{"-"}</button>
+                <button onClick={spriteClick} className="">{"-"}</button>
             </div>
         </div>)
     ] : [
