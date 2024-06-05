@@ -20,6 +20,6 @@ export default function Form({
                 <button className="mt-10 border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite">{buttonText}</button>
             </form>
         </main>
-    )
+    );
     
 }
