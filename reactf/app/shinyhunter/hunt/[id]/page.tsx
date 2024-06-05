@@ -32,19 +32,19 @@ export default function HuntPage({params}: {params: {id: number}}) {
     //setup Hunt Display
     let content;
     let button;
-    if (hunt != null) {
+    if (hunt !== undefined) {
         content = (
             <BigHunt hunt={hunt}/>
         );
+        handleSettings = async (event: any) => {
+            event.preventDefault();
+            document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
+        }
         button = hunt.end_date_display === null ? (
             <BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>
         ) : (
             <span></span>
         )
-        handleSettings = async (event: any) => {
-            event.preventDefault();
-            document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
-        }
     }
 
     //full page with Hunt

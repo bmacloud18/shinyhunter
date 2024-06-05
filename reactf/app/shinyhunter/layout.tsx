@@ -5,6 +5,7 @@ import "../globals.css";
 import api from "../APIclient";
 import { useState, useEffect } from "react";
 import User from "@/app/interfaces/user";
+import Register from "@/app/util/serviceWorker";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,11 +32,13 @@ export default function Layout({
 }
 
   useEffect(() => {
+    Register();
     if (user === undefined) {
       Promise.all([api.getCurrentUser()]).then((res) => {
         const u = res[0];
         setUser(u);
       });
+      
     }
   });
 
@@ -82,7 +85,7 @@ export default function Layout({
                 />
               </div>
               <form onSubmit={handleLogout}>
-                <button className="border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>
+                <button className="border-solid border-2 border-green mr-2 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Logout</button>
               </form>
             </div>
           </header>

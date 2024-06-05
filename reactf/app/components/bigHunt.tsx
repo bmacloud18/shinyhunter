@@ -63,7 +63,9 @@ export default function HuntTile({
             if (hunt && stopwatch && counter) {
                 const newtime = hunt.hunt_time + stopwatch.elapsedTime;
                 const count = counter.counter;
-                api.updateHunt(hunt.id, newtime, hunt.start_date_string, hunt.end_date_string, count, hunt.increment).then(res => {
+
+                console.log(hunt.id, newtime, count, hunt.increment, hunt.charm)
+                api.updateHunt(hunt.id, newtime, count, hunt.increment, hunt.charm).then(res => {
                     if (res.status == '200') {
                         localStorage.removeItem('hunt');
                         localStorage.removeItem('stopwatchData');
@@ -90,7 +92,7 @@ export default function HuntTile({
     
     function resume(timer: Timer | undefined) {
         if (timer !== undefined) {
-            if (!active) {
+            if (!hunting) {
                 setHunting(true);
                 timer.start();
             }
@@ -111,14 +113,23 @@ export default function HuntTile({
     }
 
     function minus() {
-        saveDataLocallyAndDecrement('counterData');
-        setCount(count-1);
+        if (count > 0) {
+            saveDataLocallyAndDecrement('counterData');
+            setCount(count-1);
+        }
     }
 
     function plus() {
-        saveDataLocallyAndIncrement('counterData');
-        setCount(count+1);
+        if (count < 999999) {
+            saveDataLocallyAndIncrement('counterData');
+            setCount(count+1);
+        }
     }
+
+    const stopwatchData = getDataFromLocalStorage('stopwatchData');
+    const counterData = getDataFromLocalStorage('counterData');
+
+
 
     useEffect(() => {
         document.addEventListener('visibilitychange', e => {
@@ -128,19 +139,10 @@ export default function HuntTile({
             localStorage.removeItem('counterData');
         });
         try {
-            Promise.all([api.getMethodById(hunt.id)]).then((res) => {
+            Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                 setMethod(res[0].name);
-                const stopwatchData = getDataFromLocalStorage('stopwatchData');
-                const counterData = getDataFromLocalStorage('counterData');
             
                 let hunt_time = hunt.hunt_time;
-                setTimer(new Timer({callback: function (e) {
-                    setSeconds(seconds+1);
-                    const newtime = hunt_time + seconds;
-                    setTimeDisplay(convertTime(newtime));
-                    saveTimeDataLocally('stopwatchData');
-                }, precision: 'seconds'}));
-
                 if (stopwatchData) {
                     hunt_time += stopwatchData.elapsedTime;
                     if (stopwatchData.isRunning) {
@@ -150,77 +152,85 @@ export default function HuntTile({
                         pause(timer);
                     }
                 }
+                setTimeDisplay(hunt.hunt_time_display);
+                setTimer(new Timer({callback: function (e) {
+                    setSeconds(seconds+1);
+                    const newtime = hunt_time + seconds;
+                    setTimeDisplay(convertTime(newtime));
+                    saveTimeDataLocally('stopwatchData');
+                }, precision: 'seconds'}));
 
                 let count = hunt.count;
                 if (counterData) {
                     count = counterData.counter;
                 }
+                setCount(count);
             });
         } catch {
             console.error("couldn't connect to API");
         }
     });
-    // const active = hunt.end_date_display == null;
-    const active = true;
-    let activeContent = hunting ? [
-        (<div className="flex flex-col w-full">
+
+    const active = hunt.end_date_display == null;
+
+    let main = (
+        <div className="flex flex-col w-full">
             <span>
                 {hunt.nickname}
             </span>
             <span>
                 {timeDisplay}
+            </span>
+            <a onClick={spriteClick}>
+                <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green"/>
+            </a>
+        </div>
+    )
+    
+    let activeContent = hunting ? [
+        (main),
+        (<div className="flex flex-row justify-between w-full">
+            <span className="justify-self-end self-end font-sans text-xl m-8">{count}</span>
+            <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
+                <button onClick={plus} className="">{"+"}</button>
+            </div>
+            <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
+                <button onClick={minus} className="">{"-"}</button>
+            </div>
+        </div>)
+    ] : [
+        (<span>Tap Sprite to Resume Hunt</span>),
+        (main)
+    ]
+
+    let completeContent = [
+        (<div className="flex flex-col w-full">
+            <span>
+                {hunt.nickname}
+            </span>
+            <span>
+                {hunt.hunt_time_display}
             </span>
             <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
         </div>),
         (<div className="flex flex-row justify-between w-full">
-        <span className="justify-self-end self-end font-sans text-xl m-8">{count}</span>
-        <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
-            <button onClick={minus} className="">{"+"}</button>
-        </div>
-        <div className="border-solid border-2 border-red mr-2 rounded-2xl p-5 bg-green hover:bg-buttonwhite">
-            <button onClick={plus} className="">{"-"}</button>
-        </div>
-    </div>)
-    ] : [
-        (<span>Tap Sprite to Resume Hunt</span>),
-        (<div className="flex flex-col w-full">
-            <span>
-                {hunt.nickname}
-            </span>
-            <span>
-                {timeDisplay}
-            </span>
-            <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
-        </div>)
-    ]
-    return active ? (
-        <div className="border-solid border-2 border-black flex flex-col items-center w-full gap-6 m-2">
-            {activeContent}
-        </div>
-    ) : (
-        <div className="border-solid border-2 border-black flex flex-col items-center w-full gap-6 m-2">
-            <div className="flex flex-col w-full">
-                <span>
-                    {hunt.nickname}
-                </span>
-                <span>
-                    {hunt.hunt_time_display}
-                </span>
-                <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
-            </div>
-            <div className="flex flex-row justify-between w-full">
-                <span className="justify-self-end self-end font-sans text-xl m-8">{hunt.count}</span>
+            <span className="justify-self-end self-end font-sans text-xl m-8">{hunt.count}</span>
+        </div>),
+        (<div>
+            <div>
+                <span>Game: {hunt.game}</span>
+                <span>Method: {method}</span>
             </div>
             <div>
-                <div>
-                    <span>Game: {hunt.game}</span>
-                    <span>Method: {method}</span>
-                </div>
-                <div>
-                    <span>Start: {hunt.start_date_display}</span>
-                    <span>End: {hunt.end_date_display}</span>
-                </div>
+                <span>Start: {hunt.start_date_display}</span>
+                <span>End: {hunt.end_date_display}</span>
             </div>
+        </div>)
+    ]
+    let content = active ? activeContent : completeContent;
+    return (
+        <div className="border-solid border-2 border-black flex flex-col items-center w-full gap-6 m-2">
+            {content}
         </div>
-    );
+    )
 }
