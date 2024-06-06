@@ -85,11 +85,11 @@ export default function Profile({params}: {params: {id: number}}) {
     else if (activeItems.length == 0 && completedItems.length > 0) {
         content = (
             <Grid>
-                <div className="w-64 border-solid border-4 border-black">
+                <div className="w-4/5 border-solid border-4 border-black">
                     <p>Active</p>
                     <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div className="w-64 border-solid border-4 border-black">
+                <div className="w-4/5 border-solid border-4 border-black">
                     <p>Complete</p>
                     <TileGrid>
                         {completedItems}
@@ -101,13 +101,13 @@ export default function Profile({params}: {params: {id: number}}) {
     else if (activeItems.length > 0 && completedItems.length == 0) {
         content = (
             <Grid>
-                <div className="w-32 border-solid border-4 border-black">
+                <div className="w-fit border-solid border-4 border-black">
                     <p>Active</p>
                     <TileGrid>
                         {activeItems}
                     </TileGrid>
                 </div>
-                <div className="w-32 border-solid border-4 border-black">
+                <div className="w-fit border-solid border-4 border-black">
                     <p>Complete</p>
                     <span className="border-solid border-black border-2">Keep Working on Those Hunts!</span>
                 </div>
@@ -117,11 +117,11 @@ export default function Profile({params}: {params: {id: number}}) {
     else {
         content = (
             <Grid>
-                <div className="w-32 border-solid border-4 border-black">
+                <div className="w-fit border-solid border-4 border-black">
                     <p>Active</p>
                     <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div className="w-32 border-solid border-4 border-black">
+                <div className="w-fit border-solid border-4 border-black">
                     <p>Complete</p>
                     <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>

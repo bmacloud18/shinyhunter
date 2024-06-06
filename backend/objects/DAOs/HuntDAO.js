@@ -97,7 +97,6 @@ async function completeHunt(id, end_date) {
 
 //update a hunt by providing it with hunt settings data
 async function updateHunt(id, time, count, increment, charm, nickname) {
-
     return query('UPDATE hunt SET hnt_time_s=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, count, increment, charm, nickname, id]).then(({results}) => {
         return results;
     }).catch(err => {

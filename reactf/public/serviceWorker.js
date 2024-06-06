@@ -56,17 +56,7 @@ self.addEventListener('fetch', e => {
         }
     }
     else if (e.request.method !== 'POST' || e.request.method !== 'PUT'){
-        e.respondWith(
-            caches.match(e.request).then(cacheResponse => {
-                return cacheResponse || fetch(e.request).then(networkResponse => {
-                    return caches.open(DYNAMIC_CACHE_NAME).then(cache => {
-                        cache.put(e.request.url, networkResponse.clone());
-                        return networkResponse;
-                    })
-                })
-            }).catch(() => {
-                return caches.match('/offline');
-            }));
+        e.respondWith(fetchFirst(e.request));
     }
 });
 

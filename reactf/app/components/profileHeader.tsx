@@ -1,6 +1,8 @@
 import ProfilePicture from "@/app/components/profilePicture";
 import BigButton from "@/app/components/bigButton";
 import User from "@/app/interfaces/user";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Profile from "@/app/shinyhunter/profile/[id]/page";
 
 export default function ProfileHeader({
     user

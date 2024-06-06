@@ -80,8 +80,14 @@ export default function HuntSettings({params}: {params: {id: number}}) {
             <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={incrementValue} min="1" placeholder="Increment" required={true} onChange={incrementChange}></input>
         </div>),
         (<div className="flex flex-row gap-2">
-            <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={countValue} min="0" placeholder="Count" required={true} onChange={countChange}></input>
-            <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={timeValue} min="0" placeholder="Time" required={true} onChange={timeChange}></input>
+            <label>
+                Count
+                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={countValue} min="0" placeholder="Count" required={true} onChange={countChange}></input>
+            </label>
+            <label>
+                Time
+                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={timeValue} min="0" placeholder="Time" required={true} onChange={timeChange}></input>
+            </label>
         </div>),
         (<label className="flex flex-col items-center">
             <span>Charm?</span>
@@ -91,7 +97,7 @@ export default function HuntSettings({params}: {params: {id: number}}) {
 
     //return page based on importing checkbox value
     return (
-        <Form formText="Enter Information for a New Hunt" buttonText="Update Hunt" handleSubmit={handleSubmit}>
+        <Form formText="Update Hunt Settings" buttonText="Update Hunt" handleSubmit={handleSubmit}>
             {main}
         </Form>
     )
