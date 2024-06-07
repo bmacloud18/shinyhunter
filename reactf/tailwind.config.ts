@@ -21,8 +21,9 @@ const config: Config = {
       'red': '#b91c1c',
       'black': '#262626',
       'buttonwhite': '#d4d4d8'
+      
     }
   },
-  plugins: [],
+  // plugins: [require('flowbite/plugin')],
 };
 export default config;

@@ -2,9 +2,9 @@ import { List } from "postcss/lib/list";
 
 export default interface Pokemon {
     id: number,
-    name: String,
-    sprite: String,
+    name: string,
+    sprite: string,
     types: List,
     games: List,
-    color: String
+    color: string
   }

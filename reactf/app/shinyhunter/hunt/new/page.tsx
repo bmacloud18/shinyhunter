@@ -21,7 +21,7 @@ export default function NewHunt() {
     const [charmValue, setCharm] = useState('');
     const [countValue, setCount] = useState<number>();
     const [timeValue, setTime] = useState<number>();
-    const [importValue, setImport] = useState('');
+    const [importValue, setImport] = useState('off');
     const [startValue, setStart] = useState<string>();
     const [endValue, setEnd] = useState<string | undefined>();
 
@@ -217,7 +217,7 @@ export default function NewHunt() {
     ]
 
     //return page based on importing checkbox value
-    return (importValue != undefined && importValue != 'on') ? (
+    return (importValue == 'off') ? (
         <Form formText="Enter Information for a New Hunt" buttonText="Create Hunt" handleSubmit={handleSubmit}>
            {main}
         </Form>
