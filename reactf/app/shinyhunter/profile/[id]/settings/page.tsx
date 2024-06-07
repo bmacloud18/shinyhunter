@@ -4,6 +4,7 @@ import api from "@/app/APIclient";
 import Form from "@/app/components/form";
 import User from "@/app/interfaces/user";
 import sampleuser from "@/app/samples/user";
+import fileUpload from "@/app/util/fileupload";
 
 
 export default function UserSettings({params}: {params: {id: number}}) {
@@ -67,60 +68,12 @@ export default function UserSettings({params}: {params: {id: number}}) {
         try {
             if (user && currentPassword.length > 3 && ((firstname.length > 2 && firstname !== user.first_name) || lastname.length > 2 && lastname !== user.last_name || 
             newPassword.length > 3 && newPassword === confirmPassword)) {
-                //handle image change
-                const first_change = (avatar.length > 16 && user.avatar.substring(8, 16) === "robohash");
+                
                 const url = 'images/uploads/';
-                const avatar_string = url + filename;
+                fileUpload(avatar, user, formdata, url);
                 setFilename('');
-                if (!first_change) {
-                    try {
-                        const res = await fetch(user.avatar, {
-                            method: 'GET'
-                        });
-
-                        if (res.status === 404) {
-                            const err = new Error("404");
-                            throw err;
-                        }
-
-                        if (res.status === 200) {
-                            const deleteres = await fetch(user.avatar, {
-                                method: 'DELETE'
-                            });
-
-                            if (deleteres.status === 200) {
-                                await fetch(url, {
-                                    method: 'POST',
-                                    body: formdata
-                                }).catch((err) => {
-                                    throw new Error('Error uploading image' + err);
-                                })
-                            }
-                        }
-
-                    } catch (err: any) {
-                        if (err.message == "404") {
-                            await fetch(url, {
-                                method: 'POST',
-                                body:formdata
-                            }).catch((err) => {
-                                throw new Error('Error uploading image (no delete): ' + err)
-                            })
-                        }
-                        else {
-                            throw new Error('Something wrong with get');
-                        }
-                    }
-                }
-                else {
-                    await fetch(url, {
-                        method: 'POST',
-                        body: formdata
-                    }).catch((err) => {
-                        throw new Error('Error uploading image (no delete)' + err);
-                    })
-                }
-
+                const avatar_string = url + filename;
+                
                 //update user with changed values
                 try {
                     api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
