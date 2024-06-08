@@ -75,7 +75,7 @@ export default function HuntTile({
             console.log(hunt, stopwatch, counter);
     
             if (hunt && stopwatch && counter) {
-                const newtime = hunt.hunt_time + stopwatch.elapsedTime;
+                const newtime = stopwatch.elapsedTime;
                 const count = counter.counter;
                 console.log(newtime, count);
                 api.updateHunt(hunt.id, newtime, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
@@ -182,7 +182,7 @@ export default function HuntTile({
                 timer.start({countdown: false, startValues: {seconds: hunt_time}});
                 timer.addEventListener('secondsUpdated', function () {
                     if (!timer.isPaused()) {
-                        const s = timer.getTimeValues().seconds + hunt_time;
+                        const s = timer.getTimeValues().seconds;
                         setTimeDisplay(convertTime(s));
                         setSeconds(s);
                     }

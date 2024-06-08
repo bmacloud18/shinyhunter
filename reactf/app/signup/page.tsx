@@ -43,7 +43,7 @@ export default function Signin() {
     }
 
     const SignIn = (event: any) => {
-        document.location = '/';
+        document.location = '/signin';
     }
 
     return (

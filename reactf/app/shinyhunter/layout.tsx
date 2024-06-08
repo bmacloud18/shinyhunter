@@ -73,7 +73,7 @@ export default function Layout({
                 </div>
                 <a href={href}>
                     <img 
-                        className="max-h-16 max-w-24 px-4"
+                        className="h-24 w-24 px-4"
                         src={user.avatar.toString()}
                         alt="User PFP"/>
                 </a>

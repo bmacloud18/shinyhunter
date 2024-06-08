@@ -26,6 +26,16 @@ const config: Config = {
       'black': '#262626',
       'buttonwhite': '#d4d4d8'
       
+    },
+    screens: {
+      'sm': '100px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '640px',
+      // => @media (min-width: 840px) { ... }
+
+      'lg': '1024px',
+      // => @media (min-width: 1024px) { ... }
     }
   },
   // plugins: [require('flowbite/plugin')],

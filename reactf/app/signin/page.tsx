@@ -34,7 +34,7 @@ export default function Signin() {
     }
 
     const SignUp = (event: any) => {
-        document.location = "./signup";
+        document.location = "/signup";
     }
 
     return (
