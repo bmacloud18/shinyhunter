@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Head from "next/head";
-import { Inter } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Roboto_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ShinyHunter",

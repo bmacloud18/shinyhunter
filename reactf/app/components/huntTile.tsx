@@ -29,7 +29,7 @@ export default function HuntTile({
                 </div>
                 <div className="flex flex-row justify-between w-full">
                     <img src={hunt.sprite.toString()} alt="pkm sprite" className="h-24 w-24 fill-green" />
-                    <span className="justify-self-end self-end font-sans text-xl m-8">{hunt.count}</span>
+                    <span className="justify-self-end self-end text-xl m-8">{hunt.count}</span>
                 </div>
             </div>
         </Link>

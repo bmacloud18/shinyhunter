@@ -33,6 +33,10 @@ export default function Signin() {
         }
     }
 
+    const SignUp = (event: any) => {
+        document.location = "./signup";
+    }
+
     return (
         <main className="mt-96 flex flex-col min-h-screen items-center m-auto">
             <h1 className="h5 mb-3 fw-normal text-center">Sign In to your ShinyHunter Account</h1>
@@ -41,8 +45,9 @@ export default function Signin() {
                 <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={usernameValue} placeholder="Username" required={true} onChange={usernameChange}/>
                 <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={passwordValue} placeholder="Password" required={true} onChange={passwordChange}></input>
               </div>
-              <BigButton text="Sign In"></BigButton>
+              <button className="max-w-fit border-solid border-2 border-green rounded-2xl p-5 bg-red hover:bg-buttonwhite">Sign In</button>
             </form>
+            <BigButton text="Sign Up" onClick={SignUp}></BigButton>
         </main>
     );
 }

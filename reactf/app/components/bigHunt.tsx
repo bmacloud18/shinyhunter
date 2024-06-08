@@ -208,10 +208,10 @@ export default function HuntTile({
     const active = hunt.end_date_display == null;
     let main = (
         <div className="flex flex-col w-full gap-8 items-center">
-            <span className="font-sans text-6xl">
+            <span className="text-6xl">
                 {hunt.nickname}
             </span>
-            <span className="font-sans text-4xl">
+            <span className="text-4xl">
                 {timeDisplay}
             </span>
             <a className="mt-4" onClick={spriteClick}>
@@ -221,13 +221,12 @@ export default function HuntTile({
     )
     
     let activeContent = hunting ? [
-        (<BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>),
         (main),
         (<div className="flex flex-col items-center w-fit">
-            <span className="font-mono text-7xl m-8">{count}</span>
+            <span className="text-7xl m-8">{count}</span>
             <div className="flex flex-row justify-end mt-8 gap-8 items-center">
-                <button onClick={plus} className="text-6xl font-sans h-48 w-48 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">+</button>
-                <button onClick={minus} className="text-6xl font-sans h-24 w-24 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">-</button>
+                <button onClick={plus} className="text-6xl h-48 w-48 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">+</button>
+                <button onClick={minus} className="text-6xl h-24 w-24 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">-</button>
             </div>
         </div>)
     ] : [
@@ -235,7 +234,8 @@ export default function HuntTile({
         (main)
     ]
 
-    let button = active ? (<BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>) : (<span></span>)
+    let settings = active ? (<BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>) : 
+    (<button className="max-w-fit border-solid border-2 border-green rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>)
 
     let completeContent = [
         (<div className="flex flex-col w-full">
@@ -248,7 +248,7 @@ export default function HuntTile({
             <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
         </div>),
         (<div className="flex flex-row justify-between w-full">
-            <span className="justify-self-end self-end font-sans text-xl m-8">{hunt.count}</span>
+            <span className="justify-self-end self-end text-xl m-8">{hunt.count}</span>
         </div>),
         (<div>
             <div>
@@ -263,11 +263,11 @@ export default function HuntTile({
     ]
     let content = active ? activeContent : completeContent;
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <div className="rounded-2xl border-solid border-2 border-black flex flex-col items-center w-fit gap-6 m-2 p-20">
                 {content}
             </div>
-            {button}
+            {settings}
         </div>
     )
 }

@@ -15,15 +15,15 @@ export default function ProfileHeader({
     }
 
     return (
-        <form className="border-solid border-2 border-black w-full items-center justify-between font-mono text-sm flex flex-row">
+        <form className="border-solid border-2 border-black w-full items-center justify-between text-sm flex flex-row">
             <div className="flex flex-row m-2">
                 <ProfilePicture source={user.avatar}></ProfilePicture>
-                <div>
+                <div className="flex flex-col self-center mr-2">
                     <p>{user.first_name} {user.last_name}</p>
                     <p>{user.username}</p>
                 </div>
             </div>
-            <div>
+            <div className="flex m-2">
                 <BigButton onClick={handleSettings} text="Edit Profile"></BigButton>
             </div>
         </form>

@@ -77,7 +77,7 @@ export default function UserSettings({params}: {params: {id: number}}) {
                     localStorage.setItem('user', JSON.stringify(u));
                     setUser(u);
                     const id = u.id;
-                    // document.location = '/shinyhunter/profile/' + id;
+                    document.location = '/shinyhunter/profile/' + id;
                 }).catch((err) => {
                     console.log('Error updating user - ' + err.message);
                 })
@@ -138,7 +138,7 @@ export default function UserSettings({params}: {params: {id: number}}) {
         (preview),
         (<label className="mb-4 text-sm font-medium text-grey dark:text-white" htmlFor="file_input">
             <span>Upload PFP</span>
-            <input className="file:bg-green font-sans rounded-2xl block text-medium file:text-buttonwhite text-black border border-1 border-black cursor-pointer" type="file" id="file_input" onChange={fileChange}></input>
+            <input className="file:bg-green rounded-2xl block text-medium file:text-buttonwhite text-black border border-1 border-black cursor-pointer" type="file" id="file_input" onChange={fileChange}></input>
         </label>),
         (<div className="flex flex-row gap-2">
             <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>

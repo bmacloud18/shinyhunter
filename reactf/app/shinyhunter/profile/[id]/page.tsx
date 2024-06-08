@@ -136,7 +136,7 @@ export default function Profile({params}: {params: {id: number}}) {
             
             <ProfileHeader user={profileUser}></ProfileHeader>
 
-            <div className="mt-16 flex flex-row justify-between gap-16 font-mono">
+            <div className="mt-16 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
@@ -147,7 +147,7 @@ export default function Profile({params}: {params: {id: number}}) {
     ) : (
         <main className="flex min-h-screen flex-col items-center justify-around p-24">
 
-            <div className="mt-16 flex flex-row justify-between gap-16 font-mono">
+            <div className="mt-16 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 

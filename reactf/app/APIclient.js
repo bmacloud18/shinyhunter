@@ -82,7 +82,7 @@ export default {
     },
 
     getAllGames: async() => {
-        const gameObjects = await HTTPclient.get('pokemon/games');
+        const gameObjects = await HTTPclient.get('pokemon/games', API_BASE);
         return gameObjects.map((game) => {
             return game.name;
         });
@@ -139,7 +139,7 @@ export default {
             end_date: end_date
         };
 
-        return HTTPclient.put(`hunt/${id}/complete`, data);
+        return HTTPclient.put(`hunt/${id}/complete`, data, API_BASE);
     },
 
     updateHunt: async(id, time, count, increment, charm, nickname) => {
