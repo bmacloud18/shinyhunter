@@ -18,8 +18,7 @@ export default function UserSettings({params}: {params: {id: number}}) {
     const [confirmPassword, setConfirm] = useState('');
     const [avatar, setAvatar] = useState('');
     const [filename, setFilename] = useState('');
-
-    let formdata = new FormData();
+    const [formdata, setFormdata] = useState(new FormData());
 
     //functions for input change
     const usernameChange = (event: any) => {
@@ -45,7 +44,6 @@ export default function UserSettings({params}: {params: {id: number}}) {
         if (file) {
             setFilename(file.name);
             const reader = new FileReader();
-            formdata = new FormData();
             reader.readAsDataURL(file);
             console.log(reader);
             reader.onload = function(e) {
@@ -54,9 +52,11 @@ export default function UserSettings({params}: {params: {id: number}}) {
                 }
                 else {
                     if (e.target && e.target.result && typeof(e.target.result) == 'string') {
+                        console.log("before change: ", formdata);
+                        formdata.append('pfp', file);
                         setAvatar(e.target.result);
                         event.target.setCustomValidity('');
-                        formdata.append('pfp', file);
+                        console.log("after change: ", formdata);
                     }
                 }
             }
@@ -66,30 +66,39 @@ export default function UserSettings({params}: {params: {id: number}}) {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            if (user && currentPassword.length > 3 && ((firstname.length > 2 && firstname !== user.first_name) || lastname.length > 2 && lastname !== user.last_name || 
-            newPassword.length > 3 && newPassword === confirmPassword)) {
-                
-                const url = 'images/uploads/';
+            if (user && ((firstname.length > 2 && firstname !== user.first_name) || (lastname.length > 2 && lastname !== user.last_name) || (avatar !== user.avatar))) {
+                const url = '/images/uploads/';
                 fileUpload(avatar, user, formdata, url);
                 setFilename('');
                 const avatar_string = url + filename;
                 
                 //update user with changed values
-                try {
-                    api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
-                        localStorage.setItem('user', JSON.stringify(u));
-                        setUser(u);
-                        const id = u.id;
-                        document.location = '/shinyhunter/profile/' + id;
-                    }).catch((err) => {
-                        console.log('Error updating user - ' + err.message);
-                    })
-                } catch (err: any) {
-                    throw new Error('Error occurred updating user: ' + err.message);
-                }
+                api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
+                    localStorage.setItem('user', JSON.stringify(u));
+                    setUser(u);
+                    const id = u.id;
+                    // document.location = '/shinyhunter/profile/' + id;
+                }).catch((err) => {
+                    console.log('Error updating user - ' + err.message);
+                })
             }
         } catch (error: any) {
             throw new Error(error.message);
+        }
+
+        try {
+            if (user && currentPassword.length > 3 && newPassword.length > 3 && newPassword === confirmPassword) {
+                api.updatePassword(currentPassword, newPassword).then((res) => {
+
+                }).catch((err) => {
+                    if (err.status === 401)
+                        throw new Error("Unauthenticated (current password incorrect)");
+                    else
+                        throw new Error("Invalid password");
+                });
+            }
+        } catch(err) {
+            throw new Error("Unable to change password" + err);
         }
     }
 
@@ -98,7 +107,7 @@ export default function UserSettings({params}: {params: {id: number}}) {
         if (user === undefined) {
             try {
                 Promise.all([api.getCurrentUser(), api.getUserById(params.id)]).then((res) => {
-                    if (res[0] === res[1]) {
+                    if (res[0].username === res[1].username) {
                         const u = res[0];
                         setUser(u);
                         setUsername(u.username);
@@ -137,9 +146,10 @@ export default function UserSettings({params}: {params: {id: number}}) {
             <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>
         </div>),
         (<div className="flex flex-row gap-2">
+            <span>Authenticate to Update Password</span>
             <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={newPassword} placeholder="New Password" onChange={newChange}></input>
             <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={confirmPassword} placeholder="Confirm Password" onChange={confirmChange}></input>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" required={true} onChange={currentChange}></input>
+            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" onChange={currentChange}></input>
         </div>),
         // (),
         // (),

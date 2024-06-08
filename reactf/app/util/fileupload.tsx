@@ -1,13 +1,13 @@
 //handle image change
+import api from "@/app/APIclient";
 import User from "@/app/interfaces/user";
 
 export default async function fileupload(avatar: string, user: User, formdata: FormData, url: string) {
+    console.log("on upload", formdata);
     const first_change = (avatar.length > 16 && user.avatar.substring(8, 16) === "robohash");
     if (!first_change) {
         try {
-            const res = await fetch(user.avatar, {
-                method: 'GET'
-            });
+            const res = await api.getImage(user.avatar);
     
             if (res.status === 404) {
                 const err = new Error("404");
@@ -15,28 +15,20 @@ export default async function fileupload(avatar: string, user: User, formdata: F
             }
     
             if (res.status === 200) {
-                const deleteres = await fetch(user.avatar, {
-                    method: 'DELETE'
-                });
+                const deleteres = await api.deleteImage(user.avatar);
     
                 if (deleteres.status === 200) {
-                    await fetch(url, {
-                        method: 'POST',
-                        body: formdata
-                    }).catch((err) => {
+                    await api.uploadImage(formdata).catch((err) => {
                         throw new Error('Error uploading image' + err);
-                    })
+                    });
                 }
             }
     
         } catch (err: any) {
             if (err.message == "404") {
-                await fetch(url, {
-                    method: 'POST',
-                    body:formdata
-                }).catch((err) => {
+                await api.uploadImage(formdata).catch((err) => {
                     throw new Error('Error uploading image (no delete): ' + err)
-                })
+                });
             }
             else {
                 throw new Error('Something wrong with get');
@@ -44,10 +36,7 @@ export default async function fileupload(avatar: string, user: User, formdata: F
         }
     }
     else {
-        await fetch(url, {
-            method: 'POST',
-            body: formdata
-        }).catch((err) => {
+        await api.uploadImage(formdata).catch((err) => {
             throw new Error('Error uploading image (no delete)' + err);
         })
     }

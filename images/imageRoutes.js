@@ -70,7 +70,8 @@ router.get('/sprites/:filename', (req, res) => {
     });
 });
 
-router.post('/', upload.single('pfp'), (req, res) => {
+router.post('/uploads/', upload.single('pfp'), (req, res) => {
+    console.log(req.file);
     if (req.file.mimetype.substring(0, 5) != 'image') {
         const filePath = image_path + req.file.originalname;
         fs.unlink(filePath, (err) => {
@@ -80,7 +81,7 @@ router.post('/', upload.single('pfp'), (req, res) => {
     res.json('image uploaded');
 });
 
-router.delete('/:filename', (req, res) => {
+router.delete('/uploads/:filename', (req, res) => {
     const name = req.params.filename;
     const filePath = path.join(image_path, name);
     fs.unlink(filePath, () => {

@@ -8,7 +8,6 @@
 //     }
 // };
 
-const API_BASE = '/api/';
 
 const handleError = (res) => {
     if(!res.ok) {
@@ -27,8 +26,8 @@ const handleError = (res) => {
 
 export default {
     
-    get: async (url) => {
-        return fetch(API_BASE + url, {
+    get: async (url, location) => {
+        return fetch(location + url, {
             headers: {
             }
         }).then(handleError).then(res => {
@@ -36,8 +35,8 @@ export default {
         });
     },
   
-    post: async (url, data) => {
-        return fetch(API_BASE + url, {
+    post: async (url, data, location) => {
+        return fetch(location + url, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -48,8 +47,8 @@ export default {
         });
     },
   
-    put: async (url, data) => {
-        return fetch(API_BASE + url, {
+    put: async (url, data, location) => {
+        return fetch(location + url, {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: {
@@ -61,14 +60,23 @@ export default {
 
     },
 
-    delete: async (url) => {
-        return fetch(API_BASE + url, {
+    delete: async (url, location) => {
+        return fetch(location + url, {
             method: 'DELETE',
             headers: {
             }
         }).then(handleError).then(res => {
             return res.json();
         });
-    },  
+    },
+
+    upload: async (url, formdata, location) => {
+        return fetch(location + url, {
+            method: 'POST',
+            body: formdata
+        }).then(handleError).then(res => {
+            return res.json();
+        });
+    }
 };
   

@@ -19,42 +19,42 @@ export default function Profile({params}: {params: {id: number}}) {
     const [user, setUser] = useState<User>();
     //fetch user and hunt data for profile display
     useEffect(() => {
-        const hunts = [sample, sample2, sample, sample2, sample, sample, sample, sample]
-        const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-        const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-        const active = activeHunts.map((hunt: Hunt) => {
-            return <HuntTile hunt={hunt}/>
-        });
-        const completed = completedHunts.map((hunt: Hunt) => {
-            return <HuntTile hunt={hunt}/>
-        });
+        // const hunts = [sample, sample2, sample, sample2, sample, sample, sample, sample]
+        // const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+        // const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+        // const active = activeHunts.map((hunt: Hunt) => {
+        //     return <HuntTile hunt={hunt}/>
+        // });
+        // const completed = completedHunts.map((hunt: Hunt) => {
+        //     return <HuntTile hunt={hunt}/>
+        // });
 
-        setActiveItems(completed);
-        setCompletedItems(active);
+        // setActiveItems(completed);
+        // setCompletedItems(active);
 
-        setProfileUser(sampleuser);
-        setUser(sampleuser);
-        // if (user === undefined || activeItems === undefined || completedItems === undefined) {
-        //     Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
-        //         setUser(res[0]);
-        //         setProfileUser(res[1]);
+        // setProfileUser(sampleuser);
+        // setUser(sampleuser);
+        if (user === undefined || activeItems === undefined || completedItems === undefined) {
+            Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
+                setUser(res[0]);
+                setProfileUser(res[1]);
     
-        //         const hunts = res[2];
-        //         const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-        //         const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+                const hunts = res[2];
+                const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+                const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
     
-        //         const active = activeHunts.map((hunt: Hunt) => {
-        //             return <HuntTile hunt={hunt}/>
-        //         });
-        //         const completed = completedHunts.map((hunt: Hunt) => {
-        //             return <HuntTile hunt={hunt}/>
-        //         });
+                const active = activeHunts.map((hunt: Hunt) => {
+                    return <HuntTile hunt={hunt}/>
+                });
+                const completed = completedHunts.map((hunt: Hunt) => {
+                    return <HuntTile hunt={hunt}/>
+                });
     
     
-        //         setActiveItems(completed);
-        //         setCompletedItems(active);
-        //     });
-        // }
+                setActiveItems(completed);
+                setCompletedItems(active);
+            });
+        }
     }, [params.id]);
 
 

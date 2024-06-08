@@ -2,6 +2,9 @@
 //Defines a clean pokemon object for frontend use
 import HTTPclient from './HTTPclient.js';
 
+const API_BASE = "/api/";
+const IMAGES_BASE = "/images/";
+
 export default {
 
     /*//////\\\\\\*\
@@ -13,11 +16,11 @@ export default {
             username: username,
             password: password
         };
-        return HTTPclient.post('login', data);
+        return HTTPclient.post('login', data, API_BASE);
     },
 
     logout: async () => {
-        return HTTPclient.post('logout', {});
+        return HTTPclient.post('logout', {}, API_BASE);
     },
 
     register: async (username, password, first, last) => {
@@ -27,26 +30,24 @@ export default {
             username: username,
             password: password
         };
-        return HTTPclient.post('register', data);
+        return HTTPclient.post('register', data, API_BASE);
     },
 
     // current user
     getCurrentUser: async () => {
         try {
-            return HTTPclient.get('currentuser');
+            return HTTPclient.get('currentuser', API_BASE);
         } catch (err) {
             console.log(err.message);
         }
-        
     },
 
     getUserById: async (id) => {
         try {
-            return HTTPclient.get(`users/${id}`);
+            return HTTPclient.get(`users/${id}`, API_BASE);
         } catch (err) {
             console.log(err.message);
         }
-        
     },
 
     updateCurrentUserSettings: async (first, last, username, avatar) => {
@@ -57,29 +58,19 @@ export default {
             avatar: avatar
         };
         try {
-            return HTTPclient.put('currentuser', data);
+            return HTTPclient.put('currentuser', data, API_BASE);
         } catch (err) {
             console.log(err.message);
         }
-        
     },
 
-    updatePassword: async ( password, updatedPassword ) => {
+    updatePassword: async (password, updatedPassword) => {
         const data = {
             "password": password,
             "new_password": updatedPassword
         };
-        return HTTPclient.put( 'currentuser/password', data );
+        return HTTPclient.put('currentuser/password', data, API_BASE);
     },
-
-    // updateSettings: async ( darkMode, notifications, largeText ) => {
-    //     const data = {
-    //         "dark": darkMode,
-    //         "notify": notifications,
-    //         "text": largeText
-    //     };
-    //     return HTTPclient.put( 'currentuser/settings', data );
-    // },
 
     /*///////\\\\\\\*\
     //Pokemon Routes\\
@@ -87,7 +78,7 @@ export default {
 
     //returns a clean pokemon object with sprite, name, types, games
     getPokemonByName: async (name) => {
-        return HTTPclient.get(`pokemon/name/${name}`);
+        return HTTPclient.get(`pokemon/name/${name}`, API_BASE);
     },
 
     getAllGames: async() => {
@@ -98,7 +89,7 @@ export default {
     },
 
     getAllMons: async() => {
-        return HTTPclient.get('pokemon');
+        return HTTPclient.get('pokemon', API_BASE);
     },
 
     /*//////\\\\\*\
@@ -106,19 +97,19 @@ export default {
     \*\\\\\///////*/
 
     getAllHunts: async() => {
-        return HTTPclient.get('hunt');
+        return HTTPclient.get('hunt', API_BASE);
     },
 
     getCurrentUserHunts: async() => {
-        return HTTPclient.get('hunt/users/current');
+        return HTTPclient.get('hunt/users/current', API_BASE);
     },
 
     getHuntById: async(id) => {
-        return HTTPclient.get(`hunt/${id}`);
+        return HTTPclient.get(`hunt/${id}`, API_BASE);
     },
 
     getHuntsByUser: async(id) => {
-        return HTTPclient.get(`hunt/users/id/${id}`)
+        return HTTPclient.get(`hunt/users/id/${id}`, API_BASE);
     },
 
     createHunt: async(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite) => {
@@ -139,7 +130,7 @@ export default {
 
         console.log(data);
 
-        return HTTPclient.post('hunt', data);
+        return HTTPclient.post('hunt', data, API_BASE);
     },
 
     completeHunt: async(id, end_date) => {
@@ -148,7 +139,7 @@ export default {
             end_date: end_date
         };
 
-        return HTTPclient.put(`hunt/${id}/complete`, data)
+        return HTTPclient.put(`hunt/${id}/complete`, data);
     },
 
     updateHunt: async(id, time, count, increment, charm, nickname) => {
@@ -160,11 +151,11 @@ export default {
             nickname: nickname
         };
 
-        return HTTPclient.put(`hunt/${id}`, data)
+        return HTTPclient.put(`hunt/${id}`, data, API_BASE);
     },
 
     deleteHunt: async(id) => {
-        return HTTPclient.delete(`hunt/${id}`);
+        return HTTPclient.delete(`hunt/${id}`, API_BASE);
     },
 
     /*//////\\\\\\*\
@@ -172,11 +163,31 @@ export default {
     \*\\\\\\//////*/
 
     getAllMethods: async() => {
-        return HTTPclient.get('method');
+        return HTTPclient.get('method', API_BASE);
     },
 
     getMethodById: async(id) => {
-        return HTTPclient.get(`method/${id}`);
+        return HTTPclient.get(`method/${id}`, API_BASE);
+    },
+
+    /*//////\\\\\*\
+    //Image Routes\\
+    \*\\\\\\//////*/
+
+    //filename should have images/{folder}/{filename} already appended
+    getImage: async(filename) => {
+        return HTTPclient.get(`${filename}`, '/') ;
+    },
+
+    //uploading an image posts to the images 'upload' route
+    //needs an images base to post to the proper route
+    uploadImage: async(formdata) => {
+        return HTTPclient.upload('uploads', formdata, IMAGES_BASE);
+    },
+
+    //deleting an image also has the full route already saved
+    deleteImage: async(filename) => {
+        return HTTPclient.delete(`${filename}`, '/');
     }
 
 };
