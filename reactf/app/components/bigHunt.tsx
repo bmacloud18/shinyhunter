@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import api from "@/app/APIclient";
 import Timer from "easytimer.js";
@@ -19,22 +19,27 @@ export default function HuntTile({
     const [timer, setTimer] = useState<Timer>();
     const [hunting, setHunting] = useState<boolean>(true);
     const [count, setCount] = useState<number>(0);
-    const [seconds, setSeconds] = useState<number>(0);
+    const [seconds, setSeconds] = useState<number>(hunt.hunt_time);
+    const [elapsed, setElapsed] = useState<number>(0);
     const [diff, setDiff] = useState<number>(0);
     const [timeDisplay, setTimeDisplay] = useState(convertTime(hunt.hunt_time));
     const [stopwatchData, setStopwatchData] = useState<any>();
     const [counterData, setCounterData] = useState<any>();
-    const [user, setUser] = useState<User>();
+    // const [user, setUser] = useState<User>();
 
-    const [spriteClick, setSpriteClick] = useState(() => () => {
-        console.log('default');
-    });
-    const [saveCurrentHunt, setSaveCurrentHunt] = useState(() => () => {
-        console.log('default');
-    });
-    const [handleSettings, setHandleSettings] = useState(() => () => {
-        console.log('default');
-    });
+    const diffRef = useRef(diff);
+    const secondsRef = useRef(seconds);
+    const elapsedRef = useRef(elapsed);
+
+    // const [spriteClick, setSpriteClick] = useState(() => () => {
+    //     console.log('default');
+    // });
+    // const [saveCurrentHunt, setSaveCurrentHunt] = useState(() => () => {
+    //     console.log('default');
+    // });
+    // const [handleSettings, setHandleSettings] = useState(() => () => {
+    //     console.log('default');
+    // });
 
 
 
@@ -53,7 +58,8 @@ export default function HuntTile({
     function saveTimeDataLocally() {
         const key = "stopwatchData";
         const data = {
-            elapsedTime: seconds,
+            totalSeconds: seconds,
+            elapsedTime: elapsed,
             isRunning: hunting
         };
 
@@ -105,6 +111,9 @@ export default function HuntTile({
         if (count > 0) {
             decrementAndSave();
             saveTimeDataLocally();
+            setSeconds(seconds + elapsed);
+            timer?.reset();
+            setElapsed(0);
         }
     }
 
@@ -112,8 +121,63 @@ export default function HuntTile({
         if (count < 999999) {
             incrementAndSave();
             saveTimeDataLocally();
+            setSeconds(seconds + elapsed);
+            timer?.reset();
+            setElapsed(0);
         }
     }
+
+    useEffect(() => {
+        diffRef.current = diff;
+        secondsRef.current = seconds;
+        elapsedRef.current = elapsed;
+    }, [diff, seconds]);
+
+    async function saveCurrentHunt(currentDiff: number, currentElapsed: number) {
+        console.log('elapsed', currentElapsed);
+        if ((currentDiff != 0 || currentElapsed > 3) && navigator.onLine) {
+            console.log('getting data');
+            const hunt = getDataFromLocalStorage('hunt');
+            const stopwatch = getDataFromLocalStorage('stopwatchData');
+            const counter = getDataFromLocalStorage('counterData');
+    
+            if (hunt && stopwatch && counter) {
+                console.log('hunt saving');
+                const newtime = stopwatch.totalSeconds;
+                const count = counter.counter;
+
+                console.log(hunt.id, newtime, count);
+                localStorage.removeItem('hunt');
+                localStorage.removeItem('stopwatchData');
+                localStorage.removeItem('counterData');
+
+                api.updateHunt(hunt.id, newtime, count).then(res => {
+                    console.log(res);
+                }).catch(err => {
+                    console.error('Error syncing data with server: ', err);
+                });
+            }
+        }
+    }
+
+    //onClick functions
+    function spriteClick() {
+        if (hunting) {
+            saveTimeDataLocally();
+            saveCurrentHunt(diff, elapsed)
+            pause(timer);
+        }
+        else {
+            saveDataToLocalStorage('hunt', hunt);
+            resume(timer);
+        }
+    }
+
+    async function handleSettings () {
+        saveCurrentHunt(diff, elapsed)
+        document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
+    }
+
 
     
 
@@ -132,85 +196,25 @@ export default function HuntTile({
     if (timer === undefined)
         setTimer(new Timer());
 
+
+
     
     useEffect(() => {
-        async function saveCurrentHuntFunction() {
-            console.log('function called');
-            console.log('nav check', navigator.onLine);
-            console.log('diff check', diff, seconds);
-            if ((diff != 0 || seconds > 3) && navigator.onLine) {
-                console.log('getting data');
-                const hunt = getDataFromLocalStorage('hunt');
-                const stopwatch = getDataFromLocalStorage('stopwatchData');
-                const counter = getDataFromLocalStorage('counterData');
-        
-                if (hunt && stopwatch && counter) {
-                    console.log('hunt saving');
-                    const newtime = stopwatch.elapsedTime;
-                    const count = counter.counter;
-    
-                    console.log(hunt.id, newtime, count);
-                    localStorage.removeItem('hunt');
-                    localStorage.removeItem('stopwatchData');
-                    localStorage.removeItem('counterData');
-    
-                    api.updateHunt(hunt.id, newtime, count).then(res => {
-                        console.log(res);
-                    }).catch(err => {
-                        console.error('Error syncing data with server: ', err);
-                    });
-                }
-            }
-        }
-
-        setSaveCurrentHunt(() => {
-            return () => {
-                saveCurrentHuntFunction
-            }
-        });
-
-        //onClick functions
-        function spriteClickFunction() {
-            if (hunting) {
-                saveTimeDataLocally();
-                saveCurrentHunt();
-                pause(timer);
-            }
-            else {
-                saveDataToLocalStorage('hunt', hunt);
-                resume(timer);
-            }
-        }
-
-        setSpriteClick(() => {
-            return () => {
-                spriteClickFunction();
-            }
-        });
-
-        async function handleSettingsFunction () {
-            saveCurrentHunt();
-            document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
-        }
-
-        setHandleSettings(() => {
-            return () => {
-                handleSettingsFunction();
-            }
-        });
 
         const pfp = document.getElementById('pfp');
         console.log(pfp);
         if (pfp) {
-            pfp.addEventListener('click', saveCurrentHunt);
+            pfp.addEventListener('click', () => {
+                saveCurrentHunt(diffRef.current, elapsedRef.current);
+            });
         }
         
 
         if (method.length < 1) {
 
             //set user from local storage, save hunt to local storage
-            const u = getDataFromLocalStorage('user')
-            setUser(u);
+            // const u = getDataFromLocalStorage('user')
+            // setUser(u);
             saveDataToLocalStorage('hunt', hunt);
 
             //save count state and to local storage
@@ -221,8 +225,9 @@ export default function HuntTile({
 
             //save time state and to local storage
             setSeconds(hunt.hunt_time);
+            setElapsed(0);
             saveDataToLocalStorage('stopwatchData', {
-                elapsedTime: hunt.hunt_time,
+                totalSeconds: hunt.hunt_time,
                 isRunning: true
             });
 
@@ -233,7 +238,7 @@ export default function HuntTile({
             //     mover.addEventListener('click', async () => {
             //         console.log('clicked mover');
             //         try {
-            //             await saveCurrentHunt();
+            //             await saveCurrentHunt(diff, seconds)
             //             // document.location = "/shinyhunter/profile/" + u.id;
             //         }
             //         catch (err) {
@@ -254,7 +259,7 @@ export default function HuntTile({
             
             
             // if (stopwatchData) {
-            //     hunt_time += stopwatchData.elapsedTime;
+            //     hunt_time += stopwatchData.totalSeconds;
             //     if (stopwatchData.isRunning) {
             //         resume(timer);
             //     }
@@ -263,13 +268,14 @@ export default function HuntTile({
             //     }
             // }
             if (timer) {
-                timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
+                timer.start({countdown: false, startValues: {seconds: 0}});
                 timer.addEventListener('secondsUpdated', function () {
                     if (!timer.isPaused()) {
                         const s = timer.getTimeValues().seconds + (timer.getTimeValues().minutes * 60) + 
                             (timer.getTimeValues().hours * 3600) + (timer.getTimeValues().days * 86400);
-                        setTimeDisplay(convertTime(s));
-                        setSeconds(s);
+                        setTimeDisplay(convertTime(s + seconds));
+                        setSeconds(s + seconds);
+                        setElapsed(s);
                     }
                 });
             }
