@@ -31,21 +31,21 @@ services:
     networks:
       - shinyhunter-net
 
-  database:
-    image: mariadb:10.6
-    restart: unless-stopped
-    ports:
-      # Make the DB accessible from outside of the Docker network if needed
-      - 3307:3306
-    volumes:
-      # Mount a volume for mariadb's persistent files for lifecycle outside of stack
-      - "./db/data:/var/lib/mysql"
-      # Mount the db_schema into the container to be auto-read and created in the new db
-      - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
-    env_file:
-      - .env
-    networks:
-      - shinyhunter-net
+  # database:
+  #   image: mariadb:10.6
+  #   restart: unless-stopped
+  #   ports:
+  #     # Make the DB accessible from outside of the Docker network if needed
+  #     - 3307:3306
+  #   volumes:
+  #     # Mount a volume for mariadb's persistent files for lifecycle outside of stack
+  #     - "./db/data:/var/lib/mysql"
+  #     # Mount the db_schema into the container to be auto-read and created in the new db
+  #     - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - shinyhunter-net
 
   images:
     build: ./images

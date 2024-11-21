@@ -142,7 +142,7 @@ export default {
         return HTTPclient.put(`hunt/${id}/complete`, data, API_BASE);
     },
 
-    updateHunt: async(id, time, count, increment, charm, nickname) => {
+    updateHuntSettings: async(id, time, count, increment, charm, nickname) => {
         const data = {
             time: time,
             count: count,
@@ -151,7 +151,16 @@ export default {
             nickname: nickname
         };
 
-        return HTTPclient.put(`hunt/${id}`, data, API_BASE);
+        return HTTPclient.put(`hunt/settings/${id}`, data, API_BASE);
+    },
+
+    updateHunt: async(id, time, count) => {
+        const data = {
+            time: time,
+            count: count
+        };
+
+        return HTTPclient.update(`hunt/${id}`, data, API_BASE);
     },
 
     deleteHunt: async(id) => {

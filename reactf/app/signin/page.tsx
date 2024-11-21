@@ -7,7 +7,7 @@ export default function Signin() {
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
 
-    console.log('signin', typeof window !== 'undefined');
+    // console.log('signin', typeof window !== 'undefined');
 
     const usernameChange = (event: any) => {
         setUsernameValue(event.target.value)
@@ -16,9 +16,10 @@ export default function Signin() {
         setPasswordValue(event.target.value);
     }
     const handleSubmit = async (event: any) => {
+        console.log('submit');
         event.preventDefault();
         try {
-            if (usernameValue.length > 4 && passwordValue.length > 3) {
+            if (usernameValue.length >= 4 && passwordValue.length > 3) {
                 console.log(usernameValue, passwordValue);
                 api.login(usernameValue, passwordValue).then(user => {
                     localStorage.setItem('user', JSON.stringify(user));

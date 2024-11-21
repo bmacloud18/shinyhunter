@@ -7,6 +7,9 @@ const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
+const updateRouter = express.Router();
+updateRouter.use(express.text());
+
 //get all hunts
 router.get('/hunt', tokenMiddleware, (req, res) => {
     HuntDAO.getAllHunts().then(hunts => {
@@ -81,7 +84,8 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
     })
 });
 
-router.put('/hunt/:id', tokenMiddleware, async (req, res) => {
+//updates all hunt values
+router.put('/hunt/settings/:id', tokenMiddleware, async (req, res) => {
     const huntId = req.params.id;
     const time = req.body.time;
     const count = req.body.count;
@@ -89,7 +93,22 @@ router.put('/hunt/:id', tokenMiddleware, async (req, res) => {
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHunt(huntId, time, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHuntSettings(huntId, time, count, increment, charm, nickname).then(hunt => {
+        res.json(hunt);
+    }).catch(err => {
+        res.status(404).json(err.message);
+    });
+});
+
+//update progress after hunting 
+updateRouter.post('/hunt/:id', tokenMiddleware, async (req, res) => {
+    const huntId = req.params.id;
+    const body = req.body.split('\,');
+    const time = body[0].split('\:')[1];
+    const count = body[1].split('\:')[1];;
+    console.log(req.body, body);
+
+    HuntDAO.updateHunt(huntId, time, count).then(hunt => {
         res.json(hunt);
     }).catch(err => {
         res.status(404).json(err.message);
@@ -118,4 +137,7 @@ function timeComparator(a, b) {
 }
 
 
-export default router;
+export {
+    router,
+    updateRouter
+};

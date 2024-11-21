@@ -96,8 +96,18 @@ async function completeHunt(id, end_date) {
 };
 
 //update a hunt by providing it with hunt settings data
-async function updateHunt(id, time, count, increment, charm, nickname) {
+async function updateHuntSettings(id, time, count, increment, charm, nickname) {
     return query('UPDATE hunt SET hnt_time_s=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, count, increment, charm, nickname, id]).then(({results}) => {
+        return results;
+    }).catch(err => {
+        console.log(err.message);
+        throw new Error(err.message +  ': error updating hunt');
+    });
+}
+
+//update a hunt after hunting progress
+async function updateHunt(id, time, count) {
+    return query('UPDATE hunt SET hnt_time_s=?, hnt_count=? WHERE hnt_id=?', [time, count, id]).then(({results}) => {
         return results;
     }).catch(err => {
         console.log(err.message);
@@ -120,6 +130,7 @@ export {
     getHuntsByUser,
     createNewHunt,
     completeHunt,
+    updateHuntSettings,
     updateHunt,
     deleteHunt
 };

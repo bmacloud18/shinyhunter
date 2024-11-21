@@ -71,12 +71,12 @@ export default function Layout({
                   <span>{user.first_name.toString()}</span>
                   <span>{user.last_name.toString()}</span>
                 </div>
-                <a href={href}>
+                <button className="newPage" id="pfp">
                     <img 
-                        className="h-24 w-24 px-4"
+                        className="h-24 w-24"
                         src={user.avatar.toString()}
                         alt="User PFP"/>
-                </a>
+                </button>
               </div>
               <form onSubmit={handleLogout}>
                 <button className="border-solid border-2 border-green mt-3 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Logout</button>

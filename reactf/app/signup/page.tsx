@@ -27,7 +27,7 @@ export default function Signin() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         try {
-            if (usernameValue.length > 4 && passwordValue.length > 3 && confirmValue === passwordValue && firstValue.length > 1 && lastValue.length > 1) {
+            if (usernameValue.length >= 4 && passwordValue.length > 3 && confirmValue === passwordValue && firstValue.length > 1 && lastValue.length > 1) {
                 console.log(usernameValue, passwordValue, firstValue, lastValue);
                 api.register(usernameValue, passwordValue, firstValue, lastValue).then(user => {
                     localStorage.setItem('user', JSON.stringify(user));

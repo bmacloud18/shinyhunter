@@ -9,7 +9,7 @@ export default function BigButton({
 }) {
     return (
         <div className="max-w-fit border-solid border-2 border-green rounded-2xl p-5 bg-red hover:bg-buttonwhite">
-            <button onClick={onClick} className="">{text}</button>
+            <button onClick={onClick} className="newPage">{text}</button>
         </div>
     );
 }

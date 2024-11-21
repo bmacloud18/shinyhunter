@@ -60,6 +60,11 @@ export default {
 
     },
 
+    update: async (url, data, location) => {
+        console.log(data);
+        return navigator.sendBeacon(location + url, JSON.stringify(data));
+    },
+
     delete: async (url, location) => {
         return fetch(location + url, {
             method: 'DELETE',
