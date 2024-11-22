@@ -1,30 +1,30 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 import api from "@/app/APIclient";
 import Timer from "easytimer.js";
 import convertTime from "@/app/util/convertTime";
+import getSeconds from "@/app/util/getSeconds";
 import BigButton from "@/app/components/bigButton";
+// import User from "@/app/interfaces/user";
+
 export default function HuntTile({
     hunt
 } : {
     hunt:any
 }) {
-
-    const router = useRouter();
     
     const [method, setMethod] = useState('');
     const [timer, setTimer] = useState<Timer>();
+    const [intervalTimer, setInterval] = useState<Timer>();
     const [hunting, setHunting] = useState<boolean>(true);
     const [count, setCount] = useState<number>(0);
-    const [seconds, setSeconds] = useState<number>(0);
     const [diff, setDiff] = useState<number>(0);
     const [timeDisplay, setTimeDisplay] = useState(convertTime(hunt.hunt_time));
     const [stopwatchData, setStopwatchData] = useState<any>();
     const [counterData, setCounterData] = useState<any>();
+    // const [user, setUser] = useState<User>();
 
-
-
+    const diffRef = useRef(diff);
 
 
     //local storage functions
@@ -37,16 +37,21 @@ export default function HuntTile({
         return data ? JSON.parse(data) : null;
     }
     
-    function saveTimeDataLocally(key: string) {
-        const data = {
-            elapsedTime: seconds,
-            isRunning: hunting
-        };
-
-        saveDataToLocalStorage(key, data);
+    function saveTimeDataLocally() {
+        if (timer && intervalTimer) {
+            const key = "stopwatchData";
+            const data = {
+                totalSeconds: getSeconds(timer),
+                interval: getSeconds(intervalTimer),
+                isRunning: hunting
+            };
+    
+            saveDataToLocalStorage(key, data);
+        }
     }
     
-    function saveDataLocallyAndIncrement(key: string) {
+    function incrementAndSave() {
+        const key = "counterData";
         setCount(count+1);
         setDiff(diff+1);
         const data = {
@@ -55,7 +60,8 @@ export default function HuntTile({
         saveDataToLocalStorage(key, data);
     }
     
-    function saveDataLocallyAndDecrement(key: string) {
+    function decrementAndSave() {
+        const key = "counterData";
         setCount(count-1);
         setDiff(diff-1);
         const data = {
@@ -64,93 +70,107 @@ export default function HuntTile({
         saveDataToLocalStorage(key, data);
     }
 
-    async function saveCurrentHunt() {
-        console.log('hunt saving');
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        if ((diff != 0 || seconds > 3) && navigator.onLine) {
-            const hunt = getDataFromLocalStorage('hunt');
-            const stopwatch = getDataFromLocalStorage('stopwatchData');
-            const counter = getDataFromLocalStorage('counterData');
-
-            console.log(hunt, stopwatch, counter);
     
-            if (hunt && stopwatch && counter) {
-                const newtime = stopwatch.elapsedTime;
-                const count = counter.counter;
-                console.log(newtime, count);
-                api.updateHunt(hunt.id, newtime, count, hunt.increment, hunt.charm, hunt.nickname).then(res => {
-                    console.log(res);
-                    if (res.status != '404') {
-                        localStorage.removeItem('hunt');
-                        localStorage.removeItem('stopwatchData');
-                        localStorage.removeItem('counterData');
-                        console.log('update sent');
-                    }
-                    else {
-                        console.error('Failed to sync data with server: ', res.status);
-                    }
-                }).catch(err => {
-                    console.error('Error syncing data with server: ', err);
-                });
-            }
-        }
-    }
     
     //Timer functions
     function pause(timer: Timer | undefined) {
-        if (timer !== undefined) {
+        if (timer && intervalTimer) {
             setHunting(false);
             
             timer.pause();
+            intervalTimer.pause();
         }
     };
     
     function resume(timer: Timer | undefined) {
-        if (timer !== undefined) {
+        if (timer && intervalTimer) {
             if (!hunting) {
                 setHunting(true);
                 timer.start();
+                intervalTimer.start();
             }
         }
     };
 
 
-    //onClick functions
-    function spriteClick() {
-        saveCurrentHunt();
-        if (hunting) {
-            saveTimeDataLocally('stopwatchData');
-            pause(timer);
-        }
-        else {
-            resume(timer);
-            
-        }
-    }
-
     function minus() {
-        if (count > 0) {
-            saveDataLocallyAndDecrement('counterData');
-            saveTimeDataLocally('stopwatchData');
+        if (count > 0 && intervalTimer) {
+            decrementAndSave();
+            saveTimeDataLocally();
+            intervalTimer.reset();
         }
     }
 
     function plus() {
-        if (count < 999999) {
-            saveDataLocallyAndIncrement('counterData');
-            saveTimeDataLocally('stopwatchData');
+        if (count < 999999 && intervalTimer) {
+            incrementAndSave();
+            saveTimeDataLocally();
+            intervalTimer.reset();
         }
     }
 
-    async function handleSettings (event: any) {
-        event.preventDefault();
-        saveCurrentHunt();
+    useEffect(() => {
+        diffRef.current = diff;
+    }, [diff]);
+
+    async function saveCurrentHunt(currentDiff: number) {
+        if (intervalTimer) {
+            const currentInterval = getSeconds(intervalTimer);
+            console.log(currentInterval);
+            if ((currentDiff != 0 || currentInterval > 3) && navigator.onLine) {
+                console.log('getting data');
+                const hunt = getDataFromLocalStorage('hunt');
+                const stopwatch = getDataFromLocalStorage('stopwatchData');
+                const counter = getDataFromLocalStorage('counterData');
+        
+                if (hunt && stopwatch && counter) {
+                    console.log('hunt saving');
+                    const newtime = stopwatch.totalSeconds;
+                    const count = counter.counter;
+    
+                    console.log(hunt.id, newtime, count);
+                    localStorage.removeItem('hunt');
+                    localStorage.removeItem('stopwatchData');
+                    localStorage.removeItem('counterData');
+    
+                    api.updateHunt(hunt.id, newtime, count).then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.error('Error syncing data with server: ', err);
+                    });
+                }
+            }
+        }
+    }
+
+    //onClick functions
+    function spriteClick() {
+        if (hunting) {
+            saveTimeDataLocally();
+            saveCurrentHunt(diff)
+            pause(timer);
+        }
+        else {
+            saveDataToLocalStorage('hunt', hunt);
+            resume(timer);
+        }
+    }
+
+    async function handleSettings () {
+        saveCurrentHunt(diff)
         document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
     }
 
+
+    
+
+    // async function handleClick (event: any) {
+        
+    // }
+
     //set data variables and declare timer 
     if (stopwatchData === undefined) {
-        saveTimeDataLocally('stopwatchData');
+        saveTimeDataLocally();
         setStopwatchData(getDataFromLocalStorage('stopwatchData'));
     }
         
@@ -158,42 +178,93 @@ export default function HuntTile({
         setCounterData(getDataFromLocalStorage('counterData'));
     if (timer === undefined)
         setTimer(new Timer());
+    if (intervalTimer === undefined)
+        setInterval(new Timer());
 
 
+
+    
     useEffect(() => {
-        if (method.length < 1) {
-            saveDataToLocalStorage('hunt', hunt);
-            
-            document.onvisibilitychange = async () => {
-                await saveCurrentHunt();
-            }
 
-            let hunt_time = hunt.hunt_time;
-            if (stopwatchData) {
-                hunt_time += stopwatchData.elapsedTime;
-                if (stopwatchData.isRunning) {
-                    resume(timer);
-                }
-                else {
-                    pause(timer);
-                }
-            }
-            if (timer) {
-                timer.start({countdown: false, startValues: {seconds: hunt_time}});
+        const pfp = document.getElementById('pfp');
+        console.log(pfp);
+        const u = getDataFromLocalStorage('user');
+        if (pfp) {
+            pfp.addEventListener('click', () => {
+                saveCurrentHunt(diffRef.current);
+                document.location = "/shinyhunter/profile/" + u.id;
+            });
+        }
+        
+
+        if (method.length < 1) {
+
+            //set user from local storage, save hunt to local storage
+            // const u = getDataFromLocalStorage('user')
+            // setUser(u);
+            saveDataToLocalStorage('hunt', hunt);
+
+            //save count state and to local storage
+            setCount(hunt.count);
+            saveDataToLocalStorage('counterData', {
+                counter: hunt.count
+            });
+
+            //save time state and to local storage
+            saveDataToLocalStorage('stopwatchData', {
+                totalSeconds: hunt.hunt_time,
+                isRunning: true
+            });
+
+            //add event listener for any buttons which change the page to save the hunt before change
+            //update function uses navigator.sendBeacon
+            // const movers = document.querySelectorAll("button.newPage");
+            // movers.forEach((mover) => {
+            //     mover.addEventListener('click', async () => {
+            //         console.log('clicked mover');
+            //         try {
+            //             await saveCurrentHunt(diff, seconds)
+            //             // document.location = "/shinyhunter/profile/" + u.id;
+            //         }
+            //         catch (err) {
+            //             console.error('Error saving hunt', err);
+            //         }
+            //     });
+            // })
+            // console.log(movers);
+
+
+
+            
+
+            // const links = document.querySelectorAll("a.name");
+            // links.forEach((link) => {
+            //     link.addEventListener('click', saveCurrentHunt);
+            // });
+            
+            
+            // if (stopwatchData) {
+            //     hunt_time += stopwatchData.totalSeconds;
+            //     if (stopwatchData.isRunning) {
+            //         resume(timer);
+            //     }
+            //     else {
+            //         pause(timer);
+            //     }
+            // }
+            if (timer && intervalTimer) {
+                timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
                 timer.addEventListener('secondsUpdated', function () {
                     if (!timer.isPaused()) {
-                        const s = timer.getTimeValues().seconds;
+                        
+                        const s = getSeconds(timer);
                         setTimeDisplay(convertTime(s));
-                        setSeconds(s);
                     }
                 });
+
+                intervalTimer.start({countdown: false, startValues: {seconds: 0}});
             }
 
-            let count = hunt.count;
-            if (counterData) {
-                count = counterData.counter;
-            }
-            setCount(count);
             try {
                 Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                     setMethod(res[0].name);
@@ -203,7 +274,7 @@ export default function HuntTile({
                 setMethod('random');
             }
         }
-    });
+    }, []);
 
     const active = hunt.end_date_display == null;
     let main = (
@@ -231,11 +302,13 @@ export default function HuntTile({
         </div>)
     ] : [
         (<span>Tap Sprite to Resume Hunt</span>),
-        (main)
+        (main),
+        (<span className="text-7xl m-8">{count}</span>)
+        
     ]
 
     let settings = active ? (<BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>) : 
-    (<button className="max-w-fit border-solid border-2 border-green rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>)
+    (<button className="newPage max-w-fit border-solid border-2 border-green rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>)
 
     let completeContent = [
         (<div className="flex flex-col w-full">
