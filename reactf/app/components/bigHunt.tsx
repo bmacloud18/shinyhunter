@@ -162,12 +162,6 @@ export default function HuntTile({
     }
 
 
-    
-
-    // async function handleClick (event: any) {
-        
-    // }
-
     //set data variables and declare timer 
     if (stopwatchData === undefined) {
         saveTimeDataLocally();
@@ -199,9 +193,6 @@ export default function HuntTile({
 
         if (method.length < 1) {
 
-            //set user from local storage, save hunt to local storage
-            // const u = getDataFromLocalStorage('user')
-            // setUser(u);
             saveDataToLocalStorage('hunt', hunt);
 
             //save count state and to local storage
@@ -216,42 +207,7 @@ export default function HuntTile({
                 isRunning: true
             });
 
-            //add event listener for any buttons which change the page to save the hunt before change
-            //update function uses navigator.sendBeacon
-            // const movers = document.querySelectorAll("button.newPage");
-            // movers.forEach((mover) => {
-            //     mover.addEventListener('click', async () => {
-            //         console.log('clicked mover');
-            //         try {
-            //             await saveCurrentHunt(diff, seconds)
-            //             // document.location = "/shinyhunter/profile/" + u.id;
-            //         }
-            //         catch (err) {
-            //             console.error('Error saving hunt', err);
-            //         }
-            //     });
-            // })
-            // console.log(movers);
 
-
-
-            
-
-            // const links = document.querySelectorAll("a.name");
-            // links.forEach((link) => {
-            //     link.addEventListener('click', saveCurrentHunt);
-            // });
-            
-            
-            // if (stopwatchData) {
-            //     hunt_time += stopwatchData.totalSeconds;
-            //     if (stopwatchData.isRunning) {
-            //         resume(timer);
-            //     }
-            //     else {
-            //         pause(timer);
-            //     }
-            // }
             if (timer && intervalTimer) {
                 timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
                 timer.addEventListener('secondsUpdated', function () {

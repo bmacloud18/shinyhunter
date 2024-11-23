@@ -19,21 +19,21 @@ export default function Profile({params}: {params: {id: number}}) {
     const [user, setUser] = useState<User>();
     //fetch user and hunt data for profile display
     useEffect(() => {
-        // const hunts = [sample, sample2, sample, sample2, sample, sample, sample, sample]
-        // const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-        // const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-        // const active = activeHunts.map((hunt: Hunt) => {
-        //     return <HuntTile hunt={hunt}/>
-        // });
-        // const completed = completedHunts.map((hunt: Hunt) => {
-        //     return <HuntTile hunt={hunt}/>
-        // });
+        const hunts = [sample2, sample2]
+        const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+        const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+        const active = activeHunts.map((hunt: Hunt) => {
+            return <HuntTile hunt={hunt}/>
+        });
+        const completed = completedHunts.map((hunt: Hunt) => {
+            return <HuntTile hunt={hunt}/>
+        });
 
-        // setActiveItems(completed);
-        // setCompletedItems(active);
+        setActiveItems(completed);
+        setCompletedItems(active);
 
-        // setProfileUser(sampleuser);
-        // setUser(sampleuser);
+        setProfileUser(sampleuser);
+        setUser(sampleuser);
         if (user === undefined || activeItems === undefined || completedItems === undefined) {
             Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
                 setUser(res[0]);
@@ -86,12 +86,12 @@ export default function Profile({params}: {params: {id: number}}) {
     else if (activeItems.length == 0 && completedItems.length > 0) {
         content = (
             <Grid>
-                <div className="w-4/5 border-solid border-4 border-black">
-                    <p>Active</p>
-                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
+                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-r-1">
+                    <p className="p-2" >Active</p>
+                    <span className="m-16 p-5 border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div className="w-4/5 border-solid border-4 border-black">
-                    <p>Complete</p>
+                <div className="flex flex-col justify-around gap-2 lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-l-1">
+                    <p className="p-2" >Complete</p>
                     <TileGrid>
                         {completedItems}
                     </TileGrid>
@@ -102,15 +102,15 @@ export default function Profile({params}: {params: {id: number}}) {
     else if (activeItems.length > 0 && completedItems.length == 0) {
         content = (
             <Grid>
-                <div className="w-fit border-solid border-4 border-black">
-                    <p>Active</p>
+                <div className="flex flex-col justify-around gap-2 lg:w-[24rem] md:w-[20rem] sm:w-[10rem] border-solid border-2 border-black border-r-1">
+                    <p className="p-2 w-[10rem]" >Active</p>
                     <TileGrid>
                         {activeItems}
                     </TileGrid>
                 </div>
-                <div className="w-fit border-solid border-4 border-black">
-                    <p>Complete</p>
-                    <span className="border-solid border-black border-2">Keep Working on Those Hunts!</span>
+                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[10rem] border-solid border-2 border-black border-l-1">
+                    <p className="p-2" >Complete</p>
+                    <div className="m-16 p-5 border-solid border-black border-2 sm:m-8 sm:p-2">Keep Working on Those Hunts!</div>
                 </div>
             </Grid>
         );
@@ -118,13 +118,13 @@ export default function Profile({params}: {params: {id: number}}) {
     else {
         content = (
             <Grid>
-                <div className="w-fit border-solid border-4 border-black">
-                    <p>Active</p>
-                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
+                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-r-1">
+                    <p className="p-2">Active</p>
+                    <span className="m-16 p-5 border-solid border-black border-1 mr-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div className="w-fit border-solid border-4 border-black">
-                    <p>Complete</p>
-                    <span className="border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
+                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-l-1">
+                    <p className="p-2" >Complete</p>
+                    <span className="m-16 p-5 border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
                 </div>
             </Grid>
         );

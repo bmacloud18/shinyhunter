@@ -8,8 +8,8 @@ export default function HuntTile({
 }) {
     const active = hunt.end_date_display == null;
     return (
-        <Link href={`/shinyhunter/hunt/${hunt.id}`}>
-            <div className="border-solid border-2 border-black p-2 rounded-2xl lg:min-w-[20rem] md:w-[14rem] sm:w-[8rem] flex flex-col gap-6 m-2">
+        <Link className="w-fit self-center" href={`/shinyhunter/hunt/${hunt.id}`}>
+            <div className="flex self-center border-solid border-2 border-black p-2 rounded-2xl lg:w-[20rem] md:w-[16rem] sm:w-[8rem] flex flex-col gap-6">
                 <div className="flex flex-col">
                     <span>
                         {hunt.nickname}
