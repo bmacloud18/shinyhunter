@@ -24,7 +24,8 @@ const config: Config = {
       'green': '#14532d',
       'red': '#b91c1c',
       'black': '#262626',
-      'buttonwhite': '#d4d4d8'
+      'buttonwhite': '#d4d4d8',
+      'grey': '#c4c2bb'
       
     },
     screens: {

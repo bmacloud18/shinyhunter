@@ -141,15 +141,19 @@ export default function UserSettings({params}: {params: {id: number}}) {
             <input className="file:bg-green rounded-2xl block text-medium file:text-buttonwhite text-black border border-1 border-black cursor-pointer" type="file" id="file_input" onChange={fileChange}></input>
         </label>),
         (<div className="flex flex-row gap-2">
-            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
-            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
-            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>
+            <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
+            <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
+            <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>
         </div>),
-        (<div className="flex flex-row gap-2">
-            <span>Authenticate to Update Password</span>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={newPassword} placeholder="New Password" onChange={newChange}></input>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={confirmPassword} placeholder="Confirm Password" onChange={confirmChange}></input>
-            <input type="password" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" onChange={currentChange}></input>
+        (<div className="w-fit flex flex-col items-center gap-1">
+            <div className="w-fit">Authenticate to Update Password</div>
+            <div>
+                <input type="password" className="w-[16rem] sm:w-[12rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" onChange={currentChange}></input>
+            </div>
+            <div className="flex flex-row gap-2">
+                <input type="password" className="w-[15rem] sm:w-[10rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={newPassword} placeholder="New Password" onChange={newChange}></input>
+                <input type="password" className="w-[15rem] sm:w-[10rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={confirmPassword} placeholder="Confirm Password" onChange={confirmChange}></input>
+            </div>
         </div>),
         // (),
         // (),

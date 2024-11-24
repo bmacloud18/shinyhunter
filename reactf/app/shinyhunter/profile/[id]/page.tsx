@@ -132,11 +132,11 @@ export default function Profile({params}: {params: {id: number}}) {
 
     //change to loading screen later
     return profileUser != null ? (
-        <main className="flex min-h-screen flex-col items-center p-24">
+        <main className="flex min-h-screen flex-col items-center p-12">
             
             <ProfileHeader user={profileUser}></ProfileHeader>
 
-            <div className="mt-16 flex flex-row justify-between gap-16">
+            <div className="mt-10 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
@@ -145,7 +145,7 @@ export default function Profile({params}: {params: {id: number}}) {
 
         </main>
     ) : (
-        <main className="flex min-h-screen flex-col items-center justify-around p-24">
+        <main className="flex min-h-screen flex-col items-center justify-around p-12">
 
             <div className="mt-16 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>

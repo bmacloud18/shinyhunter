@@ -15,9 +15,9 @@ export default function ProfileHeader({
     }
 
     return (
-        <form className="border-solid border-2 border-black w-full max-w-[48rem] items-center justify-between text-sm flex flex-row">
+        <form className="border-solid border-2 border-black w-full max-w-[40rem] items-center justify-between text-sm flex flex-row">
             <div className="flex flex-row m-2">
-                <ProfilePicture source={user.avatar}></ProfilePicture>
+            <img src={user.avatar} alt="Profile Picture" className="h-16 w-16 fill-green" />
                 <div className="flex flex-col self-center mr-2">
                     <p>{user.first_name} {user.last_name}</p>
                     <p>{user.username}</p>

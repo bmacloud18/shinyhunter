@@ -20,6 +20,7 @@ export default function HuntTile({
     const [count, setCount] = useState<number>(0);
     const [diff, setDiff] = useState<number>(0);
     const [timeDisplay, setTimeDisplay] = useState(convertTime(hunt.hunt_time));
+    const [intervalDisplay, setIntervalDisplay] = useState(convertTime(0));
     const [stopwatchData, setStopwatchData] = useState<any>();
     const [counterData, setCounterData] = useState<any>();
     // const [user, setUser] = useState<User>();
@@ -219,6 +220,13 @@ export default function HuntTile({
                 });
 
                 intervalTimer.start({countdown: false, startValues: {seconds: 0}});
+                intervalTimer.addEventListener('secondsUpdated', function () {
+                    if (!intervalTimer.isPaused()) {
+                        
+                        const i = getSeconds(intervalTimer);
+                        setIntervalDisplay(convertTime(i));
+                    }
+                });
             }
 
             try {
@@ -234,12 +242,15 @@ export default function HuntTile({
 
     const active = hunt.end_date_display == null;
     let main = (
-        <div className="flex flex-col w-full gap-8 items-center">
+        <div className="flex flex-col w-full gap-4 items-center">
             <span className="text-6xl">
                 {hunt.nickname}
             </span>
             <span className="text-4xl">
                 {timeDisplay}
+            </span>
+            <span className="text-2xl text-grey">
+                {intervalDisplay}
             </span>
             <a className="mt-4" onClick={spriteClick}>
                 <img src={hunt.sprite} alt="Loading Icon" className="h-32 w-32 fill-green"/>
@@ -250,10 +261,10 @@ export default function HuntTile({
     let activeContent = hunting ? [
         (main),
         (<div className="flex flex-col items-center w-fit">
-            <span className="text-7xl m-8">{count}</span>
-            <div className="flex flex-row justify-end mt-8 gap-8 items-center">
-                <button onClick={plus} className="text-6xl h-48 w-48 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">+</button>
-                <button onClick={minus} className="text-6xl h-24 w-24 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">-</button>
+            <span className="text-6xl m-2">{count}</span>
+            <div className="flex flex-row justify-end mt-2 gap-8 items-center">
+                <button onClick={plus} className="text-6xl h-40 w-40 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">+</button>
+                <button onClick={minus} className="text-6xl h-20 w-20 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">-</button>
             </div>
         </div>)
     ] : [
@@ -293,7 +304,7 @@ export default function HuntTile({
     let content = active ? activeContent : completeContent;
     return (
         <div className="flex flex-col items-center">
-            <div className="rounded-2xl border-solid border-2 border-black flex flex-col items-center w-fit gap-6 m-2 p-20">
+            <div className="rounded-2xl border-solid border-2 border-black flex flex-col items-center w-fit m-2 p-6">
                 {content}
             </div>
             {settings}

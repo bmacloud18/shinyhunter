@@ -61,7 +61,7 @@ export default function Layout({
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <body className={inter.className}>
-          <header className="flex justify-between items-center top-0 w-full bg-grey shadow-md">
+          <header className="flex justify-between items-center top-0 h-fit w-full shadow-md">
             <h1 className="flex-start p-6 basis-4/6 text-4xl font-bold text-black">
               ShinyHunter
             </h1>
@@ -70,17 +70,17 @@ export default function Layout({
                 <div className="flex flex-col gap-2">
                   <span>{user.first_name.toString()}</span>
                   <span>{user.last_name.toString()}</span>
+                  <form onSubmit={handleLogout}>
+                    <button className="border-solid border-2 border-green mt-3 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Logout</button>
+                  </form>
                 </div>
-                <button className="newPage" id="pfp">
+                <button className="newPage p-1" id="pfp">
                     <img 
                         className="h-24 w-24"
                         src={user.avatar.toString()}
                         alt="User PFP"/>
                 </button>
               </div>
-              <form onSubmit={handleLogout}>
-                <button className="border-solid border-2 border-green mt-3 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Logout</button>
-              </form>
             </div>
           </header>
           {children}

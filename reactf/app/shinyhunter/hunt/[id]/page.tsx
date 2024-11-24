@@ -32,7 +32,7 @@ export default function HuntPage({params}: {params: {id: number}}) {
 
     //full page with Hunt
     return (
-        <main className="flex min-h-screen flex-col items-center mt-48 p-10">
+        <main className="flex min-h-screen flex-col items-center mt-14 p-10">
             {content} 
         </main>
     )
