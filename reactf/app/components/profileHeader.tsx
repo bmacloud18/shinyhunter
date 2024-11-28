@@ -15,16 +15,16 @@ export default function ProfileHeader({
     }
 
     return (
-        <form className="border-solid border-2 border-black w-full max-w-[40rem] items-center justify-between text-sm flex flex-row">
-            <div className="flex flex-row m-2">
+        <form className="border-solid border-2 border-black w-fit max-w-[40rem] min-w-[20rem] items-center justify-between text-sm flex flex-row p-1">
+            <div className="flex flex-row p-2">
             <img src={user.avatar} alt="Profile Picture" className="h-16 w-16 fill-green" />
                 <div className="flex flex-col self-center mr-2">
-                    <p>{user.first_name} {user.last_name}</p>
+                    <p className="min-w-4">{user.first_name} {user.last_name}</p>
                     <p>{user.username}</p>
                 </div>
             </div>
-            <div className="flex m-2">
-                <BigButton onClick={handleSettings} text="Edit Profile"></BigButton>
+            <div className="max-w-fit max-h-[4rem] h-fit min-w-6 border-solid border-2 border-green rounded-2xl p-3 text-sm bg-red hover:bg-buttonwhite">
+                <button onClick={handleSettings} className="newPage max-h-2">Edit Profile</button>
             </div>
         </form>
     )

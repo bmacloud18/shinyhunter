@@ -19,7 +19,7 @@ export default function Profile({params}: {params: {id: number}}) {
     const [user, setUser] = useState<User>();
     //fetch user and hunt data for profile display
     useEffect(() => {
-        const hunts = [sample2, sample2]
+        const hunts = [sample2, sample2, sample]
         const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
         const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
         const active = activeHunts.map((hunt: Hunt) => {
@@ -68,14 +68,14 @@ export default function Profile({params}: {params: {id: number}}) {
     if (activeItems.length > 0 && completedItems.length > 0) {
         content = (
             <Grid>
-                <div>
-                    <p>Active</p>
+                <div className="flex flex-col gap-2 lg:w-[24rem] md:w-[18rem] sm:w-[10rem] border-solid border-2 border-black border-r-1">
+                    <p className="p-2 border-b-2 border-grey border-dashed">Active</p>
                     <TileGrid>
                         {activeItems}
                     </TileGrid>
                 </div>
-                <div>
-                    <p>Complete</p>
+                <div className="flex flex-col gap-2 lg:w-[24rem] md:w-[18rem] sm:w-[10rem] border-solid border-2 border-black border-r-1">
+                    <p className="p-2 border-b-2 border-grey border-dashed">Complete</p>
                     <TileGrid>
                         {completedItems}
                     </TileGrid>
@@ -86,12 +86,12 @@ export default function Profile({params}: {params: {id: number}}) {
     else if (activeItems.length == 0 && completedItems.length > 0) {
         content = (
             <Grid>
-                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-r-1">
-                    <p className="p-2" >Active</p>
-                    <span className="m-16 p-5 border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
+                <div className="lg:w-[24rem] md:w-[18rem] sm:w-[12rem] border-solid border-2 border-black border-r-1">
+                    <p className="p-2 border-b-2 border-grey border-dashed" >Active</p>
+                    <span className="m-16 p-5 border-solid border-black border-2 sm:max-md:text-sm flex place-self-center">Begin Hunting with the New Hunt Button ^</span>
                 </div>
-                <div className="flex flex-col justify-around gap-2 lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-l-1">
-                    <p className="p-2" >Complete</p>
+                <div className="flex flex-col gap-2 lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-l-1">
+                    <p className="p-2 border-b-2 border-grey border-dashed" >Complete</p>
                     <TileGrid>
                         {completedItems}
                     </TileGrid>
@@ -102,15 +102,15 @@ export default function Profile({params}: {params: {id: number}}) {
     else if (activeItems.length > 0 && completedItems.length == 0) {
         content = (
             <Grid>
-                <div className="flex flex-col justify-around gap-2 lg:w-[24rem] md:w-[20rem] sm:w-[10rem] border-solid border-2 border-black border-r-1">
-                    <p className="p-2 w-[10rem]" >Active</p>
+                <div className="flex flex-col gap-2 lg:w-[24rem] md:w-[20rem] sm:w-fit border-solid border-2 border-black border-r-1">
+                    <p className="p-2 border-b-2 border-grey border-dashed" >Active</p>
                     <TileGrid>
                         {activeItems}
                     </TileGrid>
                 </div>
-                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[10rem] border-solid border-2 border-black border-l-1">
-                    <p className="p-2" >Complete</p>
-                    <div className="m-16 p-5 border-solid border-black border-2 sm:m-8 sm:p-2">Keep Working on Those Hunts!</div>
+                <div className="lg:w-[24rem] md:w-[20rem] sm:w-[12rem] border-solid border-2 border-black border-l-1">
+                    <p className="p-2 border-b-2 border-grey border-dashed" >Complete</p>
+                    <div className="m-16 p-5 border-solid border-black border-2 sm:m-8 sm:p-2 sm:max-md:text-sm flex place-self-center">Keep Working on Those Hunts!</div>
                 </div>
             </Grid>
         );
@@ -120,11 +120,11 @@ export default function Profile({params}: {params: {id: number}}) {
             <Grid>
                 <div className="lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-r-1">
                     <p className="p-2">Active</p>
-                    <span className="m-16 p-5 border-solid border-black border-1 mr-2">Begin Hunting with the New Hunt Button ^</span>
+                    <span className="m-16 p-5 border-solid border-black border-1 mr-2 sm:max-md:text-sm flex place-self-center">Begin Hunting with the New Hunt Button ^</span>
                 </div>
                 <div className="lg:w-[24rem] md:w-[20rem] sm:w-[16rem] border-solid border-2 border-black border-l-1">
                     <p className="p-2" >Complete</p>
-                    <span className="m-16 p-5 border-solid border-black border-2">Begin Hunting with the New Hunt Button ^</span>
+                    <span className="m-16 p-5 border-solid border-black border-2 sm:max-md:text-sm flex place-self-center">Begin Hunting with the New Hunt Button ^</span>
                 </div>
             </Grid>
         );
@@ -132,27 +132,21 @@ export default function Profile({params}: {params: {id: number}}) {
 
     //change to loading screen later
     return profileUser != null ? (
-        <main className="flex min-h-screen flex-col items-center p-12">
-            
+        <main className="flex flex-col h-screen items-center gap-6 p-8">
             <ProfileHeader user={profileUser}></ProfileHeader>
 
-            <div className="mt-10 flex flex-row justify-between gap-16">
+            <div className="flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
             {content} 
-            
-
         </main>
     ) : (
-        <main className="flex min-h-screen flex-col items-center justify-around p-12">
-
+        <main className="flex flex-col items-center gap-6 p-12">
             <div className="mt-16 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
-
             {content} 
-
         </main>
     );
 }

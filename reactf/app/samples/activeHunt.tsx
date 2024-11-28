@@ -14,5 +14,5 @@ export default {
     count: 5000,
     increment: 5,
     charm: "no",
-    sprite: "/next.svg"
+    sprite: "/pkmalt.png"
 }

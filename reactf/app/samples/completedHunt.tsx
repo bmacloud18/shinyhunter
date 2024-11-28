@@ -11,7 +11,7 @@ export default {
     end_date_display: "Sat May 15, 2020",
     hunt_time: 5,
     hunt_time_display: "5s",
-    count: 5000,
+    count: 2332,
     increment: 5,
     charm: "no",
     sprite: "/next.svg"

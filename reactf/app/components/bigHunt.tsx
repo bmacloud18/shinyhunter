@@ -98,12 +98,12 @@ export default function HuntTile({
         if (count > 0 && intervalTimer) {
             decrementAndSave();
             saveTimeDataLocally();
-            intervalTimer.reset();
         }
     }
 
     function plus() {
         if (count < 999999 && intervalTimer) {
+            setIntervalDisplay(convertTime(0));
             incrementAndSave();
             saveTimeDataLocally();
             intervalTimer.reset();
@@ -242,7 +242,7 @@ export default function HuntTile({
 
     const active = hunt.end_date_display == null;
     let main = (
-        <div className="flex flex-col w-full gap-4 items-center">
+        <div className="flex flex-col w-full gap-4 p items-center">
             <span className="text-6xl">
                 {hunt.nickname}
             </span>
@@ -253,15 +253,15 @@ export default function HuntTile({
                 {intervalDisplay}
             </span>
             <a className="mt-4" onClick={spriteClick}>
-                <img src={hunt.sprite} alt="Loading Icon" className="h-32 w-32 fill-green"/>
+                <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green"/>
             </a>
         </div>
     )
     
     let activeContent = hunting ? [
         (main),
-        (<div className="flex flex-col items-center w-fit">
-            <span className="text-6xl m-2">{count}</span>
+        (<div className="flex flex-col self-center w-fit">
+            <span className="text-6xl m-2 self-center">{count}</span>
             <div className="flex flex-row justify-end mt-2 gap-8 items-center">
                 <button onClick={plus} className="text-6xl h-40 w-40 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">+</button>
                 <button onClick={minus} className="text-6xl h-20 w-20 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">-</button>
@@ -274,40 +274,64 @@ export default function HuntTile({
         
     ]
 
-    let settings = active ? (<BigButton onClick={handleSettings} text="Hunt Settings"></BigButton>) : 
-    (<button className="newPage max-w-fit border-solid border-2 border-green rounded-2xl p-2 bg-red hover:bg-buttonwhite"></button>)
+    let settings = 
+        (<div className="w-8 h-6 border-solid border-2 rounded-2xl border-black bg-red hover:bg-buttonwhite self-end place-content-center">
+            <button onClick={handleSettings} className="newPage flex place-self-center">
+                <img 
+                    className="h-4 w-4"
+                    src='/settings.png'
+                    alt="User PFP"/>
+            </button>
+        </div>)
+
+    let capture = 
+        (<div className="w-20 h-20 border-solid border-2 rounded-3xl border-black bg-red hover:bg-buttonwhite place-content-center">
+            <button onClick={handleSettings} className="newPage flex place-self-center">
+                <img 
+                    className="h-14 w-14"
+                    src='/sparkles.png'
+                    alt="User PFP"/>
+            </button>
+        </div>)
 
     let completeContent = [
-        (<div className="flex flex-col w-full">
-            <span>
+        (<div className="flex flex-col w-full items-center place-self-center gap-1">
+            <span className="text-4xl">
                 {hunt.nickname}
             </span>
-            <span>
+            <span className="text-3xl">
                 {hunt.hunt_time_display}
             </span>
             <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
         </div>),
-        (<div className="flex flex-row justify-between w-full">
-            <span className="justify-self-end self-end text-xl m-8">{hunt.count}</span>
+        (<div className="flex flex-col justify-between w-full justify-self-center self-center">
+            <span className="text-6xl m-8 flex place-self-center">{hunt.count}</span>
         </div>),
-        (<div>
-            <div>
+        (<div className="flex flex-col w-full items-center place-self-center gap-2">
+            <div className="flex flex-col w-full items-center place-self-center">
                 <span>Game: {hunt.game}</span>
                 <span>Method: {method}</span>
             </div>
-            <div>
+            <div className="flex flex-col w-full items-center place-self-center">
                 <span>Start: {hunt.start_date_display}</span>
                 <span>End: {hunt.end_date_display}</span>
             </div>
         </div>)
     ]
-    let content = active ? activeContent : completeContent;
-    return (
+
+    return active ? (
         <div className="flex flex-col items-center">
-            <div className="rounded-2xl border-solid border-2 border-black flex flex-col items-center w-fit m-2 p-6">
-                {content}
+            <div className="rounded-2xl border-solid border-2 border-black flex flex-col w-fit md:w-[30rem] lg:w-[36rem] mb-1 md:mb-2 p-8 md:p-10">
+                {settings}
+                {activeContent}
             </div>
-            {settings}
+            {capture}
+        </div>
+    ) : (
+        <div className="flex flex-col items-center mt-10">
+            <div className="rounded-2xl border-solid border-2 border-black flex flex-col w-fit md:w-[30rem] lg:w-[36rem] mb-1 md:mb-2 p-8 md:p-10">
+                {completeContent}
+            </div>
         </div>
     )
 }

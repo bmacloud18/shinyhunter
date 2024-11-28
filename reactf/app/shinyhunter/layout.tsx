@@ -62,7 +62,7 @@ export default function Layout({
         </Head>
         <body className={inter.className}>
           <header className="flex justify-between items-center top-0 h-fit w-full shadow-md">
-            <h1 className="flex-start p-6 basis-4/6 text-4xl font-bold text-black">
+            <h1 className="flex flex-start basis-4/6 text-4xl sm:text-xl font-bold text-black">
               ShinyHunter
             </h1>
             <div className="p-2 items-center">
@@ -98,17 +98,17 @@ export default function Layout({
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-      <body className={inter.className}>
-        <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
-          <h1 className="flex-auto p-6 basis-4/6 text-4xl font-bold text-black">
+      <body className={`${inter.className}`}>
+        {/* <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
+          <h1 className="flex flex-auto basis-4/6 text-xl md:text-4xl basis-4/6 text-4xl font-bold text-black">
             ShinyHunter
           </h1>
           <img
-            className="max-h-16 max-w-24 px-4"
+            className="h-16 w-24"
             src="/next.svg"
             alt="User PFP"
           />
-        </header>
+        </header> */}
         {children}
       </body>
     </html>
