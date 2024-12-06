@@ -140,11 +140,12 @@ export default function UserSettings({params}: {params: {id: number}}) {
             <span>Upload PFP</span>
             <input className="file:bg-green rounded-2xl block text-medium file:text-buttonwhite text-black border border-1 border-black cursor-pointer" type="file" id="file_input" onChange={fileChange}></input>
         </label>),
-        (<div className="flex flex-row gap-2">
+        (<input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>),
+        (<div className="flex flex-row gap-2 mb-4">
             <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
             <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
-            <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>
         </div>),
+        
         (<div className="w-fit flex flex-col items-center gap-1">
             <div className="w-fit">Authenticate to Update Password</div>
             <div>

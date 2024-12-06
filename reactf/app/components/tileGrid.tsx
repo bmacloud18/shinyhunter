@@ -6,7 +6,7 @@ export default function Grid({
 
     return (
         <>
-            <div className="overflow-y-auto w-fit flex flex-col content-center self-center gap-1">{children}</div>
+            <div className="overflow-y-auto w-fit flex flex-col content-center self-center gap-1 mb-2">{children}</div>
         </>
     )
     

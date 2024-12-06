@@ -17,7 +17,7 @@ export default function HuntPage({params}: {params: {id: number}}) {
             setHunt(h);
         }).catch((err) => {
             console.error(err);
-            setHunt(sample2);
+            setHunt(sample);
         });
 
     }, [params.id]);

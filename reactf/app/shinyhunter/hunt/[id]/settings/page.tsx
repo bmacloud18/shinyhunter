@@ -42,7 +42,7 @@ export default function HuntSettings({params}: {params: {id: number}}) {
             //make update call if any setting has changed
             if ((user && hunt) && (nicknameValue.length > 1 && nicknameValue != hunt.nickname || incrementValue != hunt.increment || 
             (charmValue == 'on' && !hunt.charm || charmValue == 'off' && hunt.charm) || countValue != hunt.count || timeValue != hunt.hunt_time)) {
-                api.updateHunt(hunt.id, timeValue, countValue, incrementValue, charmValue == 'on', nicknameValue).then((h) => {
+                api.updateHuntSettings(hunt.id, timeValue, countValue, incrementValue, charmValue == 'on', nicknameValue).then((h) => {
                     document.location = '/shinyhunter/hunt/' + hunt.id;
                 }).catch((err) => {
                     console.log('Unable to update Hunt - ' + err.message);
@@ -76,22 +76,29 @@ export default function HuntSettings({params}: {params: {id: number}}) {
     //define settings content
     const main = [
         (<div className="flex flex-row gap-2">
-            <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
-            <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={incrementValue} min="1" placeholder="Increment" required={true} onChange={incrementChange}></input>
+            <label className="flex flex-col">
+                Nickname
+                <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
+            </label>
+            <label className="flex flex-col">
+                Increment
+                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" value={incrementValue} min="1" placeholder="Increment" required={true} onChange={incrementChange}></input>
+            </label>
+            
         </div>),
         (<div className="flex flex-row gap-2">
-            <label>
+            <label className="flex flex-col">
                 Count
-                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={countValue} min="0" placeholder="Count" required={true} onChange={countChange}></input>
+                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" value={countValue} min="0" placeholder="Count" required={true} onChange={countChange}></input>
             </label>
-            <label>
+            <label className="flex flex-col">
                 Time
-                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={timeValue} min="0" placeholder="Time" required={true} onChange={timeChange}></input>
+                <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" value={timeValue} min="0" placeholder="Time" required={true} onChange={timeChange}></input>
             </label>
         </div>),
         (<label className="flex flex-col items-center">
             <span>Charm?</span>
-            <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
+            <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
         </label>)
     ]
 
