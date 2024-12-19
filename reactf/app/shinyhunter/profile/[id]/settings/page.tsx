@@ -45,18 +45,15 @@ export default function UserSettings({params}: {params: {id: number}}) {
             setFilename(file.name);
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            console.log(reader);
             reader.onload = function(e) {
                 if (file.type.substring(0, 5) != 'image') {
                     event.target.setCustomValidity('File not a valid image');
                 }
                 else {
                     if (e.target && e.target.result && typeof(e.target.result) == 'string') {
-                        console.log("before change: ", formdata);
                         formdata.append('pfp', file);
                         setAvatar(e.target.result);
                         event.target.setCustomValidity('');
-                        console.log("after change: ", formdata);
                     }
                 }
             }
@@ -71,13 +68,15 @@ export default function UserSettings({params}: {params: {id: number}}) {
                 fileUpload(avatar, user, formdata, url);
                 setFilename('');
                 const avatar_string = url + filename;
+
+                console.log(avatar_string);
                 
                 //update user with changed values
                 api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
                     localStorage.setItem('user', JSON.stringify(u));
                     setUser(u);
                     const id = u.id;
-                    document.location = '/shinyhunter/profile/' + id;
+                    // document.location = '/shinyhunter/profile/' + id;
                 }).catch((err) => {
                     console.log('Error updating user - ' + err.message);
                 })
