@@ -47,18 +47,18 @@ services:
   #   networks:
   #     - shinyhunter-net
 
-#  images:
- #   build: ./images
-  #  restart: unless-stopped
-   # volumes:
-    #  - ./images/:/app/
-  #  env_file:
-   #   - .env
-  #  networks:
-   #   - shinyhunter-net
-    #ports:
+  images:
+    build: ./images
+    restart: unless-stopped
+    volumes:
+      - ./images/:/app/
+    env_file:
+      - .env
+    networks:
+      - shinyhunter-net
+    ports:
       # Make the service accessible from outside of the Docker network if needed
-     # - 8080:8080
+      - 8080:8080
 
 networks:
   shinyhunter-net:
