@@ -3,7 +3,7 @@
 import HTTPclient from './HTTPclient.js';
 
 const API_BASE = "/api/";
-const IMAGES_BASE = "/mages";
+const IMAGES_BASE = "/images/";
 
 export default {
 
@@ -185,21 +185,27 @@ export default {
 
     //image_path should have images/{folder}/{filename} already appended
     getImage: async(image_path) => {
-        //need to add string to the route name so that just the image id is returned
-        const words = image_path.split('\/');
-        const get_path = words[1] + '/' + 'string' + '/' + words[2];
-        return HTTPclient.get(`${get_path}`, IMAGES_BASE) ;
+        const get_path = image_path;
+        return HTTPclient.get(`${get_path}`, '/api') ;
     },
 
     //uploading an image posts to the images 'upload' route
     //needs an images base to post to the proper route
-    uploadImage: async(formdata) => {
-        return HTTPclient.upload('uploads', formdata, IMAGES_BASE);
+    uploadImage: async(formdata, path) => {
+        const data = {
+            path: path
+        }
+        await HTTPclient.upload('uploads', formdata, IMAGES_BASE)
+
+        const response = await HTTPclient.post('images', data, API_BASE);
+        console.log(response);
+        return response;
     },
 
     //deleting an image also has the full route already saved
-    deleteImage: async(filename) => {
-        return HTTPclient.delete(`${filename}`, '/');
+    deleteImage: async(image_path) => {
+        const get_path = 'images/' + image_path;
+        return HTTPclient.delete(`${filename}`, API_BASE);
     }
 
 };

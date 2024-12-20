@@ -1,21 +1,28 @@
 //handle image change
 import api from "@/app/APIclient";
 import User from "@/app/interfaces/user";
+import Img from "@/app/interfaces/image";
 
-export default async function fileupload(avatar: string, user: User, formdata: FormData, url: string) {
+
+export default async function fileupload(avatar: string, user: User, formdata: FormData, url: string, new_avatar: string) {
     console.log("on upload", formdata);
     const first_change = (avatar.length > 16 && user.avatar.substring(8, 16) === "robohash");
     if (!first_change) {
         try {
-            const id = await api.getImage(user.avatar);
-    
-            if (id > -1) {
+            const res = await api.getImage(user.avatar);
+
+            if (res.path === user.avatar) {
                 const deleteres = await api.deleteImage(user.avatar);
+
+                console.log('delete status: ' + deleteres)
     
-                if (deleteres.status === 200) {
-                    await api.uploadImage(formdata).catch((err) => {
-                        throw new Error('Error uploading image' + err);
-                    });
+                if (deleteres == 'imaged deleted') {
+                    const uploadres = await api.uploadImage(formdata, new_avatar);
+
+                    return uploadres;
+                }
+                else {
+                    throw new Error('Error uploading image');
                 }
             }
     
@@ -31,7 +38,7 @@ export default async function fileupload(avatar: string, user: User, formdata: F
         }
     }
     else {
-        await api.uploadImage(formdata).catch((err) => {
+        return api.uploadImage(formdata, new_avatar).catch((err) => {
             throw new Error('Error uploading image (no delete)' + err);
         })
     }

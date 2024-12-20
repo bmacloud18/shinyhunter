@@ -1,5 +1,5 @@
 const express = require('express');
-const routes = require('./imageRoutes.js');
+const routes = require('./imageRoutes.cjs');
 
 const app = express();
 const PORT = process.env.IMAGES_PORT;

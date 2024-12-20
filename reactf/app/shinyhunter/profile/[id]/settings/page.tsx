@@ -65,21 +65,23 @@ export default function UserSettings({params}: {params: {id: number}}) {
         try {
             if (user && ((firstname.length > 2 && firstname !== user.first_name) || (lastname.length > 2 && lastname !== user.last_name) || (avatar !== user.avatar))) {
                 const url = '/images/uploads/';
-                fileUpload(avatar, user, formdata, url);
-                setFilename('');
                 const avatar_string = url + filename;
+                const res = await fileUpload(avatar, user, formdata, url, avatar_string);
+                setFilename('');
 
-                console.log(avatar_string);
+                console.log(res);
                 
-                //update user with changed values
-                api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
-                    localStorage.setItem('user', JSON.stringify(u));
-                    setUser(u);
-                    const id = u.id;
-                    // document.location = '/shinyhunter/profile/' + id;
-                }).catch((err) => {
-                    console.log('Error updating user - ' + err.message);
-                })
+                if (res == 'upload successful') {
+                    api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
+                        localStorage.setItem('user', JSON.stringify(u));
+                        setUser(u);
+                        const id = u.id;
+                        // document.location = '/shinyhunter/profile/' + id;
+                    }).catch((err) => {
+                        console.log('Error updating user - ' + err.message);
+                    })
+                }
+                
             }
         } catch (error: any) {
             throw new Error(error.message);
