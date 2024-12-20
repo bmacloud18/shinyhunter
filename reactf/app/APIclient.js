@@ -183,9 +183,12 @@ export default {
     //Image Routes\\
     \*\\\\\\//////*/
 
-    //filename should have images/{folder}/{filename} already appended
-    getImage: async(filename) => {
-        return HTTPclient.get(`${filename}`, '/') ;
+    //image_path should have images/{folder}/{filename} already appended
+    getImage: async(image_path) => {
+        //need to add string to the route name so that just the image id is returned
+        const words = image_path.split('\/');
+        const get_path = words[1] + '/' + 'string' + '/' + words[2];
+        return HTTPclient.get(`${get_path}`, IMAGES_BASE) ;
     },
 
     //uploading an image posts to the images 'upload' route

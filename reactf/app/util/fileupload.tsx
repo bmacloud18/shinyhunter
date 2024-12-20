@@ -7,14 +7,9 @@ export default async function fileupload(avatar: string, user: User, formdata: F
     const first_change = (avatar.length > 16 && user.avatar.substring(8, 16) === "robohash");
     if (!first_change) {
         try {
-            const res = await api.getImage(user.avatar);
-            
-            if (res.status === 404) {
-                const err = new Error("404");
-                throw err;
-            }
+            const id = await api.getImage(user.avatar);
     
-            if (res == 'picture') {
+            if (id > -1) {
                 const deleteres = await api.deleteImage(user.avatar);
     
                 if (deleteres.status === 200) {
