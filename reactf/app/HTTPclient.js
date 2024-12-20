@@ -27,12 +27,26 @@ const handleError = (res) => {
 export default {
     
     get: async (url, location) => {
-        return fetch(location + url, {
-            headers: {
+        try {
+            const res = await fetch(location + url, {
+                headers: {
+                }
+            });
+
+            const contentType = res.headers.get('content-type');
+            if (contentType && !contentType.includes('application/json')) {
+                return ('picture');
             }
-        }).then(handleError).then(res => {
+
+            await handleError(res);
+
             return res.json();
-        });
+
+            
+        } catch(error) {
+            console.error('error: ' + error)
+            throw error; 
+        }
     },
   
     post: async (url, data, location) => {

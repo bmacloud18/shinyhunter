@@ -3,7 +3,7 @@
 import HTTPclient from './HTTPclient.js';
 
 const API_BASE = "/api/";
-const IMAGES_BASE = "/images/";
+const IMAGES_BASE = "/mages";
 
 export default {
 

@@ -16,7 +16,7 @@ export default function Profile({params}: {params: {id: number}}) {
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
     const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
     const [profileUser, setProfileUser] = useState<User>();
-    const [user, setUser] = useState<User>();
+    const [user, setUser] = useState<User>(sampleuser);
     //fetch user and hunt data for profile display
     useEffect(() => {
         const hunts = [sample2, sample2, sample]
@@ -34,7 +34,7 @@ export default function Profile({params}: {params: {id: number}}) {
 
         setProfileUser(sampleuser);
         setUser(sampleuser);
-        if (user === undefined || activeItems === undefined || completedItems === undefined) {
+        if (user === sampleuser || activeItems === undefined || completedItems === undefined) {
             Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
                 setUser(res[0]);
                 setProfileUser(res[1]);
@@ -62,6 +62,12 @@ export default function Profile({params}: {params: {id: number}}) {
         event.preventDefault();
         document.location = '../hunt/new';
     }
+
+    const handleGetImage = async (event: any) => {
+        event.preventDefault();
+        console.log(api.getImage(user.avatar));
+    }
+    
 
     //set hunt displays based on what hunts users have 
     let content;
@@ -139,6 +145,11 @@ export default function Profile({params}: {params: {id: number}}) {
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
+            <div className="mt-16 flex flex-row justify-between gap-16">
+                <BigButton onClick={handleGetImage} text="New Hunt"></BigButton>
+
+            </div>
+
             {content} 
         </main>
     ) : (
@@ -146,6 +157,7 @@ export default function Profile({params}: {params: {id: number}}) {
             <div className="mt-16 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
+
             {content} 
         </main>
     );

@@ -8,13 +8,13 @@ export default async function fileupload(avatar: string, user: User, formdata: F
     if (!first_change) {
         try {
             const res = await api.getImage(user.avatar);
-    
+            
             if (res.status === 404) {
                 const err = new Error("404");
                 throw err;
             }
     
-            if (res.status === 200) {
+            if (res == 'picture') {
                 const deleteres = await api.deleteImage(user.avatar);
     
                 if (deleteres.status === 200) {
