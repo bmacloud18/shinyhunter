@@ -3,7 +3,7 @@ export default class Image {
     path = null;
 
     constructor(data) {
-        this.id = data.img_id || null;
-        this.path = data.img_path || null;
+        this.id = data.img_id;
+        this.path = data.img_path;
     }
 }

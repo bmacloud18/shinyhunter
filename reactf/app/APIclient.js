@@ -183,10 +183,10 @@ export default {
     //Image Routes\\
     \*\\\\\\//////*/
 
-    //image_path should have images/{folder}/{filename} already appended
+    //image_path should have /images/{folder}/{filename} already appended
     getImage: async(image_path) => {
         const get_path = image_path;
-        return HTTPclient.get(`${get_path}`, '/api') ;
+        return HTTPclient.get(`${get_path}`, '/api');
     },
 
     //uploading an image posts to the images 'upload' route

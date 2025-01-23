@@ -11,12 +11,12 @@ export default async function fileupload(avatar: string, user: User, formdata: F
         try {
             const res = await api.getImage(user.avatar);
 
-            if (res.path === user.avatar) {
+            if (res === 'picture') {
                 const deleteres = await api.deleteImage(user.avatar);
 
                 console.log('delete status: ' + deleteres)
     
-                if (deleteres == 'imaged deleted') {
+                if (deleteres === 'imaged deleted') {
                     const uploadres = await api.uploadImage(formdata, new_avatar);
 
                     return uploadres;
