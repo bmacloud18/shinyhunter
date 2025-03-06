@@ -1,11 +1,4 @@
 services:
-  # proxy:
-  #   image: nginx:latest
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
-  #   ports:
-  #     - "80:80"
 
   api:
     build: ./backend
@@ -15,7 +8,7 @@ services:
     env_file:
       - .env
     ports:
-      - "80:80"
+      - "8080:8080"
     networks:
       - shinyhunter-net
 
@@ -59,6 +52,21 @@ services:
     ports:
       # Make the service accessible from outside of the Docker network if needed
       - 8080:8080
+
+  proxy:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+        - ./reactf/build:/usr/share/nginx/html  # Point NGINX to the React build directory
+        - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - reactf
+      - api
+      - images
+    networks:
+    - shinyhunter-net
 
 networks:
   shinyhunter-net:
