@@ -291,6 +291,8 @@ export default function HuntTile({
                 <Image 
                     className="h-14 w-14"
                     src='/sparkles.png'
+                    height="54"
+                    width="54"
                     alt="User PFP"/>
             </button>
         </div>)
@@ -303,7 +305,7 @@ export default function HuntTile({
             <span className="text-3xl">
                 {hunt.hunt_time_display}
             </span>
-            <Image src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
+            <Image src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" width="96" height="96"/>
         </div>),
         (<div key="cc2" className="flex flex-col justify-between w-full justify-self-center self-center">
             <span className="text-6xl m-8 flex place-self-center">{hunt.count}</span>
