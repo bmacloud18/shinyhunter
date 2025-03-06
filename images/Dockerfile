@@ -9,4 +9,5 @@ RUN npm install
 # Copy all files from current directory to working dir in image
 COPY . ./
 
+EXPOSE 88
 ENTRYPOINT ["npm", "start"]
