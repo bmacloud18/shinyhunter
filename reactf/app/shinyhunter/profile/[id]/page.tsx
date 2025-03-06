@@ -1,11 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
+
 import BigButton from "@/app/components/bigButton";
 import HuntTile from "@/app/components/huntTile";
 import TileGrid from "@/app/components/tileGrid";
 import Grid from "@/app/components/fullGrid";
 import ProfileHeader from "@/app/components/profileHeader";
+
 import api from "@/app/APIclient";
+
 import User from "@/app/interfaces/user";
 import Hunt from "@/app/interfaces/hunt";
 import sample from "@/app/samples/completedHunt"
@@ -13,50 +16,58 @@ import sample2 from "@/app/samples/activeHunt";
 import sampleuser from "@/app/samples/user";
 
 export default function Profile({params}: {params: {id: number}}) {
+    const [loading, setLoading] = useState(true);
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
     const [completedItems, setCompletedItems] = useState<React.ReactNode[]>([]);
     const [profileUser, setProfileUser] = useState<User>();
-    const [user, setUser] = useState<User>(sampleuser);
+    const [user, setUser] = useState<User>();
+
+    
     //fetch user and hunt data for profile display
     useEffect(() => {
-        const hunts = [sample2, sample2, sample]
-        const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-        const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-        const active = activeHunts.map((hunt: Hunt) => {
-            return <HuntTile hunt={hunt}/>
-        });
-        const completed = completedHunts.map((hunt: Hunt) => {
-            return <HuntTile hunt={hunt}/>
-        });
+        Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
+            setUser(res[0]);
+            setProfileUser(res[1]);
 
-        setActiveItems(completed);
-        setCompletedItems(active);
+            const hunts = res[2];
+            const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+            const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
 
-        setProfileUser(sampleuser);
-        setUser(sampleuser);
-        if (user === sampleuser || activeItems === undefined || completedItems === undefined) {
-            Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
-                setUser(res[0]);
-                setProfileUser(res[1]);
-    
-                const hunts = res[2];
-                const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
-                const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-    
-                const active = activeHunts.map((hunt: Hunt) => {
-                    return <HuntTile hunt={hunt}/>
-                });
-                const completed = completedHunts.map((hunt: Hunt) => {
-                    return <HuntTile hunt={hunt}/>
-                });
-    
-    
-                setActiveItems(completed);
-                setCompletedItems(active);
+            const active = activeHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt}/>
             });
-        }
-    }, [params.id]);
+            const completed = completedHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt}/>
+            });
 
+
+            setActiveItems(completed);
+            setCompletedItems(active);
+            setLoading(false);
+        }).catch(e => {
+            console.log('unable to connect to api');
+            const hunts = [sample2, sample]
+            const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+            const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+            const active = activeHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt} key={hunt.id}/>
+            });
+            const completed = completedHunts.map((hunt: Hunt) => {
+                return <HuntTile hunt={hunt} key={hunt.id}/>
+            });
+        
+            setActiveItems(completed);
+            setCompletedItems(active);
+        
+            setProfileUser(sampleuser);
+            setUser(sampleuser);
+            setLoading(false);
+        });
+
+        
+        
+    }, [params.id]);
+    
 
     const handleNew = async (event: any) => {
         event.preventDefault();
@@ -65,7 +76,8 @@ export default function Profile({params}: {params: {id: number}}) {
 
     const handleGetImage = async (event: any) => {
         event.preventDefault();
-        console.log(api.getImage(user.avatar));
+        if (user)
+            console.log(api.getImage(user.avatar));
     }
     
 
@@ -137,7 +149,8 @@ export default function Profile({params}: {params: {id: number}}) {
     }
 
     //change to loading screen later
-    return profileUser != null ? (
+    // 
+    return (!loading && profileUser != undefined) ? (
         <main className="flex flex-col h-screen items-center gap-6 p-8">
             <ProfileHeader user={profileUser}></ProfileHeader>
 
@@ -145,14 +158,10 @@ export default function Profile({params}: {params: {id: number}}) {
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>
             </div>
 
-            <div className="mt-16 flex flex-row justify-between gap-16">
-                <BigButton onClick={handleGetImage} text="New Hunt"></BigButton>
-
-            </div>
-
             {content} 
         </main>
-    ) : (
+    ) 
+    : (
         <main className="flex flex-col items-center gap-6 p-12">
             <div className="mt-16 flex flex-row justify-between gap-16">
                 <BigButton onClick={handleNew} text="New Hunt"></BigButton>

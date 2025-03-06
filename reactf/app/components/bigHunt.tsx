@@ -182,7 +182,6 @@ export default function HuntTile({
     useEffect(() => {
 
         const pfp = document.getElementById('pfp');
-        console.log(pfp);
         const u = getDataFromLocalStorage('user');
         if (pfp) {
             pfp.addEventListener('click', () => {
@@ -229,20 +228,18 @@ export default function HuntTile({
                 });
             }
 
-            try {
-                Promise.all([api.getMethodById(hunt.method)]).then((res) => {
-                    setMethod(res[0].name);
-                });
-            } catch {
-                console.error("couldn't connect to API");
+            Promise.all([api.getMethodById(hunt.method)]).then((res) => {
+                setMethod(res[0].name);
+            }).catch((e) => {
                 setMethod('random');
-            }
+                console.log("couldn't connect to API");
+            });
         }
     }, []);
 
     const active = hunt.end_date_display == null;
     let main = (
-        <div className="flex flex-col w-full gap-4 p items-center">
+        <div key="hm" className="flex flex-col w-full gap-4 p items-center">
             <span className="text-6xl">
                 {hunt.nickname}
             </span>
@@ -260,7 +257,7 @@ export default function HuntTile({
     
     let activeContent = hunting ? [
         (main),
-        (<div className="flex flex-col self-center w-fit">
+        (<div key="h1" className="flex flex-col self-center w-fit">
             <span className="text-6xl m-2 self-center">{count}</span>
             <div className="flex flex-row justify-end mt-2 gap-8 items-center">
                 <button onClick={plus} className="text-6xl h-40 w-40 border-solid border-2 border-red rounded-2xl bg-green hover:bg-buttonwhite">+</button>
@@ -268,14 +265,14 @@ export default function HuntTile({
             </div>
         </div>)
     ] : [
-        (<span>Tap Sprite to Resume Hunt</span>),
+        (<span key="h1">Tap Sprite to Resume Hunt</span>),
         (main),
-        (<span className="text-7xl m-8">{count}</span>)
+        (<span key="h2" className="text-7xl m-8">{count}</span>)
         
     ]
 
     let settings = 
-        (<div className="w-8 h-6 border-solid border-2 rounded-2xl border-black bg-red hover:bg-buttonwhite self-end place-content-center">
+        (<div key="s1" className="w-8 h-6 border-solid border-2 rounded-2xl border-black bg-red hover:bg-buttonwhite self-end place-content-center">
             <button onClick={handleSettings} className="newPage flex place-self-center">
                 <img 
                     className="h-4 w-4"
@@ -285,7 +282,7 @@ export default function HuntTile({
         </div>)
 
     let capture = 
-        (<div className="w-20 h-20 border-solid border-2 rounded-3xl border-black bg-red hover:bg-buttonwhite place-content-center">
+        (<div key="c1" className="w-20 h-20 border-solid border-2 rounded-3xl border-black bg-red hover:bg-buttonwhite place-content-center">
             <button onClick={handleSettings} className="newPage flex place-self-center">
                 <img 
                     className="h-14 w-14"
@@ -295,7 +292,7 @@ export default function HuntTile({
         </div>)
 
     let completeContent = [
-        (<div className="flex flex-col w-full items-center place-self-center gap-1">
+        (<div key="cc1" className="flex flex-col w-full items-center place-self-center gap-1">
             <span className="text-4xl">
                 {hunt.nickname}
             </span>
@@ -304,10 +301,10 @@ export default function HuntTile({
             </span>
             <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
         </div>),
-        (<div className="flex flex-col justify-between w-full justify-self-center self-center">
+        (<div key="cc2" className="flex flex-col justify-between w-full justify-self-center self-center">
             <span className="text-6xl m-8 flex place-self-center">{hunt.count}</span>
         </div>),
-        (<div className="flex flex-col w-full items-center place-self-center gap-2">
+        (<div key="cc3" className="flex flex-col w-full items-center place-self-center gap-2">
             <div className="flex flex-col w-full items-center place-self-center">
                 <span>Game: {hunt.game}</span>
                 <span>Method: {method}</span>

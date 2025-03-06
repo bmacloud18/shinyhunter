@@ -56,26 +56,24 @@ export default function HuntSettings({params}: {params: {id: number}}) {
     //fetch relevant data
     useEffect(() => {
         if (user === undefined || hunt === undefined) {
-            try {
-                Promise.all([api.getCurrentUser(), api.getHuntById(params.id)]).then((res) => {
-                    setUser(res[0]);
-                    const h = res[1];
-                    setHunt(h);
-                    setNickname(h.nickname);
-                    setIncrement(h.increment);
-                    setCharm(h.charm ? 'on' : 'off');
-                    setCount(h.count);
-                    setTime(h.hunt_time);
-                });
-            } catch (error: any) {
-                console.log("unable to communicate with api");
-            }
+            Promise.all([api.getCurrentUser(), api.getHuntById(params.id)]).then((res) => {
+                setUser(res[0]);
+                const h = res[1];
+                setHunt(h);
+                setNickname(h.nickname);
+                setIncrement(h.increment);
+                setCharm(h.charm ? 'on' : 'off');
+                setCount(h.count);
+                setTime(h.hunt_time);
+            }).catch((e)=> {
+                console.log("couldn't connect to api");
+            });
         }
     });
 
     //define settings content
     const main = [
-        (<div className="flex flex-row gap-2">
+        (<div key="s1" className="flex flex-row gap-2">
             <label className="flex flex-col">
                 Nickname
                 <input className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
@@ -86,7 +84,7 @@ export default function HuntSettings({params}: {params: {id: number}}) {
             </label>
             
         </div>),
-        (<div className="flex flex-row gap-2">
+        (<div key="s2" className="flex flex-row gap-2">
             <label className="flex flex-col">
                 Count
                 <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" value={countValue} min="0" placeholder="Count" required={true} onChange={countChange}></input>
@@ -96,7 +94,7 @@ export default function HuntSettings({params}: {params: {id: number}}) {
                 <input type="number" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" value={timeValue} min="0" placeholder="Time" required={true} onChange={timeChange}></input>
             </label>
         </div>),
-        (<label className="flex flex-col items-center">
+        (<label key="s3" className="flex flex-col items-center">
             <span>Charm?</span>
             <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl w-[10rem]" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
         </label>)

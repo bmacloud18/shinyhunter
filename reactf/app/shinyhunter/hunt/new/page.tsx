@@ -104,16 +104,14 @@ export default function NewHunt() {
     //fetch relevant data
     useEffect(() => {
         if (user === undefined || gameOptions === undefined || methodOptions === undefined || pokemonOptions === undefined) {
-            try {
-                Promise.all([api.getCurrentUser(), api.getAllGames(), api.getAllMethods(), api.getAllMons()]).then((res) => {
-                    setUser(res[0]);
-                    setGameOptions(res[1]);
-                    setMethodOptions(res[2]);
-                    setPokemonOptions(res[3]);
-                })
-            } catch (error: any) {
+            Promise.all([api.getCurrentUser(), api.getAllGames(), api.getAllMethods(), api.getAllMons()]).then((res) => {
+                setUser(res[0]);
+                setGameOptions(res[1]);
+                setMethodOptions(res[2]);
+                setPokemonOptions(res[3]);
+            }).catch (e => {
                 console.log("unable to communicate with api");
-            }
+            });
         }
     });
     
@@ -132,7 +130,7 @@ export default function NewHunt() {
 
         
     }
-    if (gameOptions !== undefined) {
+    if (gameOptions && gameOptions[0] !== 'no games') {
         go = gameOptions.map((game: String) => {
             return {
                 value: game,
@@ -151,21 +149,21 @@ export default function NewHunt() {
 
     //define main content (when a normal hunt is being started)
     const main = [
-        (<label className="flex flex-col items-center">
+        (<label key={'pkm'} className="flex flex-col items-center">
             <span>Select a Pokemon</span>
             <Select className="w-[10rem]" placeholder="Pokemon" onChange={setPokemon} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
-                <div className="pkm-option">
+                <div key={pkm.label} className="pkm-option">
                     <img src={pkm.image} alt="pkm-image" />
                     <span>{pkm.label}</span>
                 </div>
             )}
             />
         </label>),
-        (<div className="flex flex-row gap-4"> 
+        (<div key={'gam-mtd'} className="flex flex-row gap-4"> 
             <label className="flex flex-col items-center">
                 <span>Select a Game</span>
                 <Select className="w-[10rem] sm:w-[7rem]" placeholder="Game" onChange={setGame} value={gameValue} options={go} formatOptionLabel={(game: any) => (
-                    <div className="game-option">
+                    <div key={game.label} className="game-option">
                         <span>{game.label}</span>
                     </div>
                 )}
@@ -174,7 +172,7 @@ export default function NewHunt() {
             <label className="flex flex-col items-center">
                 <span>Select a Method</span>
                 <Select className="w-[10rem] sm:w-[7rem]" placeholder="Method" onChange={setMethod} value={methodValue} options={mo} formatOptionLabel={(mtd: any) => (
-                    <div className="mtd-option">
+                    <div key={mtd.label} className="mtd-option">
                         <span>{mtd.label}</span>
                     </div>
                 )}
@@ -182,11 +180,11 @@ export default function NewHunt() {
             </label>
 
         </div>),
-        (<div className="flex flex-row gap-4">
-        <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
-        <input type="number" className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={incrementValue} min="1" placeholder="Increment" required={true} onChange={incrementChange}></input>
-    </div>),
-        (<div className="flex flex-col gap-4">
+        (<div key={'nn-inc'} className="flex flex-row gap-4">
+            <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={nicknameValue} placeholder="Nickname" required={true} onChange={nicknameChange}/>
+            <input type="number" className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={incrementValue} min="1" placeholder="Increment" required={true} onChange={incrementChange}></input>
+        </div>),
+        (<div key={'chrm-imp'} className="flex flex-col gap-4">
             <label className="flex flex-col items-center gap-2">
                 Charm?
                 <input type="checkbox" className="border-solid border-2 border-green p-2 focus:outline-none rounded-xl" placeholder="Charm" id="charm" required={false} onChange={charmChange}></input>
@@ -200,11 +198,11 @@ export default function NewHunt() {
     ]
 
     const importContent = [
-        (<div className="flex flex-row gap-4">
+        (<div key={'nums'} className="flex flex-row gap-4">
             <input type="number" className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={countValue} placeholder="Count" required={true} onChange={countChange}></input>
             <input type="number" className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-1 focus:outline-none rounded-xl" min="0" value={timeValue} placeholder="Time" required={true} onChange={timeChange}></input>
         </div>),
-        ( <div className="flex flex-row">
+        ( <div key={'sta-end'} className="flex flex-row">
             <div className="flex flex-col gap-2">
                 <input type="date" required={true} onChange={startChange}></input>
                 <button onClick={useToday} className="border-solid border-2 border-green mr-2 rounded-xl p-1 bg-red hover:bg-buttonwhite">Use Today</button>

@@ -38,16 +38,17 @@ export default {
         try {
             return HTTPclient.get('currentuser', API_BASE);
         } catch (err) {
-            console.log(err.message);
+            console.error('error retrieving current user');
         }
     },
 
     getUserById: async (id) => {
-        try {
-            return HTTPclient.get(`users/${id}`, API_BASE);
-        } catch (err) {
-            console.log(err.message);
+        const cu = await HTTPclient.get(`users/${id}`, API_BASE);
+        console.log(cu);
+        if (cu) {
+            return cu;
         }
+        return '';
     },
 
     updateCurrentUserSettings: async (first, last, username, avatar) => {
@@ -82,10 +83,17 @@ export default {
     },
 
     getAllGames: async() => {
-        const gameObjects = await HTTPclient.get('pokemon/games', API_BASE);
-        return gameObjects.map((game) => {
-            return game.name;
-        });
+        try {
+            const gameObjects = await HTTPclient.get('pokemon/games', API_BASE);
+            if (gameObjects) {
+                return gameObjects.map((game) => {
+                    return game.name;
+                });
+            }
+        }
+        catch(e) {
+            return (['no games']);
+        }
     },
 
     getAllMons: async() => {

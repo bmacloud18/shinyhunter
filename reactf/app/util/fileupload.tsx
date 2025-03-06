@@ -8,34 +8,36 @@ export default async function fileupload(avatar: string, user: User, formdata: F
     console.log("on upload", formdata);
     const first_change = (avatar.length > 16 && user.avatar.substring(8, 16) === "robohash");
     if (!first_change) {
-        try {
-            const res = await api.getImage(user.avatar);
+        // try {
+        //     const res = await api.getImage(user.avatar);
 
-            if (res === 'picture') {
-                const deleteres = await api.deleteImage(user.avatar);
+        //     if (res === 'picture') {
+        //         const deleteres = await api.deleteImage(user.avatar);
 
-                console.log('delete status: ' + deleteres)
+        //         console.log('delete status: ' + deleteres)
     
-                if (deleteres === 'imaged deleted') {
-                    const uploadres = await api.uploadImage(formdata, new_avatar);
+        //         if (deleteres === 'imaged deleted') {
+        //             const uploadres = await api.uploadImage(formdata, new_avatar);
 
-                    return uploadres;
-                }
-                else {
-                    throw new Error('Error uploading image');
-                }
-            }
+        //             return uploadres;
+        //         }
+        //         else {
+        //             throw new Error('Error uploading image');
+        //         }
+        //     }
     
-        } catch (err: any) {
-            if (err.message == "404") {
-                await api.uploadImage(formdata).catch((err) => {
-                    throw new Error('Error uploading image (no delete): ' + err)
-                });
-            }
-            else {
-                throw new Error('Something wrong with get');
-            }
-        }
+        // } catch (err: any) {
+        //     if (err.message == "404") {
+        //         await api.uploadImage(formdata).catch((err) => {
+        //             throw new Error('Error uploading image (no delete): ' + err)
+        //         });
+        //     }
+        //     else {
+        //         throw new Error('Something wrong with get');
+        //     }
+        // }
+
+        return 'xx'
     }
     else {
         return api.uploadImage(formdata, new_avatar).catch((err) => {

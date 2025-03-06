@@ -106,48 +106,42 @@ export default function UserSettings({params}: {params: {id: number}}) {
     //fetch relevant data
     useEffect(() => {
         if (user === undefined) {
-            try {
-                Promise.all([api.getCurrentUser(), api.getUserById(params.id)]).then((res) => {
-                    if (res[0].username === res[1].username) {
-                        const u = res[0];
-                        setUser(u);
-                        setUsername(u.username);
-                        setFirst(u.first_name);
-                        setLast(u.last_name);
-                        setAvatar(u.avatar);
-                    }
-                    else
-                        throw new Error('Cannot edit other users\' settings');
-                }).catch((err) => {
-                    console.error("error occurred - " + err.message);
-                })
-            } catch (error: any) {
-                console.error("error occurred - " + error.message);
-                setUser(sampleuser);
-            }
+            Promise.all([api.getCurrentUser(), api.getUserById(params.id)]).then((res) => {
+                if (res[0].username === res[1].username) {
+                    const u = res[0];
+                    setUser(u);
+                    setUsername(u.username);
+                    setFirst(u.first_name);
+                    setLast(u.last_name);
+                    setAvatar(u.avatar);
+                }
+                else
+                    throw new Error('Cannot edit other users\' settings');
+            }).catch((err) => {
+                console.log("error occurred - couldn't connect to api - " + err.message);
+            })
         }
     }, [params.id]);
 
     //define settings content
     let preview = avatar !== '' ? (
-            <img className="border border-1 border-green w-24 h-24" id="preview" src={avatar}></img>
+            <img key="s1" className="border border-1 border-green w-24 h-24" id="preview" src={avatar}></img>
     ) : (
-        <span></span>
+        <span key="s1"></span>
     )
 
     let main = [
         (preview),
-        (<label className="mb-4 text-sm font-medium text-grey dark:text-white" htmlFor="file_input">
+        (<label key="s2" className="mb-4 text-sm font-medium text-grey dark:text-white" htmlFor="file_input">
             <span>Upload PFP</span>
             <input className="file:bg-green rounded-2xl block text-medium file:text-buttonwhite text-black border border-1 border-black cursor-pointer" type="file" id="file_input" onChange={fileChange}></input>
         </label>),
-        (<input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>),
-        (<div className="flex flex-row gap-2 mb-4">
+        (<input key="s3" className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={username} placeholder="Username" onChange={usernameChange}/>),
+        (<div key="s4" className="flex flex-row gap-2 mb-4">
             <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={firstname} placeholder="First Name" onChange={firstChange}/>
             <input className="w-[12rem] sm:w-[8rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" type="text" value={lastname} placeholder="Last Name" onChange={lastChange}/>
         </div>),
-        
-        (<div className="w-fit flex flex-col items-center gap-1">
+        (<div key="s5" className="w-fit flex flex-col items-center gap-1">
             <div className="w-fit">Authenticate to Update Password</div>
             <div>
                 <input type="password" className="w-[16rem] sm:w-[12rem] border-solid border-2 border-green p-2 focus:outline-none rounded-xl" value={currentPassword} placeholder="Current Password" onChange={currentChange}></input>

@@ -27,26 +27,20 @@ const handleError = (res) => {
 export default {
     
     get: async (url, location) => {
-        try {
-            const res = await fetch(location + url, {
-                headers: {
-                }
-            });
-
-            const contentType = res.headers.get('content-type');
-            if (contentType && !contentType.includes('application/json')) {
-                return ('picture');
+        const res = await fetch(location + url, {
+            headers: {
             }
+        }).catch(() => undefined);
 
-            await handleError(res);
+        await handleError(res);
 
-            return res.json();
-
-            
-        } catch(error) {
-            console.error('error: ' + error)
-            throw error; 
+        if (res == 'found image') {
+            return ('picture');
         }
+
+        
+
+        return res.json();
     },
   
     post: async (url, data, location) => {

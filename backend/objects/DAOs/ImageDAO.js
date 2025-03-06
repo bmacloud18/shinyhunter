@@ -8,7 +8,7 @@ async function getImage(path) {
         }
         const image = new Image(results[0]);
         if (image) {
-            return image;
+            return 'found image';
         }
         else {
             return ('image not found');
@@ -19,6 +19,12 @@ async function getImage(path) {
     })
 };
 
+//checks with getImage first to see if the image already exists
+//just realized this wouldn't really be practical as filenames don't indicate
+//the contents of an image, but we're gonna go with it for now. maybe could change
+//to also check or save the user id of the poster, can update later.
+//may need to also change the way images are saved and retrieved in the backend.
+//(need to concat the img_id with the path for the api route most likely)
 async function uploadImage(path) {
     const response = await getImage(path);
     console.log(response);

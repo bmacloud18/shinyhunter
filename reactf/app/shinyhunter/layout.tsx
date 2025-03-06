@@ -1,10 +1,10 @@
 'use client';
 import Head from "next/head";
 import { Inter } from "next/font/google";
-import "../globals.css";
 import api from "../APIclient";
 import { useState, useEffect } from "react";
 import User from "@/app/interfaces/user";
+import sample from "@/app/samples/user";
 import Register from "@/app/util/serviceWorker";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -32,14 +32,19 @@ export default function Layout({
 }
 
   useEffect(() => {
-    Register();
-    if (user === undefined) {
-      Promise.all([api.getCurrentUser()]).then((res) => {
-        const u = res[0];
-        setUser(u);
-      });
+    // Register();
+    // if (user === undefined) {
+    //   try {
+    //     Promise.all([api.getCurrentUser()]).then((res) => {
+    //       const u = res[0];
+    //       setUser(u);
+    //     });
+    //   }
+    //   catch(error: any) {
+    //     setUser(sample);
+    //   }
       
-    }
+    // }
   });
 
   let href = "/";
@@ -48,7 +53,8 @@ export default function Layout({
     href = "/shinyhunter/profile/" + user.id;
   }
 
-  return user !== undefined ? (
+  // 
+  return user !== undefined ?  (
     <html lang="en">
         <Head>
           <link
@@ -60,7 +66,7 @@ export default function Layout({
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
         </Head>
-        <body className={inter.className}>
+        <body>
           <header className="flex justify-between items-center top-0 h-fit w-full shadow-md">
             <h1 className="flex flex-start basis-4/6 text-4xl sm:text-xl font-bold text-black">
               ShinyHunter
@@ -68,8 +74,8 @@ export default function Layout({
             <div className="p-2 items-center">
               <div className="flex flex-row">
                 <div className="flex flex-col gap-2">
-                  <span>{user.first_name.toString()}</span>
-                  <span>{user.last_name.toString()}</span>
+                  <span>{user.first_name}</span>
+                  <span>{user.last_name}</span>
                   <form onSubmit={handleLogout}>
                     <button className="border-solid border-2 border-green mt-3 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Logout</button>
                   </form>
@@ -77,7 +83,7 @@ export default function Layout({
                 <button className="newPage p-1" id="pfp">
                     <img 
                         className="h-24 w-24"
-                        src={user.avatar.toString()}
+                        src={user.avatar}
                         alt="User PFP"/>
                 </button>
               </div>
@@ -86,7 +92,8 @@ export default function Layout({
           {children}
         </body>
       </html>
-  ) : (
+  ) 
+  : (
     <html lang="en">
       <Head>
         <link
@@ -98,8 +105,8 @@ export default function Layout({
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-      <body className={`${inter.className}`}>
-        {/* <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
+      <body>
+        <header className="flex justify-center items-center top-0 w-full bg-grey shadow-md">
           <h1 className="flex flex-auto basis-4/6 text-xl md:text-4xl basis-4/6 text-4xl font-bold text-black">
             ShinyHunter
           </h1>
@@ -108,7 +115,7 @@ export default function Layout({
             src="/next.svg"
             alt="User PFP"
           />
-        </header> */}
+        </header>
         {children}
       </body>
     </html>

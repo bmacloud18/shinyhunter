@@ -28,7 +28,7 @@ export default function Layout({
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
-      <body className={inter.className}>
+      <body>
         {children}
       </body>
     </html>

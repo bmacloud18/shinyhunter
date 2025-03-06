@@ -16,7 +16,7 @@ export default function HuntPage({params}: {params: {id: number}}) {
             const h = res[0];
             setHunt(h);
         }).catch((err) => {
-            console.error(err);
+            console.log("couldn't connect to api - " + err);
             setHunt(sample);
         });
 

@@ -8,19 +8,19 @@ const assets = [
 ];
     
 self.addEventListener('install', e => {
-    e.waitUntil(caches.open(STATIC_CACHE_NAME).then(cache => {
-        return cache.addAll(assets);
-    }));
+    // e.waitUntil(caches.open(STATIC_CACHE_NAME).then(cache => {
+    //     return cache.addAll(assets);
+    // }));
 });
 
 self.addEventListener('activate', e => {
-    e.waitUntil(caches.keys().then(cacheNames => {
-        return Promise.all(cacheNames.filter(name => { 
-            return name.startsWith('shiny-hunter-') && name != STATIC_CACHE_NAME && name != DYNAMIC_CACHE_NAME;
-        }).map(name => {
-            return caches.delete(name);
-        }));
-    }));
+    // e.waitUntil(caches.keys().then(cacheNames => {
+    //     return Promise.all(cacheNames.filter(name => { 
+    //         return name.startsWith('shiny-hunter-') && name != STATIC_CACHE_NAME && name != DYNAMIC_CACHE_NAME;
+    //     }).map(name => {
+    //         return caches.delete(name);
+    //     }));
+    // }));
 });
 
 
@@ -137,5 +137,5 @@ self.addEventListener('sync', e => {
 });
 
 function triggerSync() {
-    self.registration.sync.register('syncData');
+    // self.registration.sync.register('syncData');
 }
