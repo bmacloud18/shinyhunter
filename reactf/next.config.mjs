@@ -11,7 +11,7 @@ const nextConfig = {
             destination: `${process.env.IMAGES_ADDRESS}/:path*`
           }
         ]
-      }
+    },
     reactStrictMode: false,
     compiler: {
         // Enables the styled-components SWC transform
