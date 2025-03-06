@@ -1,10 +1,12 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import api from "@/app/APIclient";
 import Timer from "easytimer.js";
 import convertTime from "@/app/util/convertTime";
 import getSeconds from "@/app/util/getSeconds";
 import BigButton from "@/app/components/bigButton";
+
+import Image from 'next/image';
 // import User from "@/app/interfaces/user";
 
 export default function HuntTile({
@@ -114,7 +116,7 @@ export default function HuntTile({
         diffRef.current = diff;
     }, [diff]);
 
-    async function saveCurrentHunt(currentDiff: number) {
+    const saveCurrentHunt = useCallback(async (currentDiff: number) => {
         if (intervalTimer) {
             const currentInterval = getSeconds(intervalTimer);
             console.log(currentInterval);
@@ -142,7 +144,7 @@ export default function HuntTile({
                 }
             }
         }
-    }
+    }, [intervalTimer]);
 
     //onClick functions
     function spriteClick() {
@@ -235,7 +237,7 @@ export default function HuntTile({
                 console.log("couldn't connect to API");
             });
         }
-    }, []);
+    }, [hunt, intervalTimer, method, saveCurrentHunt, timer]);
 
     const active = hunt.end_date_display == null;
     let main = (
@@ -250,7 +252,7 @@ export default function HuntTile({
                 {intervalDisplay}
             </span>
             <a className="mt-4" onClick={spriteClick}>
-                <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green"/>
+                <Image src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" height="24" width="24"/>
             </a>
         </div>
     )
@@ -274,9 +276,11 @@ export default function HuntTile({
     let settings = 
         (<div key="s1" className="w-8 h-6 border-solid border-2 rounded-2xl border-black bg-red hover:bg-buttonwhite self-end place-content-center">
             <button onClick={handleSettings} className="newPage flex place-self-center">
-                <img 
+                <Image 
                     className="h-4 w-4"
                     src='/settings.png'
+                    height="24"
+                    width="24"
                     alt="User PFP"/>
             </button>
         </div>)
@@ -284,7 +288,7 @@ export default function HuntTile({
     let capture = 
         (<div key="c1" className="w-20 h-20 border-solid border-2 rounded-3xl border-black bg-red hover:bg-buttonwhite place-content-center">
             <button onClick={handleSettings} className="newPage flex place-self-center">
-                <img 
+                <Image 
                     className="h-14 w-14"
                     src='/sparkles.png'
                     alt="User PFP"/>
@@ -299,7 +303,7 @@ export default function HuntTile({
             <span className="text-3xl">
                 {hunt.hunt_time_display}
             </span>
-            <img src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
+            <Image src={hunt.sprite} alt="Loading Icon" className="h-24 w-24 fill-green" />
         </div>),
         (<div key="cc2" className="flex flex-col justify-between w-full justify-self-center self-center">
             <span className="text-6xl m-8 flex place-self-center">{hunt.count}</span>

@@ -5,7 +5,7 @@ import HTTPclient from './HTTPclient.js';
 const API_BASE = "/api/";
 const IMAGES_BASE = "/images/";
 
-export default {
+const API = {
 
     /*//////\\\\\\*\
     //User Routes\\
@@ -218,3 +218,4 @@ export default {
 
 };
 
+export default API;

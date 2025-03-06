@@ -51,7 +51,7 @@ services:
       - shinyhunter-net
     ports:
       # Make the service accessible from outside of the Docker network if needed
-      - 8080:8080
+      - 88:88
 
   proxy:
     image: nginx:latest

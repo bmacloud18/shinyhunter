@@ -5,6 +5,7 @@ import Form from "@/app/components/form";
 import User from "@/app/interfaces/user";
 import sampleuser from "@/app/samples/user";
 import fileUpload from "@/app/util/fileupload";
+import Image from "next/image";
 
 
 export default function UserSettings({params}: {params: {id: number}}) {
@@ -105,27 +106,25 @@ export default function UserSettings({params}: {params: {id: number}}) {
 
     //fetch relevant data
     useEffect(() => {
-        if (user === undefined) {
-            Promise.all([api.getCurrentUser(), api.getUserById(params.id)]).then((res) => {
-                if (res[0].username === res[1].username) {
-                    const u = res[0];
-                    setUser(u);
-                    setUsername(u.username);
-                    setFirst(u.first_name);
-                    setLast(u.last_name);
-                    setAvatar(u.avatar);
-                }
-                else
-                    throw new Error('Cannot edit other users\' settings');
-            }).catch((err) => {
-                console.log("error occurred - couldn't connect to api - " + err.message);
-            })
-        }
+        Promise.all([api.getCurrentUser(), api.getUserById(params.id)]).then((res) => {
+            if (res[0].username === res[1].username) {
+                const u = res[0];
+                setUser(u);
+                setUsername(u.username);
+                setFirst(u.first_name);
+                setLast(u.last_name);
+                setAvatar(u.avatar);
+            }
+            else
+                throw new Error('Cannot edit other users\' settings');
+        }).catch((err) => {
+            console.log("error occurred - couldn't connect to api - " + err.message);
+        })
     }, [params.id]);
 
     //define settings content
     let preview = avatar !== '' ? (
-            <img key="s1" className="border border-1 border-green w-24 h-24" id="preview" src={avatar}></img>
+            <Image key="s1" className="border border-1 border-green w-24 h-24" id="preview" src={avatar} alt="preview" height="96" width="96"></Image>
     ) : (
         <span key="s1"></span>
     )

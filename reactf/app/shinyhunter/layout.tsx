@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import User from "@/app/interfaces/user";
 import sample from "@/app/samples/user";
 import Register from "@/app/util/serviceWorker";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,20 +33,20 @@ export default function Layout({
 }
 
   useEffect(() => {
-    // Register();
-    // if (user === undefined) {
-    //   try {
-    //     Promise.all([api.getCurrentUser()]).then((res) => {
-    //       const u = res[0];
-    //       setUser(u);
-    //     });
-    //   }
-    //   catch(error: any) {
-    //     setUser(sample);
-    //   }
+    Register();
+    if (user === undefined) {
+      try {
+        Promise.all([api.getCurrentUser()]).then((res) => {
+          const u = res[0];
+          setUser(u);
+        });
+      }
+      catch(error: any) {
+        setUser(sample);
+      }
       
-    // }
-  });
+    }
+  }, [user]);
 
   let href = "/";
 
@@ -81,9 +82,11 @@ export default function Layout({
                   </form>
                 </div>
                 <button className="newPage p-1" id="pfp">
-                    <img 
+                    <Image 
                         className="h-24 w-24"
                         src={user.avatar}
+                        height="96"
+                        width="96"
                         alt="User PFP"/>
                 </button>
               </div>
@@ -110,10 +113,12 @@ export default function Layout({
           <h1 className="flex flex-auto basis-4/6 text-xl md:text-4xl basis-4/6 text-4xl font-bold text-black">
             ShinyHunter
           </h1>
-          <img
-            className="h-16 w-24"
+          <Image
+            className="w-24 h-24"
             src="/next.svg"
             alt="User PFP"
+            width="96"
+            height="96"
           />
         </header>
         {children}

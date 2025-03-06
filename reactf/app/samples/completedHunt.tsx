@@ -1,4 +1,4 @@
-export default {
+const complete1 = {
     id: 66,
     pkm: "pikcahu",
     nickname: "sample",
@@ -16,3 +16,5 @@ export default {
     charm: "no",
     sprite: "/next.svg"
 }    
+
+export default complete1;

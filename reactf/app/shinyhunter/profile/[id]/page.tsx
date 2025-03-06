@@ -34,10 +34,10 @@ export default function Profile({params}: {params: {id: number}}) {
             const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
 
             const active = activeHunts.map((hunt: Hunt) => {
-                return <HuntTile hunt={hunt}/>
+                return <HuntTile key={hunt.id} hunt={hunt}/>
             });
             const completed = completedHunts.map((hunt: Hunt) => {
-                return <HuntTile hunt={hunt}/>
+                return <HuntTile key={hunt.id} hunt={hunt}/>
             });
 
 

@@ -8,7 +8,7 @@ const nextConfig = {
           },
           {
             source: '/images/:path*',
-            destination: `/:path*`
+            destination: `http://images:88/:path*`
           }
         ]
     },
@@ -16,7 +16,10 @@ const nextConfig = {
     compiler: {
         // Enables the styled-components SWC transform
         styledComponents: true
-    }
+    },
+    images: {
+      domains: ['robohash.org'], // Make sure this domain is allowed
+    },
 };
 
 export default nextConfig;

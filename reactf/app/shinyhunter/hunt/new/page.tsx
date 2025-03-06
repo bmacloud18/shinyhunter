@@ -6,6 +6,8 @@ import api from "@/app/APIclient";
 import User from "@/app/interfaces/user";
 import Pokemon from "@/app/interfaces/pokemon";
 
+import Image from "next/image";
+
 
 export default function NewHunt() {
     //constants for input values
@@ -153,7 +155,7 @@ export default function NewHunt() {
             <span>Select a Pokemon</span>
             <Select className="w-[10rem]" placeholder="Pokemon" onChange={setPokemon} value={pokemonValue} options={po} formatOptionLabel={(pkm: any) => (
                 <div key={pkm.label} className="pkm-option">
-                    <img src={pkm.image} alt="pkm-image" />
+                    <Image className="w-8 h-8" src={pkm.image} alt="pkm-image" height="32" width="32"/>
                     <span>{pkm.label}</span>
                 </div>
             )}

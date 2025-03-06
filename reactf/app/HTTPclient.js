@@ -24,7 +24,7 @@ const handleError = (res) => {
     return res;
 };
 
-export default {
+const HTTP = {
     
     get: async (url, location) => {
         const res = await fetch(location + url, {
@@ -92,4 +92,6 @@ export default {
         });
     }
 };
-  
+
+
+export default HTTP;

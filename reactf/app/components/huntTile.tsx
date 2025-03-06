@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Hunt from "@/app/interfaces/hunt";
+import Image from "next/image";
 
 export default function HuntTile({
     hunt
@@ -30,7 +31,7 @@ export default function HuntTile({
                         </span>
                     </div>
                     <div className="flex flex-row justify-between w-full">
-                        <img src={hunt.sprite.toString()} alt="pkm sprite" className="sm:h-[3rem] sm:w-[3rem] lg:w-[4rem] lg:h-[4rem] fill-green" />
+                        <Image src={hunt.sprite.toString()} alt="pkm sprite" className="sm:h-[3rem] sm:w-[3rem] lg:w-[4rem] lg:h-[4rem] fill-green" height="16" width="16"/>
                         <span className="self-center text-xl sm:max-md:text-base h-full ml-2">{hunt.count}</span>
                     </div>
                 </div>
