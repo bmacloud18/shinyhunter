@@ -4,7 +4,7 @@ const nextConfig = {
         return [
           {
             source: '/api/:path*',
-            destination: `$/:path*`
+            destination: `/:path*`
           },
           {
             source: '/images/:path*',
