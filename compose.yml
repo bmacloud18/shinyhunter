@@ -1,11 +1,4 @@
 services:
-  proxy:
-    image: nginx:latest
-    restart: unless-stopped
-    volumes:
-      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
-    ports:
-      - "80:80"
 
   api:
     build: ./backend
@@ -14,28 +7,38 @@ services:
       - ./backend/src:/app/src
     env_file:
       - .env
-
-  frontend:
-    build: ./frontend
-    restart: unless-stopped
-    volumes:
-      - ./frontend/src:/app/src
-    env_file:
-      - .env
-
-  database:
-    image: mariadb:10.6
-    restart: unless-stopped
     ports:
-      # Make the DB accessible from outside of the Docker network if needed
-      - 3307:3306
+      - "8080:8080"
+    networks:
+      - shinyhunter-net
+
+  reactf:
+    build: ./reactf
+    restart: unless-stopped
     volumes:
-      # Mount a volume for mariadb's persistent files for lifecycle outside of stack
-      - "./db/data:/var/lib/mysql"
-      # Mount the db_schema into the container to be auto-read and created in the new db
-      - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
+      - ./reactf/src:/app/src
     env_file:
       - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - shinyhunter-net
+
+  # database:
+  #   image: mariadb:10.6
+  #   restart: unless-stopped
+  #   ports:
+  #     # Make the DB accessible from outside of the Docker network if needed
+  #     - 3307:3306
+  #   volumes:
+  #     # Mount a volume for mariadb's persistent files for lifecycle outside of stack
+  #     - "./db/data:/var/lib/mysql"
+  #     # Mount the db_schema into the container to be auto-read and created in the new db
+  #     - "./db/db_schema/shinyhunter.sql:/docker-entrypoint-initdb.d/shinyhunter.sql"
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - shinyhunter-net
 
   images:
     build: ./images
@@ -44,3 +47,26 @@ services:
       - ./images/:/app/
     env_file:
       - .env
+    networks:
+      - shinyhunter-net
+    ports:
+      # Make the service accessible from outside of the Docker network if needed
+      - 88:88
+
+  proxy:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+        - ./reactf/build:/usr/share/nginx/html  # Point NGINX to the React build directory
+        - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - reactf
+      - api
+      - images
+    networks:
+    - shinyhunter-net
+
+networks:
+  shinyhunter-net:

@@ -61,7 +61,7 @@ async function getHuntsByUser(user_id) {
 };
 
 //create new hunt, leave end_date_string null if hunt is active
-async function createNewHunt(user, pokemon, game, method, start_date, end_date, time, count, increment, charm, nickname) {
+async function createNewHunt(user, pokemon, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite) {
     let start_date_string;
     let end_date_string;
     if (start_date != null) {
@@ -71,14 +71,15 @@ async function createNewHunt(user, pokemon, game, method, start_date, end_date, 
         end_date_string = new Date(end_date).toISOString();
     }
 
-    console.log(user, pokemon, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname);
+    console.log(user, pokemon, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname, sprite);
 
-    return query('INSERT INTO hunt (pkm_name, usr_id, gam_name, mtd_id, hnt_start_date_string, hnt_end_date_string, hnt_time_s, hnt_count, hnt_inc, hnt_charm, hnt_nnm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
-    [pokemon, user, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname]).then(({results}) => {
+    return query('INSERT INTO hunt (pkm_name, usr_id, gam_name, mtd_id, hnt_start_date_string, hnt_end_date_string, hnt_time_s, hnt_count, hnt_inc, hnt_charm, hnt_nnm, pkm_sprite) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+    [pokemon, user, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname, sprite]).then(({results}) => {
         if (results.insertId) {
             return getHuntById(results.insertId);
         }
     }).catch( (err) => {
+        console.log(err.message);
         throw new Error("Oops! error occurred: " + err.message);
     });
 };
@@ -95,9 +96,18 @@ async function completeHunt(id, end_date) {
 };
 
 //update a hunt by providing it with hunt settings data
-async function updateHunt(id, time, start_date, end_date, count, increment, charm, nickname) {
+async function updateHuntSettings(id, time, count, increment, charm, nickname) {
+    return query('UPDATE hunt SET hnt_time_s=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, count, increment, charm, nickname, id]).then(({results}) => {
+        return results;
+    }).catch(err => {
+        console.log(err.message);
+        throw new Error(err.message +  ': error updating hunt');
+    });
+}
 
-    return query('UPDATE hunt SET hnt_time_s=?, hnt_start_date_string=?, hnt_end_date_string=?, hnt_count=?, hnt_inc=?, hnt_charm=?, hnt_nnm=? WHERE hnt_id=?', [time, start_date, end_date, count, increment, charm, nickname, id]).then(({results}) => {
+//update a hunt after hunting progress
+async function updateHunt(id, time, count) {
+    return query('UPDATE hunt SET hnt_time_s=?, hnt_count=? WHERE hnt_id=?', [time, count, id]).then(({results}) => {
         return results;
     }).catch(err => {
         console.log(err.message);
@@ -120,6 +130,7 @@ export {
     getHuntsByUser,
     createNewHunt,
     completeHunt,
+    updateHuntSettings,
     updateHunt,
     deleteHunt
 };

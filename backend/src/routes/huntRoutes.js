@@ -7,6 +7,9 @@ const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
+const updateRouter = express.Router();
+updateRouter.use(express.text());
+
 //get all hunts
 router.get('/hunt', tokenMiddleware, (req, res) => {
     HuntDAO.getAllHunts().then(hunts => {
@@ -56,13 +59,14 @@ router.post('/hunt', tokenMiddleware, (req, res) => {
     const increment = req.body.increment;
     const charm = req.body.charm == 'on' ? 1 : 0;
     const nickname = req.body.nickname;
+    const sprite = req.body.sprite;
 
     
 
-    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.createNewHunt(userId, pkm, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite).then(hunt => {
         res.json(hunt);
-    }).catch(() => {
-        res.status(404).json({error: 'error creating hunt'});
+    }).catch((err) => {
+        res.status(404).json({error: 'error creating hunt' + err.message});
     })
 
 });
@@ -80,18 +84,31 @@ router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
     })
 });
 
-router.put('/hunt/:id', tokenMiddleware, (req, res) => {
-    
+//updates all hunt values
+router.put('/hunt/settings/:id', tokenMiddleware, async (req, res) => {
     const huntId = req.params.id;
     const time = req.body.time;
     const count = req.body.count;
-    const start_date = req.body.start_date;
-    const end_date = req.body.end_date;
     const increment = req.body.increment;
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHunt(huntId, time, start_date, end_date, count, increment, charm, nickname).then(hunt => {
+    HuntDAO.updateHuntSettings(huntId, time, count, increment, charm, nickname).then(hunt => {
+        res.json(hunt);
+    }).catch(err => {
+        res.status(404).json(err.message);
+    });
+});
+
+//update progress after hunting 
+//sendBeacon only sends data in plain text, hence the separate router and custom parsing
+updateRouter.post('/hunt/:id', tokenMiddleware, async (req, res) => {
+    const huntId = req.params.id;
+    const body = req.body.split('\,');
+    const time = body[0].split('\:')[1];
+    const count = body[1].split('\:')[1];;
+
+    HuntDAO.updateHunt(huntId, time, count).then(hunt => {
         res.json(hunt);
     }).catch(err => {
         res.status(404).json(err.message);
@@ -120,4 +137,7 @@ function timeComparator(a, b) {
 }
 
 
-export default router;
+export {
+    router,
+    updateRouter
+};

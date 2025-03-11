@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `hunt` (
     `hnt_inc` int(2) unsigned NOT NULL DEFAULT 1,
     `hnt_charm` int(1) NOT NULL DEFAULT 0,
     `hnt_nnm` varchar(18) DEFAULT NULL,
+    `pkm_sprite` varchar(60) NOT NULL,
     KEY `FK_MTD_ID` (`mtd_id`),
     KEY `FK_USR_ID` (`usr_id`),
     CONSTRAINT `FK_MTD_ID` FOREIGN KEY (`mtd_id`) REFERENCES `method` (`mtd_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -55,7 +56,12 @@ CREATE TABLE IF NOT EXISTS `hunt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `hunt`;
 
-
+CREATE TABLE IF NOT EXISTS `images` (
+    `img_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `img_path` varchar(100) NOT NULL,
+    PRIMARY KEY (`img_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DELETE FROM `images`;
 
 
 

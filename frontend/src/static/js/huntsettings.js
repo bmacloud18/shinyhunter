@@ -1,5 +1,5 @@
 // This script will fill out any page where hunt settings are being updated
-// Currently applies to three pages, newhunt, huntsettings, and importhunt
+// Currently applies to three pages, newhunt, huntsettings, and importhunthandleError
 
 import api from './APIclient.js';
 import header from './header.js'
@@ -23,7 +23,7 @@ const time = document.getElementById('time');
 const submit = document.getElementById('submitbutton')
 
 const user = await api.getCurrentUser();
-header(user);
+header.generate(user);
 
 if (page == 'importhunt' || page == 'newhunt') {
     const pokemon = document.getElementById('pokemonSelect');
