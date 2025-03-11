@@ -16,7 +16,7 @@ services:
     build: ./reactf
     restart: unless-stopped
     volumes:
-      - ./reactf/src:/app/src
+      - ./reactf:/app/src
     env_file:
       - .env
     ports:
@@ -44,14 +44,13 @@ services:
     build: ./images
     restart: unless-stopped
     volumes:
-      - ./images/:/app/
+      - ./images:/app/
     env_file:
       - .env
     networks:
       - shinyhunter-net
     ports:
-      # Make the service accessible from outside of the Docker network if needed
-      - 88:88
+      - "88:88"
 
   proxy:
     image: nginx:latest
@@ -65,6 +64,8 @@ services:
       - reactf
       - api
       - images
+    env_file:
+      - .env
     networks:
     - shinyhunter-net
 
