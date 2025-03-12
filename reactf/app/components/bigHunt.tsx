@@ -123,7 +123,7 @@ export default function HuntTile({
                         const s = getSeconds(timer);
                         setTimeDisplay(convertTime(s));
                         setInterval(intRef.current + 1);
-                        setIntervalDisplay(convertTime(intRef.current));
+                        setIntervalDisplay(convertTime(intRef.current + 1));
                     }
                 });
             }
