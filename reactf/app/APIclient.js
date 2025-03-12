@@ -147,7 +147,9 @@ const API = {
             end_date: end_date
         };
 
-        return HTTPclient.put(`hunt/${id}/complete`, data, API_BASE);
+        return HTTPclient.put(`hunt/complete/${id}`, data, API_BASE).catch(e => {
+            throw new Error('something wrong: ' + e.message + e)
+        });
     },
 
     updateHuntSettings: async(id, time, count, increment, charm, nickname) => {

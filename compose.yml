@@ -44,7 +44,7 @@ services:
     build: ./images
     restart: unless-stopped
     volumes:
-      - ./images:/app/
+      - ./images:/app
     env_file:
       - .env
     networks:

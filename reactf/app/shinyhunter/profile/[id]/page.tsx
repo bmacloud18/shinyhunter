@@ -79,6 +79,15 @@ export default function Profile({params}: {params: {id: number}}) {
         if (user)
             console.log(api.getImage(user.avatar));
     }
+
+    let newButton;
+    if (user && profileUser && user.username === profileUser.username) {
+        newButton = (
+            <div className="mt-16 flex flex-row justify-between gap-16">
+                <BigButton onClick={handleNew} text="New Hunt"></BigButton>
+            </div>
+        )
+    }
     
 
     //set hunt displays based on what hunts users have 
@@ -154,18 +163,14 @@ export default function Profile({params}: {params: {id: number}}) {
         <main className="flex flex-col h-screen items-center gap-6 p-8">
             <ProfileHeader user={profileUser}></ProfileHeader>
 
-            <div className="flex flex-row justify-between gap-16">
-                <BigButton onClick={handleNew} text="New Hunt"></BigButton>
-            </div>
+            {newButton}
 
             {content} 
         </main>
     ) 
     : (
         <main className="flex flex-col items-center gap-6 p-12">
-            <div className="mt-16 flex flex-row justify-between gap-16">
-                <BigButton onClick={handleNew} text="New Hunt"></BigButton>
-            </div>
+            {newButton}
 
             {content} 
         </main>

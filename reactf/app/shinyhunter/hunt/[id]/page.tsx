@@ -8,7 +8,7 @@ import sample from "@/app/samples/activeHunt";
 import sample2 from "@/app/samples/completedHunt";
 
 export default function HuntPage({params}: {params: {id: number}}) {
-    const [hunt, setHunt] = useState<Hunt>();
+    const [hunt, setHunt] = useState<Hunt | undefined>(undefined);
     //fetch hunt data
     useEffect(() => {
 
@@ -26,7 +26,7 @@ export default function HuntPage({params}: {params: {id: number}}) {
     let content;
     if (hunt !== undefined) {
         content = (
-            <BigHunt hunt={hunt}/>
+            <BigHunt h={hunt}/>
         );
     }
 

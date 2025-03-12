@@ -73,14 +73,17 @@ router.post('/hunt', tokenMiddleware, (req, res) => {
 
 //hit this endpoint to complete an active hunt by adding an end_date_string to the hunt 
 //denoted by the id param. the end date cannot be editted once a hunt is complete
-router.put('/hunt/:id/complete', tokenMiddleware, (req, res) => {
+router.put('/hunt/complete/:id', tokenMiddleware, (req, res) => {
     const end_date = req.body.end_date;
-    const huntId = req.params.id;
+    const huntId = req.body.id;
+
+    console.log(end_date, huntId);
 
     HuntDAO.completeHunt(huntId, end_date).then(hunt => {
+        console.log('completing' + hunt);
         res.json(hunt);
-    }).catch(() => {
-        res.status(404).json({error: 'error completing hunt'});
+    }).catch((e) => {
+        throw new Error(e.message);
     })
 });
 

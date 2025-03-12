@@ -6,28 +6,33 @@ import convertTime from "@/app/util/convertTime";
 import getSeconds from "@/app/util/getSeconds";
 import BigButton from "@/app/components/bigButton";
 
+import sample from "@/app/samples/completedHunt"
+
 import Image from 'next/image';
 // import User from "@/app/interfaces/user";
+import Hunt from "@/app/interfaces/hunt";
 
 export default function HuntTile({
-    hunt
+    h
 } : {
-    hunt:any
+    h:Hunt
 }) {
     
-    const [method, setMethod] = useState('');
+    const [method, setMethod] = useState<string>('');
     const [timer, setTimer] = useState<Timer>();
-    const [intervalTimer, setInterval] = useState<Timer>();
+    const [interval, setInterval] = useState<number>(0)
     const [hunting, setHunting] = useState<boolean>(true);
     const [count, setCount] = useState<number>(0);
     const [diff, setDiff] = useState<number>(0);
-    const [timeDisplay, setTimeDisplay] = useState(convertTime(hunt.hunt_time));
+    const [timeDisplay, setTimeDisplay] = useState(convertTime(h.hunt_time));
     const [intervalDisplay, setIntervalDisplay] = useState(convertTime(0));
     const [stopwatchData, setStopwatchData] = useState<any>();
     const [counterData, setCounterData] = useState<any>();
+    const [hunt, setHunt] = useState<Hunt>(h);
     // const [user, setUser] = useState<User>();
 
     const diffRef = useRef(diff);
+    const intRef = useRef(interval);
 
 
     //local storage functions
@@ -41,11 +46,11 @@ export default function HuntTile({
     }
     
     function saveTimeDataLocally() {
-        if (timer && intervalTimer) {
+        if (timer) {
             const key = "stopwatchData";
             const data = {
                 totalSeconds: getSeconds(timer),
-                interval: getSeconds(intervalTimer),
+                interval: interval,
                 isRunning: hunting
             };
     
@@ -77,48 +82,60 @@ export default function HuntTile({
     
     //Timer functions
     function pause(timer: Timer | undefined) {
-        if (timer && intervalTimer) {
+        if (timer) {
             setHunting(false);
             
             timer.pause();
-            intervalTimer.pause();
         }
     };
     
     function resume(timer: Timer | undefined) {
-        if (timer && intervalTimer) {
+        if (timer) {
             if (!hunting) {
                 setHunting(true);
                 timer.start();
-                intervalTimer.start();
             }
         }
     };
 
 
     function minus() {
-        if (count > 0 && intervalTimer) {
+        if (count > 0) {
             decrementAndSave();
             saveTimeDataLocally();
         }
     }
 
     function plus() {
-        if (count < 999999 && intervalTimer) {
-            setIntervalDisplay(convertTime(0));
+        if (count < 999999) {
             incrementAndSave();
             saveTimeDataLocally();
-            intervalTimer.reset();
+            setInterval(0);
         }
+    }
+
+    function newTimer() {
+        setTimer(new Timer())
+            if (timer) {
+                timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
+                timer.addEventListener('secondsUpdated', function () {
+                    if (!timer.isPaused()) {
+                        const s = getSeconds(timer);
+                        setTimeDisplay(convertTime(s));
+                        setInterval(intRef.current + 1);
+                        setIntervalDisplay(convertTime(intRef.current));
+                    }
+                });
+            }
     }
 
     useEffect(() => {
         diffRef.current = diff;
-    }, [diff]);
+        intRef.current = interval;
+    }, [diff, interval]);
 
     const saveCurrentHunt = useCallback(async (currentDiff: number) => {
-        if (intervalTimer) {
-            const currentInterval = getSeconds(intervalTimer);
+        const currentInterval = intRef.current;
             console.log(currentInterval);
             if ((currentDiff != 0 || currentInterval > 3) && navigator.onLine) {
                 console.log('getting data');
@@ -129,22 +146,21 @@ export default function HuntTile({
                 if (hunt && stopwatch && counter) {
                     console.log('hunt saving');
                     const newtime = stopwatch.totalSeconds;
-                    const count = counter.counter;
+                    const c = counter.counter;
     
                     console.log(hunt.id, newtime, count);
                     localStorage.removeItem('hunt');
                     localStorage.removeItem('stopwatchData');
                     localStorage.removeItem('counterData');
     
-                    api.updateHunt(hunt.id, newtime, count).then(res => {
+                    api.updateHunt(hunt.id, newtime, c).then(res => {
                         console.log(res);
                     }).catch(err => {
                         console.error('Error syncing data with server: ', err);
                     });
                 }
             }
-        }
-    }, [intervalTimer]);
+    }, []);
 
     //onClick functions
     function spriteClick() {
@@ -159,9 +175,21 @@ export default function HuntTile({
         }
     }
 
-    async function handleSettings () {
+    async function handleSettings() {
         saveCurrentHunt(diff)
         document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
+    }
+
+    async function handleCapture() {
+        saveCurrentHunt(diff);
+        Promise.all([api.completeHunt(hunt.id, new Date().toISOString())]).then( (res) => {
+            const uh = res[0];
+            setHunt(uh);
+            // congratulations popup
+        }).catch((err) => {
+            console.log("couldn't connect to api - " + err);
+            setHunt(sample);
+        });
     }
 
 
@@ -175,9 +203,6 @@ export default function HuntTile({
         setCounterData(getDataFromLocalStorage('counterData'));
     if (timer === undefined)
         setTimer(new Timer());
-    if (intervalTimer === undefined)
-        setInterval(new Timer());
-
 
 
     
@@ -192,6 +217,10 @@ export default function HuntTile({
             });
         }
         
+        const display = document.getElementById("main")
+        if (display && u.id !== hunt.user) {
+            display.style.pointerEvents = "none";
+        }
 
         if (method.length < 1) {
 
@@ -209,35 +238,16 @@ export default function HuntTile({
                 isRunning: true
             });
 
-
-            if (timer && intervalTimer) {
-                timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
-                timer.addEventListener('secondsUpdated', function () {
-                    if (!timer.isPaused()) {
-                        
-                        const s = getSeconds(timer);
-                        setTimeDisplay(convertTime(s));
-                    }
-                });
-
-                intervalTimer.start({countdown: false, startValues: {seconds: 0}});
-                intervalTimer.addEventListener('secondsUpdated', function () {
-                    if (!intervalTimer.isPaused()) {
-                        
-                        const i = getSeconds(intervalTimer);
-                        setIntervalDisplay(convertTime(i));
-                    }
-                });
-            }
+            newTimer();
 
             Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                 setMethod(res[0].name);
             }).catch((e) => {
                 setMethod('random');
-                console.log("couldn't connect to API");
+                console.log("couldn't connect to API", method);
             });
         }
-    }, [hunt, intervalTimer, method, saveCurrentHunt, timer]);
+    }, [hunt, saveCurrentHunt]);
 
     const active = hunt.end_date_display == null;
     let main = (
@@ -287,7 +297,7 @@ export default function HuntTile({
 
     let capture = 
         (<div key="c1" className="w-20 h-20 border-solid border-2 rounded-3xl border-black bg-red hover:bg-buttonwhite place-content-center">
-            <button onClick={handleSettings} className="newPage flex place-self-center">
+            <button onClick={handleCapture} className="newPage flex place-self-center">
                 <Image 
                     className="h-14 w-14"
                     src='/sparkles.png'
@@ -323,7 +333,7 @@ export default function HuntTile({
     ]
 
     return active ? (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center" id="main">
             <div className="rounded-2xl border-solid border-2 border-black flex flex-col w-fit md:w-[30rem] lg:w-[36rem] mb-1 md:mb-2 p-8 md:p-10">
                 {settings}
                 {activeContent}
@@ -331,7 +341,7 @@ export default function HuntTile({
             {capture}
         </div>
     ) : (
-        <div className="flex flex-col items-center mt-10">
+        <div className="flex flex-col items-center mt-10" id="main">
             <div className="rounded-2xl border-solid border-2 border-black flex flex-col w-fit md:w-[30rem] lg:w-[36rem] mb-1 md:mb-2 p-8 md:p-10">
                 {completeContent}
             </div>

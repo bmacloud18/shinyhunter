@@ -38,6 +38,7 @@ async function getAllHunts() {
 async function getHuntById(id) {
     return query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
         const hunt = new Hunt(results[0]);
+        console.log(hunt);
         if (hunt) {
             return hunt;
         }
@@ -88,11 +89,11 @@ async function createNewHunt(user, pokemon, game, method, start_date, end_date, 
 async function completeHunt(id, end_date) {
     const end_date_string = new Date(end_date).toISOString();
 
-    return query('UPDATE hunt SET end_date_string=? WHERE hnt_id=?', [end_date_string, id]).then(({results}) => {
-        return results;
+    return query('UPDATE hunt SET hnt_end_date_string=? WHERE hnt_id=?', [end_date_string, id]).then((results) => {
+        return getHuntById(id);
     }).catch( () => {
         throw new Error("Oops! couldn't complete hunt");
-    })
+    });
 };
 
 //update a hunt by providing it with hunt settings data

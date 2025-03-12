@@ -56,16 +56,18 @@ const HTTP = {
     },
   
     put: async (url, data, location) => {
-        return fetch(location + url, {
+        const res = await fetch(location + url, {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).then(handleError).then(res => {
-            return res.json();
-        });
+        }).catch(() => undefined);
 
+        console.log(res);
+        await handleError(res);
+        
+        return res.json();
     },
 
     update: async (url, data, location) => {
