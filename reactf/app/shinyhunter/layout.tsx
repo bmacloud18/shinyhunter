@@ -23,7 +23,7 @@ export default function Layout({
     event.preventDefault();
     try {
       api.logout().then(() => {
-        document.location = '/signin/';
+        document.location = '/shinyhunter/signin';
     }).catch((err: { message: string; }) => {
         console.log('Logout Failed - ' + err.message);
     })
@@ -32,9 +32,20 @@ export default function Layout({
     }
 }
 
+
+let href = "/";
+
+if (user !== undefined) {
+  href = "/shinyhunter/profile/" + user.id;
+}
+
+function handleProfile() {
+  document.location = `${href}`
+}
+
   useEffect(() => {
     Register();
-    if (user === undefined) {
+    if (user === undefined && document.location.pathname !== '/shinyhunter/signin' && document.location.pathname !== '/shinyhunter/signup') {
       try {
         Promise.all([api.getCurrentUser()]).then((res) => {
           const u = res[0];
@@ -48,11 +59,7 @@ export default function Layout({
     }
   }, [user]);
 
-  let href = "/";
 
-  if (user !== undefined) {
-    href = "/shinyhunter/profile/" + user.id;
-  }
 
   // 
   return user !== undefined ?  (
@@ -81,7 +88,7 @@ export default function Layout({
                     <button className="border-solid border-2 border-green mt-3 rounded-2xl p-2 bg-red hover:bg-buttonwhite">Logout</button>
                   </form>
                 </div>
-                <button className="newPage p-1" id="pfp">
+                <button className="newPage p-1" id="pfp" onClick={handleProfile}>
                     <Image 
                         className="h-24 w-24"
                         src={user.avatar}

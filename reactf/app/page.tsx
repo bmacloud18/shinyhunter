@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function Home() {
     useEffect(() => {
-        document.location = "/signin";
+        document.location = "/shinyhunter/signin";
     }, []);
     
 

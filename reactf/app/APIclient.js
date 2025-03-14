@@ -195,15 +195,15 @@ const API = {
 
     //image_path should have /images/{folder}/{filename} already appended
     getImage: async(image_path) => {
-        const get_path = image_path;
-        return HTTPclient.get(`${get_path}`, '/api');
+        const filename = image_path.split('/')[3];
+        return HTTPclient.get(`${filename}`, API_BASE);
     },
 
     //uploading an image posts to the images 'upload' route
     //needs an images base to post to the proper route
-    uploadImage: async(formdata, path) => {
+    uploadImage: async(formdata, filename) => {
         const data = {
-            path: path
+            filename: filename
         }
         await HTTPclient.upload('uploads', formdata, IMAGES_BASE)
 
@@ -214,8 +214,9 @@ const API = {
 
     //deleting an image also has the full route already saved
     deleteImage: async(image_path) => {
-        const get_path = 'images/' + image_path;
-        return HTTPclient.delete(`${filename}`, API_BASE);
+        const filename = image_path.split('/')[3];
+        await HTTPclient.delete(`${filename}`, API_BASE);
+        return HTTPclient.delete(`${image_path}`, IMAGES_BASE);
     }
 
 };

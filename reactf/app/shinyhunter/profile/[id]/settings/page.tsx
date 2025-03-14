@@ -67,12 +67,14 @@ export default function UserSettings({params}: {params: {id: number}}) {
             if (user && ((firstname.length > 2 && firstname !== user.first_name) || (lastname.length > 2 && lastname !== user.last_name) || (avatar !== user.avatar))) {
                 const url = '/images/uploads/';
                 const avatar_string = url + filename;
-                const res = await fileUpload(avatar, user, formdata, url, avatar_string);
+                const res = await fileUpload(avatar, user, formdata, avatar_string).catch((err) => {
+                    console.log("errrrr" + err);
+                });
                 setFilename('');
 
                 console.log(res);
                 
-                if (res == 'upload successful') {
+                if (res == 'image uploaded') {
                     api.updateCurrentUserSettings(firstname, lastname, username, avatar_string).then(u => {
                         localStorage.setItem('user', JSON.stringify(u));
                         setUser(u);

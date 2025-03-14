@@ -43,7 +43,7 @@ export default function Signin() {
     }
 
     const SignIn = (event: any) => {
-        document.location = '/signin';
+        document.location = '/shinyhunter/signin';
     }
 
     return (

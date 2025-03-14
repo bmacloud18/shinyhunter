@@ -58,7 +58,7 @@ DELETE FROM `hunt`;
 
 CREATE TABLE IF NOT EXISTS `images` (
     `img_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `img_path` varchar(100) NOT NULL,
+    `img_name` varchar(100) NOT NULL,
     PRIMARY KEY (`img_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DELETE FROM `images`;

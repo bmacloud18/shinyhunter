@@ -13,7 +13,7 @@ const handleError = (res) => {
     if(!res.ok) {
         if(res.status == 401) {
             localStorage.removeItem('user');
-            document.location = '/signin';
+            document.location = '/shinyhunter/signin';
             throw new Error("Unauthenticated - bad api fetch");
         }
         else {
@@ -76,6 +76,7 @@ const HTTP = {
     },
 
     delete: async (url, location) => {
+        console.log(location + url);
         return fetch(location + url, {
             method: 'DELETE',
             headers: {

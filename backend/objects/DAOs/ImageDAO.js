@@ -1,8 +1,8 @@
 import {query} from '../DBConnection.js';
 import Image from '../models/Image.js';
 
-async function getImage(path) {
-    return query(`SELECT * FROM images WHERE img_path=?`, [path]).then(({results}) => {
+async function getImage(filename) {
+    return query(`SELECT * FROM images WHERE img_name=?`, [filename]).then(({results}) => {
         if (results[0] === undefined) {
             return undefined;
         }
@@ -24,13 +24,13 @@ async function getImage(path) {
 //the contents of an image, but we're gonna go with it for now. maybe could change
 //to also check or save the user id of the poster, can update later.
 //may need to also change the way images are saved and retrieved in the backend.
-//(need to concat the img_id with the path for the api route most likely)
-async function uploadImage(path) {
-    const response = await getImage(path);
+//(need to concat the img_id with the filename for the api route most likely)
+async function uploadImage(filename) {
+    const response = await getImage(filename);
     console.log(response);
     if (response === undefined) {
-        console.log(path);
-        return query(`INSERT INTO images (img_path) VALUES (?)`, [path]).then(({results}) => {
+        console.log(filename);
+        return query(`INSERT INTO images (img_name) VALUES (?)`, [filename]).then(({results}) => {
             if (results.insertId) {
                 console.log(results.insertId);
                 return results;
@@ -44,8 +44,8 @@ async function uploadImage(path) {
     return ("image already exists");
 };
 
-async function deleteImage(path) {
-    return query('DELETE FROM images WHERE img_path=?', [image_path]).then(({results}) => {
+async function deleteImage(filename) {
+    return query('DELETE FROM images WHERE img_name=?', [filename]).then(({results}) => {
         return res.json({message: 'Image deleted successfully'});
     }).catch(err => {
         console.log(err.message);

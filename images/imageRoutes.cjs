@@ -85,7 +85,7 @@ router.delete('/uploads/:filename', (req, res) => {
     const name = req.params.filename;
     const filePath = path.join(image_path, name);
     fs.unlink(filePath, () => {
-        res.json('Image deleted');
+        res.json('image deleted');
     });
 });
 

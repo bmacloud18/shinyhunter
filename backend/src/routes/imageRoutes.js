@@ -7,28 +7,29 @@ const router = express.Router();
 router.use(cookieParser());
 router.use(express.json());
 
-router.get('/images/:path', tokenMiddleware, (req, res) => {
-    const path = req.params.path;
+router.get('/images/uploads/:filename', tokenMiddleware, (req, res) => {
+    const filename = req.params.filename;
     
-    ImageDAO.getImage(path).then(image => {
-        res.json(image);
-    })
-});
-
-router.post('/images', tokenMiddleware, (req, res) => {
-    const path = req.body.path;
-
-    ImageDAO.uploadImage(path).then(result => {
-        res.json('upload successful');
-    }).catch((err) => {
-        res.status(404).json({error: 'error uploading image path: ' + err.message});
+    ImageDAO.getImage(filename).then(image => {
+        if (image)
+            res.json('found image');
     });
 });
 
-router.delete('/images/:path', tokenMiddleware, (req, res) => {
-    const path = req.params.path;
+router.post('/images', tokenMiddleware, (req, res) => {
+    const filename = req.body.filename;
 
-    ImageDAO.deleteImage(path).then(msg => {
+    ImageDAO.uploadImage(filename).then(result => {
+        res.json('image uploaded');
+    }).catch((err) => {
+        res.status(404).json({error: 'error uploading image: ' + err.message});
+    });
+});
+
+router.delete('/images/uploads/:filename', tokenMiddleware, (req, res) => {
+    const filename = req.params.filename;
+
+    ImageDAO.deleteImage(filename).then(msg => {
         console.log('image deleted');
     });
 });
