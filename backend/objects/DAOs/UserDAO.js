@@ -32,6 +32,16 @@ async function getUserById(userId) {
     });
 };
 
+//delete user entirely from DB
+async function deleteUser(username) {
+    return query('DELETE FROM user WHERE usr_username=?', [username]).then(({results}) => {
+        return 'user deleted';
+    }).catch(err => {
+        console.log(err.message);
+        throw new Error(err.message +  ': error deleting hunt');
+    });
+}
+
 //login
 async function login(username, password) {
     return query('SELECT * FROM user WHERE usr_username=?', [username]).then(({results}) => {

@@ -1,5 +1,7 @@
 // const mysql = require('mysql');
-import mysql from 'mysql';
+import mysql from 'mysql2/promise';
+import 'dotenv/config'
+import {log, error} from 'console';
 
 let connection;
 
@@ -17,27 +19,23 @@ const getDatabaseConnection = () => {
   return connection;
 };
 
-const query = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    if(!connection) {
-      connection = getDatabaseConnection();
-    }
-    connection.query(query, params, (err, results, fields) => {
-      if(err) {
-        reject(err);
-        return;
-      }
-      resolve({
-        results: results,
-        fields: fields
-      })
-    })
-  });
+const query = async (query, params = []) => {
+  if(!connection) {
+    connection = getDatabaseConnection();
+  }
+
+  try {
+    const [results, fields] = await connection.query(query, params);
+    return {results, fields};
+  }
+  catch (err) {
+    throw err;
+  }
 };
 
-const close = () => {
+const close = async () => {
   if(connection) {
-    connection.end();
+    await connection.end();
     connection = null;
   }
 };

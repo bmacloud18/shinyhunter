@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import {tokenMiddleware, generateToken, removeToken} from '../middleware/tokenMiddleware.js';
 import * as UserDAO from '../../objects/DAOs/UserDAO.js';
+import {log, error} from 'console';
 
 const router = express.Router();
 router.use(cookieParser());
@@ -14,6 +15,16 @@ router.get('/users/:userId', tokenMiddleware, (req, res) => {
         res.json(user);
     }).catch(() => {
         res.status(404).json(('user not found'));
+    });
+});
+
+router.delete('/users/:username', tokenMiddleware, (req, res) => {
+    const username = req.params.username;
+
+    UserDAO.deleteUser(username).then(res => {
+        res.json(res);
+    }).catch(() => {
+        res.status(404).json(('user not found/not deleted'));
     });
 });
 
@@ -110,5 +121,7 @@ router.put('/currentuser/settings', tokenMiddleware, (req, res) => {
     });
 
 });
+
+
 
 export default router;
