@@ -20,7 +20,7 @@ async function getUser(username) {
 };
 
 //get user by id
-async function getUserById(userId) {
+function getUserById(userId) {
     return query('SELECT * FROM user WHERE usr_id=?', [userId]).then(({results}) => {
         const user = new User(results[0]);
         if (user) {
@@ -34,7 +34,7 @@ async function getUserById(userId) {
 
 //delete user entirely from DB
 async function deleteUser(username) {
-    return query('DELETE FROM user WHERE usr_username=?', [username]).then(({results}) => {
+    return query('DELETE FROM user WHERE usr_username=?', [username]).then(({res}) => {
         return 'user deleted';
     }).catch(err => {
         console.log(err.message);
@@ -180,5 +180,5 @@ export {
     updateUser,
     updatePassword,
     updateSettings,
-    // search
+    deleteUser
 };

@@ -33,7 +33,7 @@ const tokenMiddleware = (req, res, next) => {
 
     // oops! invalid
     catch ( err ) {
-        res.status( 403 ).json( {error: 'Oops! Forbidden'} );
+        res.status( 403 ).json( {error: 'Oops! Forbidden' + err} );
     }
 };
 

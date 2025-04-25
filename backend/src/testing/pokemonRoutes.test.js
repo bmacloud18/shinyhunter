@@ -2,12 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import userRoutes from '../routes/userRoutes';
 import pokemonRoutes from '../routes/pokemonRoutes';
-import jwt from 'jsonwebtoken';
-import {log, error} from 'console';
-import {tokenMiddleware, generateToken, removeToken} from '../middleware/tokenMiddleware.js';
-
-const API_SECRET = process.env.API_SECRET_KEY;
-const session_time = 1000;
+const TOKEN_COOKIE_NAME = 'ShinyHunter';
 
 const mock = express();
 mock.use(express.json());
@@ -26,38 +21,46 @@ const loginInfo = {
     password: 'mockpass'
 }
 
-let data = {
-    user: userInfo,
-    exp: Math.floor( Date.now() / 1000 ) + (session_time)
-};
+let token;
 
 // sign the token
-const token = jwt.sign( data, API_SECRET );
+// const token = jwt.sign( data, API_SECRET );
 
 beforeAll( async () => {
-
-    
-
-
+    //create mock test user
     const res = await request(mock).post('/register').send(userInfo).set('Accept', 'application/json');
     expect(res.statusCode).toBe(200);
+    //login with mock user
     const login = await request(mock).post('/login').send(loginInfo).set('Accept', 'application/json');
     expect(login.statusCode).toBe(200);
-    const check = await request(mock).get('/currentuser').set('Authorization', `Bearer ${token}`);
-    log(check)
+
+    //extract cookie from login
+    const cookies = res.headers['set-cookie'];
+    const tokenCookie = cookies.find(c => c.startsWith(`${TOKEN_COOKIE_NAME}=`));
+    token = tokenCookie.split(';')[0].split('=')[1];
+
+    //ensure authenticated routes can be hit
+    const check = await request(mock).get('/currentuser').set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(check.statusCode).toBe(200);
 });
 
 afterAll( async () => {
-    const login = await request(mock).post('/login').send(loginInfo).set('Accept', 'application/json');
-    expect(login.statusCode).toBe(200);
-    const del = await request(mock).delete('/users/mockuser');
-    expect(del).toBe('user deleted');
-    const res = await request(mock).post('/logout').set('Accept', 'application/json');
+
+    //remove mock user from db
+    const del = await request(mock).delete('/users/mockuser').set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(del.statusCode).toBe(200);
+    expect(JSON.parse(del.text)).toBe('user deleted');
+
+    //make sure cookies are deleted through logout
+    const res = await request(mock).post('/logout');
     expect(res.statusCode).toBe(200);
+
 });
 
-test('new test', async () => {
-    const ret = await (request(mock).get('/pokemon/name/1'));
-    expect(ret).toBe("bulbasaur");
+test('pokemon test (external api)', async () => {
+    const ret = await (request(mock).get('/pokemon/name/1')).set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(ret.body.name).toBe("bulbasaur");
+
+    const all = await (request(mock).get('/pokemon')).set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(all.statusCode).toBe(200);
 });;

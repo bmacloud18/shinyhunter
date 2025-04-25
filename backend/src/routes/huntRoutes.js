@@ -11,7 +11,7 @@ const updateRouter = express.Router();
 updateRouter.use(express.text());
 
 //get all hunts
-router.get('/hunt', tokenMiddleware, (req, res) => {
+router.get('/hunt', tokenMiddleware, async (req, res) => {
     HuntDAO.getAllHunts().then(hunts => {
         res.json(sortHunts(hunts));
     });

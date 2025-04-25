@@ -18,18 +18,18 @@ router.get('/users/:userId', tokenMiddleware, (req, res) => {
     });
 });
 
-router.delete('/users/:username', tokenMiddleware, (req, res) => {
+router.delete('/users/:username', tokenMiddleware, async (req, res) => {
     const username = req.params.username;
 
-    UserDAO.deleteUser(username).then(res => {
-        res.json(res);
+    UserDAO.deleteUser(username).then(u => {
+        res.json(u);
     }).catch(() => {
         res.status(404).json(('user not found/not deleted'));
     });
 });
 
 //**Registration**\\
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
 
     UserDAO.getUser(req.body.username).then(() => {
         res.status(404).json(('user already exists'));
