@@ -25,6 +25,7 @@ const loginInfo = {
     password: 'mockpass'
 }
 
+
 let token;
 let usr_id;
 
@@ -36,7 +37,7 @@ beforeAll( async () => {
     const login = await request(mock).post('/login').send(loginInfo).set('Accept', 'application/json');
     expect(login.statusCode).toBe(200);
 
-    // usr_id = login.body.
+    usr_id = login.body.id;
 
     //extract cookie from login
     const cookies = res.headers['set-cookie'];
@@ -64,4 +65,13 @@ afterAll( async () => {
 test('new test', async () => {
     const ret = await (request(mock).get('/hunt')).set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(ret.statusCode).toBe(200);
+
+    const sample1 = {
+        userId: usr_id,
+        pkm: '34',
+        game: 
+    }
+
+    const newh = await (request(mock).post('/hunt')).send().set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(newh.statusCode).toBe(200);
 });;

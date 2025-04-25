@@ -63,4 +63,4 @@ test('pokemon test (external api)', async () => {
 
     const all = await (request(mock).get('/pokemon')).set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(all.statusCode).toBe(200);
-});;
+});
