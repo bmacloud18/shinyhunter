@@ -126,7 +126,7 @@ async function deleteHunt(id) {
 export {
     getAllHunts,
     getHuntById,
-    getHuntsByUser,
+    // getHuntsByUser,
     createNewHunt,
     completeHunt,
     updateHuntSettings,

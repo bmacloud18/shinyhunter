@@ -30,7 +30,7 @@ router.delete('/images/uploads/:filename', tokenMiddleware, (req, res) => {
     const filename = req.params.filename;
 
     ImageDAO.deleteImage(filename).then(msg => {
-        console.log('image deleted');
+        res.json('image deleted');
     });
 });
 

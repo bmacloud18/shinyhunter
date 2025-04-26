@@ -5,6 +5,7 @@
 import crypto from 'crypto';
 import {query} from '../DBConnection.js';
 import User from '../models/User.js';
+import {log, error} from 'console';
 
 //get user by username
 async function getUser(username) {
@@ -91,7 +92,7 @@ async function signup(user) {
 async function updateUser(id, updatedUser) {
     return query('UPDATE user SET usr_username=?, usr_first_name=?, usr_last_name=?, usr_avatar=? WHERE usr_id=?', [updatedUser.username, updatedUser.first_name, updatedUser.last_name, updatedUser.avatar, id])
         .then( ({results}) => {
-            if ( results.affectedRows == 1 && results.warningCount == 0 )
+            if ( results.affectedRows == 1 && results.warningStatus == 0 )
                 return getUserById( id );
             throw new Error( "Oops! Something went wrong." );
         }).catch( () => {
@@ -134,7 +135,7 @@ async function updatePassword(id, password, new_password) {
     // persist the new password and salt
     return query('UPDATE user SET usr_password=?, usr_salt=? WHERE usr_id=?', [computedPassword, salt, id])
         .then( ({results}) => {
-            if ( results.affectedRows == 1 && results.warningCount == 0 )
+            if ( results.affectedRows == 1 && results.warningStatus == 0 )
                 return getUserById( id );
             throw new Error( "Oops! Something went wrong." );
         }).catch( () => {
@@ -143,17 +144,17 @@ async function updatePassword(id, password, new_password) {
 };
 
 //update settings
-async function updateSettings( id, settings ) {
-    if ( !id || settings.dark === undefined || settings.notify === undefined || settings.text === undefined )
-        throw new Error( 'Oops! Something went wrong.' );
-    return query( 'UPDATE user SET usr_stg_dark=?, usr_stg_notify=?, usr_stg_text=? WHERE usr_id=?', [settings.dark, settings.notify, settings.text, id] ).then( ({results}) => {
-        if ( results.affectedRows == 1 && results.warningCount == 0 )
-            return getUserById( id );
-        throw new Error( 'Oops! Something went wrong.' );
-    }).catch( () => {
-        throw new Error( 'Oops! Something went wrong.' );
-    });
-};
+// async function updateSettings( id, settings ) {
+//     if ( !id || settings.dark === undefined || settings.notify === undefined || settings.text === undefined )
+//         throw new Error( 'Oops! Something went wrong.' );
+//     return query( 'UPDATE user SET usr_stg_dark=?, usr_stg_notify=?, usr_stg_text=? WHERE usr_id=?', [settings.dark, settings.notify, settings.text, id] ).then( ({results}) => {
+//         if ( results.affectedRows == 1 && results.warningCount == 0 )
+//             return getUserById( id );
+//         throw new Error( 'Oops! Something went wrong.' );
+//     }).catch( () => {
+//         throw new Error( 'Oops! Something went wrong.' );
+//     });
+// };
 
 // async function search( value ) {
 //     const param = `%${value}%`;
@@ -179,6 +180,6 @@ export {
     signup,
     updateUser,
     updatePassword,
-    updateSettings,
+    // updateSettings,
     deleteUser
 };

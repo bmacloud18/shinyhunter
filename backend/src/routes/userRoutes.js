@@ -103,7 +103,7 @@ router.put('/currentuser', tokenMiddleware, async (req, res) => {
 //update current user info and password
 router.put('/currentuser/password', tokenMiddleware, (req, res) => {
 
-    UserDAO.updatePassword(req.user.id, req.body?.password, req.body?.new_password).then(user => {
+    UserDAO.updatePassword(req.user.id, req.body.password, req.body.new_password).then(user => {
         res.json(user.username + ' updated');
     }).catch( () => {
         res.status(401).json( {error: 'Oops! Not authenticated.'} );
@@ -112,15 +112,15 @@ router.put('/currentuser/password', tokenMiddleware, (req, res) => {
 });
 
 //update general user settings
-router.put('/currentuser/settings', tokenMiddleware, (req, res) => {
+// router.put('/currentuser/settings', tokenMiddleware, (req, res) => {
 
-    UserDAO.updateSettings( req.user.id, req.body ).then( user => {
-        res.json( user );
-    }).catch( err => {
-        res.status( 500 ).json( {error: err.message} );
-    });
+//     UserDAO.updateSettings( req.user.id, req.body ).then( user => {
+//         res.json( user );
+//     }).catch( err => {
+//         res.status( 500 ).json( {error: err.message} );
+//     });
 
-});
+// });
 
 
 

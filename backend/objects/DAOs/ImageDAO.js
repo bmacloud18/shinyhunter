@@ -27,12 +27,12 @@ async function getImage(filename) {
 //(need to concat the img_id with the filename for the api route most likely)
 async function uploadImage(filename) {
     const response = await getImage(filename);
-    console.log(response);
+
     if (response === undefined) {
         console.log(filename);
         return query(`INSERT INTO images (img_name) VALUES (?)`, [filename]).then(({results}) => {
             if (results.insertId) {
-                console.log(results.insertId);
+
                 return results;
             }
         }).catch( (err) => {
@@ -45,8 +45,8 @@ async function uploadImage(filename) {
 };
 
 async function deleteImage(filename) {
-    return query('DELETE FROM images WHERE img_name=?', [filename]).then(({results}) => {
-        return res.json({message: 'Image deleted successfully'});
+    return query('DELETE FROM images WHERE img_name=?', [filename]).then(({res}) => {
+        return 'image deleted successfully'
     }).catch(err => {
         console.log(err.message);
         throw new Error(err.message +  ': error deleting image');
