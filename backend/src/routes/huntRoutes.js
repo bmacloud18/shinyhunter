@@ -75,12 +75,11 @@ router.post('/hunt', tokenMiddleware, (req, res) => {
 //denoted by the id param. the end date cannot be editted once a hunt is complete
 router.put('/hunt/complete/:id', tokenMiddleware, (req, res) => {
     const end_date = req.body.end_date;
-    const huntId = req.body.id;
+    const huntId = req.params.id;
 
-    console.log(end_date, huntId);
 
     HuntDAO.completeHunt(huntId, end_date).then(hunt => {
-        console.log('completing' + hunt);
+
         res.json(hunt);
     }).catch((e) => {
         throw new Error(e.message);
@@ -96,8 +95,8 @@ router.put('/hunt/settings/:id', tokenMiddleware, async (req, res) => {
     const charm = req.body.charm;
     const nickname = req.body.nickname;
 
-    HuntDAO.updateHuntSettings(huntId, time, count, increment, charm, nickname).then(hunt => {
-        res.json(hunt);
+    HuntDAO.updateHuntSettings(huntId, time, count, increment, charm, nickname).then(ret => {
+        res.json(ret);
     }).catch(err => {
         res.status(404).json(err.message);
     });

@@ -5,21 +5,21 @@ import {query} from '../DBConnection.js';
 import Hunt from '../models/Hunt.js';
 
 //unfinished
-function validateEndDate(date_string) {
-    if (date_string == null) {
-        throw new Error("Oops! couldn't complete hunt");
-    }
+// function validateEndDate(date_string) {
+//     if (date_string == null) {
+//         throw new Error("Oops! couldn't complete hunt");
+//     }
 
-    return date_string;
-}
+//     return date_string;
+// }
 
-function validateStartDate(date_string) {
-    if (date_string == null) {
-        throw new Error("Oops! couldn't complete hunt");
-    }
+// function validateStartDate(date_string) {
+//     if (date_string == null) {
+//         throw new Error("Oops! couldn't complete hunt");
+//     }
 
-    return date_string;
-}
+//     return date_string;
+// }
 
 //get all hunts
 async function getAllHunts() {
@@ -38,7 +38,6 @@ async function getAllHunts() {
 async function getHuntById(id) {
     return query('SELECT * FROM hunt WHERE hnt_id=?', [id]).then(({results}) => {
         const hunt = new Hunt(results[0]);
-        console.log(hunt);
         if (hunt) {
             return hunt;
         }
@@ -49,17 +48,18 @@ async function getHuntById(id) {
 };
 
 //get user hunts by user's id
-async function getHuntsByUser(user_id) {
-    return query('SELECT * FROM hunt WHERE usr_id=?', [user_id]).then(({results}) => {
-        const hunts = results.map(h => new Hunt(h));
-        if (hunts) {
-            return hunts;
-        }
-        else {
-            throw new Error("No Hunts Found");
-        }
-    });
-};
+//currently unused
+// async function getHuntsByUser(user_id) {
+//     return query('SELECT * FROM hunt WHERE usr_id=?', [user_id]).then(({results}) => {
+//         const hunts = results.map(h => new Hunt(h));
+//         if (hunts) {
+//             return hunts;
+//         }
+//         else {
+//             throw new Error("No Hunts Found");
+//         }
+//     });
+// };
 
 //create new hunt, leave end_date_string null if hunt is active
 async function createNewHunt(user, pokemon, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite) {
@@ -71,8 +71,6 @@ async function createNewHunt(user, pokemon, game, method, start_date, end_date, 
     if (end_date != null) {
         end_date_string = new Date(end_date).toISOString();
     }
-
-    console.log(user, pokemon, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname, sprite);
 
     return query('INSERT INTO hunt (pkm_name, usr_id, gam_name, mtd_id, hnt_start_date_string, hnt_end_date_string, hnt_time_s, hnt_count, hnt_inc, hnt_charm, hnt_nnm, pkm_sprite) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
     [pokemon, user, game, method, start_date_string, end_date_string, time, count, increment, charm, nickname, sprite]).then(({results}) => {

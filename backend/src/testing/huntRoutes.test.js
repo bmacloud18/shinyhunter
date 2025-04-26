@@ -52,7 +52,7 @@ beforeAll( async () => {
 afterAll( async () => {
 
     //remove mock user from db
-    const del = await request(mock).delete('/users/mockuser').set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    const del = await request(mock).delete('/users/mockhunt').set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(del.statusCode).toBe(200);
     expect(JSON.parse(del.text)).toBe('user deleted');
 
@@ -87,7 +87,8 @@ test('new test', async () => {
 
     
 
-    const newh = await (request(mock).post('/hunt')).send(sample1)
+    const newh = await (request(mock).post('/hunt'))
+        .send(sample1)
         .set('Accept', 'application/json')
         .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(newh.statusCode).toBe(200);
@@ -97,8 +98,42 @@ test('new test', async () => {
     
     const hunt_id = newh.body.id;
 
-    log(hunt_id);
+    const settings_data = {
+        id: hunt_id,
+        time: 5050,
+        count: 2525,
+        increment: 1,
+        charm: 'off',
+        nickname: 'settings'
+    }
 
+    const settings = await (request(mock).put(`/hunt/settings/${hunt_id}`))
+        .send(settings_data)
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    
+    expect(settings.statusCode).toBe(200);
+    expect(settings.body.affectedRows).toBe(1);
+
+
+    
+    const today = new Date().toISOString();
+    const end_data = {
+        end_date: today
+    }
+
+
+    const comp = await (request(mock).put(`/hunt/complete/${hunt_id}`))
+        .send(end_data)
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(comp.statusCode).toBe(200);
+
+
+    log('litten hunt completed');
+
+    const get = await (request(mock).get(`/hunt/${hunt_id}`))
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(get.statusCode).toBe(200);
+    expect(get.body.count).toBe(2525);
 
     const delh = await (request(mock).delete(`/hunt/${hunt_id}`))
         .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
