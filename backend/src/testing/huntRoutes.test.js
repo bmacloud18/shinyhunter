@@ -14,14 +14,14 @@ mock.use(huntRoutes.updateRouter);
 mock.use(userRoutes);
 
 const userInfo = {
-    username: 'mockuser',
+    username: 'mockhunt',
     password: 'mockpass',
     first_name: 'mockfirst',
     last_name: 'mocklast'
 }
 
 const loginInfo = {
-    username: 'mockuser',
+    username: 'mockhunt',
     password: 'mockpass'
 }
 
@@ -63,15 +63,46 @@ afterAll( async () => {
 });
 
 test('new test', async () => {
-    const ret = await (request(mock).get('/hunt')).set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    log('testing');
+    const ret = await (request(mock).get('/hunt'))
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(ret.statusCode).toBe(200);
+
+    log('hunt retrieved');
 
     const sample1 = {
         userId: usr_id,
-        pkm: '34',
-        game: 
+        pkm: 'litten',
+        game: 'sun',
+        method: 9,
+        start_date: '2025-05-14T04:39:36.778Z',
+        end_date: null,
+        time: 500,
+        count: 25,
+        increment: 5,
+        charm: 'on',
+        nickname: 'sample1',
+        sprite: '/images/sprites/725.png'
     }
 
-    const newh = await (request(mock).post('/hunt')).send().set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    
+
+    const newh = await (request(mock).post('/hunt')).send(sample1)
+        .set('Accept', 'application/json')
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(newh.statusCode).toBe(200);
+    expect(newh.body.pkm).toBe('litten');
+
+    log('litten hunt started');
+    
+    const hunt_id = newh.body.id;
+
+    log(hunt_id);
+
+
+    const delh = await (request(mock).delete(`/hunt/${hunt_id}`))
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(delh.statusCode).toBe(200);
+
+    log('litten hunt deleted');
 });;

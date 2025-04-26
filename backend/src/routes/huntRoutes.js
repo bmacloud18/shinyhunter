@@ -11,7 +11,7 @@ const updateRouter = express.Router();
 updateRouter.use(express.text());
 
 //get all hunts
-router.get('/hunt', tokenMiddleware, async (req, res) => {
+router.get('/hunt', tokenMiddleware, (req, res) => {
     HuntDAO.getAllHunts().then(hunts => {
         res.json(sortHunts(hunts));
     });
@@ -122,7 +122,7 @@ router.delete('/hunt/:id', tokenMiddleware, (req, res) => {
     const huntId = req.params.id;
 
     HuntDAO.deleteHunt(huntId).then(msg => {
-        console.log(msg);
+        res.json(msg);
     });
 });
 
