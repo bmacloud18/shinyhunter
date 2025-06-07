@@ -102,6 +102,15 @@ test('new test', async () => {
     
     const hunt_id = newh.body.id;
 
+    const newh2 = await (request(mock).post('/hunt'))
+        .send(sample1)
+        .set('Accept', 'application/json')
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(newh.statusCode).toBe(200);
+    expect(newh.body.pkm).toBe('litten'); 
+
+    const hunt_id2 = newh2.body.id;
+
     const settings_data = {
         id: hunt_id,
         time: 5050,
@@ -139,7 +148,16 @@ test('new test', async () => {
     expect(get.statusCode).toBe(200);
     expect(get.body.count).toBe(2525);
 
+    const getAll = await (request(mock).get(`/hunt/users/current`))
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(getAll.statusCode).toBe(200);
+    expect(getAll.body.length > 1)
+
     const delh = await (request(mock).delete(`/hunt/${hunt_id}`))
+        .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
+    expect(delh.statusCode).toBe(200);
+
+    const delh2 = await (request(mock).delete(`/hunt/${hunt_id2}`))
         .set('Cookie', [`${TOKEN_COOKIE_NAME}=${token}`]);
     expect(delh.statusCode).toBe(200);
 

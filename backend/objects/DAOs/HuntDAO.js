@@ -48,18 +48,17 @@ async function getHuntById(id) {
 };
 
 //get user hunts by user's id
-//currently unused
-// async function getHuntsByUser(user_id) {
-//     return query('SELECT * FROM hunt WHERE usr_id=?', [user_id]).then(({results}) => {
-//         const hunts = results.map(h => new Hunt(h));
-//         if (hunts) {
-//             return hunts;
-//         }
-//         else {
-//             throw new Error("No Hunts Found");
-//         }
-//     });
-// };
+async function getHuntsByUser(user_id) {
+    return query('SELECT * FROM hunt WHERE usr_id=?', [user_id]).then(({results}) => {
+        const hunts = results.map(h => new Hunt(h));
+        if (hunts) {
+            return hunts;
+        }
+        else {
+            throw new Error("No Hunts Found");
+        }
+    });
+};
 
 //create new hunt, leave end_date_string null if hunt is active
 async function createNewHunt(user, pokemon, game, method, start_date, end_date, time, count, increment, charm, nickname, sprite) {
@@ -126,7 +125,7 @@ async function deleteHunt(id) {
 export {
     getAllHunts,
     getHuntById,
-    // getHuntsByUser,
+    getHuntsByUser,
     createNewHunt,
     completeHunt,
     updateHuntSettings,
