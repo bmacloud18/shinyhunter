@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cytest": "cypress open"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
+    "cypress": "^14.4.1",
     "easytimer.js": "^4.6.0",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
