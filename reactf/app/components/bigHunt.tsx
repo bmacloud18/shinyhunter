@@ -36,15 +36,6 @@ export default function HuntTile({
     const intRef = useRef(interval);
     const huntingRef = useRef(hunting);
 
-    timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
-    timer.addEventListener('secondsUpdated', function () {
-        if (huntingRef.current) {
-            const s = getSeconds(timer);
-            setTimeDisplay(convertTime(s));
-            setInterval(intRef.current + 1);
-            setIntervalDisplay(convertTime(intRef.current + 1));
-        }
-    });
 
     const timerRef = useRef(timer);
 
@@ -95,8 +86,7 @@ export default function HuntTile({
     //Timer functions
     function pause() {
         setHunting(false);
-        console.log('pausing');
-        timerRef.current.pause();
+        timer.pause();
         console.log('pausing, paused: ', !huntingRef.current);
     }
     
@@ -123,8 +113,7 @@ export default function HuntTile({
     }
 
     useEffect(() => {
-        diffRef.current = diff;
-        intRef.current = interval;
+
     }, [diff, interval]);
 
     const saveCurrentHunt = useCallback(async (currentDiff: number) => {
@@ -240,8 +229,23 @@ export default function HuntTile({
                 setMethod('random');
                 console.log("couldn't connect to API", method);
             });
+
+
+            diffRef.current = diff;
+            intRef.current = interval;
+            
+            timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
+            timer.addEventListener('secondsUpdated', function () {
+                if (hunting) {
+                    const s = getSeconds(timer);
+                    setTimeDisplay(convertTime(s));
+                    setInterval(intRef.current + 1);
+                    setIntervalDisplay(convertTime(intRef.current + 1));
+                }
+            });
         }
-    }, [hunt, saveCurrentHunt]);
+
+    }, [hunt, saveCurrentHunt, timer, hunting, diff, interval]);
 
     const active = hunt.end_date_display == null;
     let main = (
