@@ -97,13 +97,13 @@ export default function HuntTile({
         setHunting(false);
         console.log('pausing');
         timerRef.current.pause();
-        console.log('pausing, paused: ', !hunting);
+        console.log('pausing, paused: ', !huntingRef.current);
     }
     
     function resume() {
         setHunting(true);
         timerRef.current.start();
-        console.log('resuming, paused: ', !hunting);
+        console.log('resuming, paused: ', !huntingRef.current);
     }
 
 
