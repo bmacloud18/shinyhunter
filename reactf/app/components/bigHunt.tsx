@@ -200,8 +200,6 @@ export default function HuntTile({
         
     if (counterData === undefined)
         setCounterData(getDataFromLocalStorage('counterData'));
-    if (timer === undefined)
-        setTimer(new Timer());
 
 
     
@@ -236,8 +234,6 @@ export default function HuntTile({
                 totalSeconds: hunt.hunt_time,
                 isRunning: true
             });
-
-            newTimer();
 
             Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                 setMethod(res[0].name);
