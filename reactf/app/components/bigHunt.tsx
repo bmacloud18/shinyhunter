@@ -35,7 +35,16 @@ export default function HuntTile({
     const diffRef = useRef(diff);
     const intRef = useRef(interval);
 
-    timer.start();
+    timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
+    timer.addEventListener('secondsUpdated', function () {
+        if (!timer.isPaused()) {
+            const s = getSeconds(timer);
+            setTimeDisplay(convertTime(s));
+            setInterval(intRef.current + 1);
+            setIntervalDisplay(convertTime(intRef.current + 1));
+        }
+    });
+
 
     //local storage functions
     function saveDataToLocalStorage(key: string, data: any) {
@@ -191,6 +200,8 @@ export default function HuntTile({
         
     if (counterData === undefined)
         setCounterData(getDataFromLocalStorage('counterData'));
+    if (timer === undefined)
+        setTimer(new Timer());
 
 
     
@@ -226,7 +237,7 @@ export default function HuntTile({
                 isRunning: true
             });
 
-            timer.start();
+            newTimer();
 
             Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                 setMethod(res[0].name);
