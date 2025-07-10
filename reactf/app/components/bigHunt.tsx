@@ -168,6 +168,10 @@ export default function HuntTile({
         }
     }
 
+    function testing() {
+        console.log(hunting);
+    }
+
     async function handleSettings() {
         saveCurrentHunt(diff)
         document.location = '/shinyhunter/hunt/' + hunt.id + '/settings';
@@ -326,6 +330,7 @@ export default function HuntTile({
             <div className="rounded-2xl border-solid border-2 border-black flex flex-col w-fit md:w-[30rem] lg:w-[36rem] mb-1 md:mb-2 p-8 md:p-10">
                 {settings}
                 {activeContent}
+                <BigButton text={test} onClick={testing}></BigButton>
             </div>
             {capture}
         </div>
