@@ -21,7 +21,7 @@ export default function HuntTile({
     
     const [method, setMethod] = useState<string>('');
     const [timer, targetAchieved] = useTimer({countdown: false, startValues: {seconds: h.hunt_time}})
-    const [interval, setInterval] = useState<number>(0)
+    const [interval, setInt] = useState<number>(0)
     const [hunting, setHunting] = useState<boolean>(true);
     const [count, setCount] = useState<number>(0);
     const [diff, setDiff] = useState<number>(0);
@@ -39,11 +39,6 @@ export default function HuntTile({
 
     const timerRef = useRef(timer);
 
-    const td = document.getElementById('td');
-    td?.addEventListener('change', () => {
-        setInterval(interval+1);
-        setIntervalDisplay(convertTime(interval+1));
-    });
 
 
 
@@ -242,7 +237,7 @@ export default function HuntTile({
                 if (hunting) {
                     const s = getSeconds(timer);
                     setTimeDisplay(convertTime(s));
-                    setInterval(interval + 1);
+                    setInt(interval + 1);
                     setIntervalDisplay(convertTime(interval + 1));
                 }
             });
