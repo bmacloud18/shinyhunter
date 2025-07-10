@@ -20,7 +20,7 @@ export default function HuntTile({
 }) {
     
     const [method, setMethod] = useState<string>('');
-    const [timer, setTimer] = useTimer({countdown: false, startValues: {seconds: h.hunt_time}})
+    const [timer, targetAchieved] = useTimer({countdown: false, startValues: {seconds: h.hunt_time}})
     const [interval, setInterval] = useState<number>(0)
     const [hunting, setHunting] = useState<boolean>(true);
     const [count, setCount] = useState<number>(0);
@@ -35,6 +35,7 @@ export default function HuntTile({
     const diffRef = useRef(diff);
     const intRef = useRef(interval);
 
+    timer.start();
 
     //local storage functions
     function saveDataToLocalStorage(key: string, data: any) {
