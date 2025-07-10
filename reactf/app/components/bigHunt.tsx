@@ -112,10 +112,6 @@ export default function HuntTile({
         }
     }
 
-    useEffect(() => {
-
-    }, [diff, interval]);
-
     const saveCurrentHunt = useCallback(async (currentDiff: number) => {
         const currentInterval = intRef.current;
             console.log(currentInterval);
@@ -239,8 +235,8 @@ export default function HuntTile({
                 if (hunting) {
                     const s = getSeconds(timer);
                     setTimeDisplay(convertTime(s));
-                    setInterval(intRef.current + 1);
-                    setIntervalDisplay(convertTime(intRef.current + 1));
+                    setInterval(interval + 1);
+                    setIntervalDisplay(convertTime(interval + 1));
                 }
             });
         }
