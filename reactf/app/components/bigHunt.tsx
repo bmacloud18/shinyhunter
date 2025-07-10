@@ -155,7 +155,7 @@ export default function HuntTile({
     }
 
     function testing() {
-        console.log(hunting);
+        console.log(interval);
     }
 
     async function handleSettings() {
