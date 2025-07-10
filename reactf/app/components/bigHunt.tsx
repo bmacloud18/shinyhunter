@@ -81,22 +81,20 @@ export default function HuntTile({
     
     
     //Timer functions
-    function pause(timer: Timer | undefined) {
+    function pause(timer: Timer) {
         if (timer) {
             setHunting(false);
             
             timer.pause();
         }
-    };
+    }
     
-    function resume(timer: Timer | undefined) {
+    function resume(timer: Timer) {
         if (timer) {
-            if (!hunting) {
                 setHunting(true);
-                timer.start();
-            }
+            timer.start();
         }
-    };
+    }
 
 
     function minus() {
@@ -116,17 +114,17 @@ export default function HuntTile({
 
     function newTimer() {
         setTimer(new Timer())
-            if (timer) {
-                timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
-                timer.addEventListener('secondsUpdated', function () {
-                    if (!timer.isPaused()) {
-                        const s = getSeconds(timer);
-                        setTimeDisplay(convertTime(s));
-                        setInterval(intRef.current + 1);
-                        setIntervalDisplay(convertTime(intRef.current + 1));
-                    }
-                });
-            }
+        if (timer) {
+            timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
+            timer.addEventListener('secondsUpdated', function () {
+                if (!timer.isPaused()) {
+                    const s = getSeconds(timer);
+                    setTimeDisplay(convertTime(s));
+                    setInterval(intRef.current + 1);
+                    setIntervalDisplay(convertTime(intRef.current + 1));
+                }
+            });
+        }
     }
 
     useEffect(() => {
@@ -167,11 +165,17 @@ export default function HuntTile({
         if (hunting) {
             saveTimeDataLocally();
             saveCurrentHunt(diff)
-            pause(timer);
+            if (timer) {
+                console.log('pausing');
+                pause(timer);
+            }
+                
         }
         else {
             saveDataToLocalStorage('hunt', hunt);
-            resume(timer);
+            if (timer) {
+                resume(timer);
+            }
         }
     }
 
@@ -279,7 +283,7 @@ export default function HuntTile({
     ] : [
         (<span key="h1">Tap Sprite to Resume Hunt</span>),
         (main),
-        (<span key="h2" className="text-7xl m-8">{count}</span>)
+        (<span key="h2" className="text-7xl m-8 self-center">{count}</span>)
         
     ]
 
