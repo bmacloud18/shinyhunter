@@ -34,10 +34,11 @@ export default function HuntTile({
 
     const diffRef = useRef(diff);
     const intRef = useRef(interval);
+    const huntingRef = useRef(hunting);
 
     timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
     timer.addEventListener('secondsUpdated', function () {
-        if (hunting) {
+        if (huntingRef.current) {
             const s = getSeconds(timer);
             setTimeDisplay(convertTime(s));
             setInterval(intRef.current + 1);
