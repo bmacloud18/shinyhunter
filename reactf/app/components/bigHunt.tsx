@@ -225,6 +225,8 @@ export default function HuntTile({
                 isRunning: true
             });
 
+            timer.start();
+
             Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                 setMethod(res[0].name);
             }).catch((e) => {
