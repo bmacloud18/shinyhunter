@@ -96,6 +96,7 @@ export default function HuntTile({
         setHunting(false);
         console.log('pausing');
         timer.pause();
+        console.log(timer.isPaused());
     }
     
     function resume() {
