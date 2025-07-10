@@ -37,7 +37,6 @@ export default function HuntTile({
 
     timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
     timer.addEventListener('secondsUpdated', function () {
-        console.log(timer.isPaused());
         if (!timer.isPaused()) {
             const s = getSeconds(timer);
             setTimeDisplay(convertTime(s));
@@ -45,6 +44,8 @@ export default function HuntTile({
             setIntervalDisplay(convertTime(intRef.current + 1));
         }
     });
+
+    const timerRef = useRef(timer);
 
 
     //local storage functions
@@ -58,16 +59,14 @@ export default function HuntTile({
     }
     
     function saveTimeDataLocally() {
-        if (timer) {
-            const key = "stopwatchData";
-            const data = {
-                totalSeconds: getSeconds(timer),
-                interval: interval,
-                isRunning: hunting
-            };
-    
-            saveDataToLocalStorage(key, data);
-        }
+        const key = "stopwatchData";
+        const data = {
+            totalSeconds: getSeconds(timerRef.current),
+            interval: interval,
+            isRunning: hunting
+        };
+
+        saveDataToLocalStorage(key, data);
     }
     
     function incrementAndSave() {
@@ -96,14 +95,14 @@ export default function HuntTile({
     function pause() {
         setHunting(false);
         console.log('pausing');
-        timer.pause();
-        console.log('pausing, paused: ', timer.isPaused());
+        timerRef.current.pause();
+        console.log('pausing, paused: ', timerRef.current.isPaused());
     }
     
     function resume() {
         setHunting(true);
-        timer.start();
-        console.log('resuming, paused: ', timer.isPaused());
+        timerRef.current.start();
+        console.log('resuming, paused: ', timerRef.current.isPaused());
     }
 
 
