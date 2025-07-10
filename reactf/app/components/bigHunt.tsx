@@ -92,19 +92,15 @@ export default function HuntTile({
     
     
     //Timer functions
-    function pause(timer: Timer) {
-        if (timer) {
-            setHunting(false);
-            console.log('pausing');
-            timer.pause();
-        }
+    function pause() {
+        setHunting(false);
+        console.log('pausing');
+        timer.pause();
     }
     
-    function resume(timer: Timer) {
-        if (timer) {
-                setHunting(true);
-            timer.start();
-        }
+    function resume() {
+        setHunting(true);
+        timer.start();
     }
 
 
@@ -161,16 +157,12 @@ export default function HuntTile({
         if (hunting) {
             saveTimeDataLocally();
             saveCurrentHunt(diff)
-            if (timer) {
-                pause(timer);
-            }
+            pause();
                 
         }
         else {
             saveDataToLocalStorage('hunt', hunt);
-            if (timer) {
-                resume(timer);
-            }
+            resume();
         }
     }
 
