@@ -39,6 +39,13 @@ export default function HuntTile({
 
     const timerRef = useRef(timer);
 
+    const td = document.getElementById('td');
+    td?.addEventListener('change', () => {
+        setInterval(interval+1);
+        setIntervalDisplay(convertTime(interval+1));
+    });
+
+
 
     //local storage functions
     function saveDataToLocalStorage(key: string, data: any) {
@@ -249,7 +256,7 @@ export default function HuntTile({
             <span className="text-6xl">
                 {hunt.nickname}
             </span>
-            <span className="text-4xl">
+            <span className="text-4xl" id="td">
                 {timeDisplay}
             </span>
             <span className="text-2xl text-grey">
