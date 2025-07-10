@@ -6,6 +6,7 @@
     "react-select": "^5.8.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.3"
+    "@types/react": "^18.3.3",
+    "easytimer-react-hook": "^2.1.0"
   }
 }

@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import api from "@/app/APIclient";
-import Timer from "easytimer.js";
 import convertTime from "@/app/util/convertTime";
 import getSeconds from "@/app/util/getSeconds";
 import BigButton from "@/app/components/bigButton";
@@ -11,6 +10,8 @@ import sample from "@/app/samples/completedHunt"
 import Image from 'next/image';
 // import User from "@/app/interfaces/user";
 import Hunt from "@/app/interfaces/hunt";
+import Timer from "easytimer.js";
+import useTimer from 'easytimer-react-hook';
 
 export default function HuntTile({
     h
@@ -19,7 +20,7 @@ export default function HuntTile({
 }) {
     
     const [method, setMethod] = useState<string>('');
-    const [timer, setTimer] = useState<Timer>();
+    const [timer, setTimer] = useTimer({countdown: false, startValues: {seconds: h.hunt_time}})
     const [interval, setInterval] = useState<number>(0)
     const [hunting, setHunting] = useState<boolean>(true);
     const [count, setCount] = useState<number>(0);
@@ -84,7 +85,7 @@ export default function HuntTile({
     function pause(timer: Timer) {
         if (timer) {
             setHunting(false);
-            
+            console.log('pausing');
             timer.pause();
         }
     }
@@ -109,21 +110,6 @@ export default function HuntTile({
             incrementAndSave();
             saveTimeDataLocally();
             setInterval(0);
-        }
-    }
-
-    function newTimer() {
-        setTimer(new Timer())
-        if (timer) {
-            timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
-            timer.addEventListener('secondsUpdated', function () {
-                if (!timer.isPaused()) {
-                    const s = getSeconds(timer);
-                    setTimeDisplay(convertTime(s));
-                    setInterval(intRef.current + 1);
-                    setIntervalDisplay(convertTime(intRef.current + 1));
-                }
-            });
         }
     }
 
@@ -166,7 +152,6 @@ export default function HuntTile({
             saveTimeDataLocally();
             saveCurrentHunt(diff)
             if (timer) {
-                console.log('pausing');
                 pause(timer);
             }
                 
@@ -205,8 +190,6 @@ export default function HuntTile({
         
     if (counterData === undefined)
         setCounterData(getDataFromLocalStorage('counterData'));
-    if (timer === undefined)
-        setTimer(new Timer());
 
 
     
@@ -241,8 +224,6 @@ export default function HuntTile({
                 totalSeconds: hunt.hunt_time,
                 isRunning: true
             });
-
-            newTimer();
 
             Promise.all([api.getMethodById(hunt.method)]).then((res) => {
                 setMethod(res[0].name);
