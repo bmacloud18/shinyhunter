@@ -270,7 +270,7 @@ export default function HuntTile({
             </div>
         </div>)
     ] : [
-        (<span key="h1">Tap Sprite to Resume Hunt</span>),
+        (<span key="h1" className="self-center">Tap Sprite to Resume Hunt</span>),
         (main),
         (<span key="h2" className="text-7xl m-8 self-center">{count}</span>)
         
@@ -330,7 +330,7 @@ export default function HuntTile({
             <div className="rounded-2xl border-solid border-2 border-black flex flex-col w-fit md:w-[30rem] lg:w-[36rem] mb-1 md:mb-2 p-8 md:p-10">
                 {settings}
                 {activeContent}
-                <BigButton text={test} onClick={testing}></BigButton>
+                <BigButton text={"test"} onClick={testing}></BigButton>
             </div>
             {capture}
         </div>
