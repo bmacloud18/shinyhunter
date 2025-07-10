@@ -116,7 +116,6 @@ export default function HuntTile({
 
     const saveCurrentHunt = useCallback(async (currentDiff: number) => {
         const currentInterval = intRef.current;
-            console.log(currentInterval);
             if ((currentDiff != 0 || currentInterval > 3) && navigator.onLine) {
                 console.log('getting data');
                 const hunt = getDataFromLocalStorage('hunt');
@@ -156,9 +155,9 @@ export default function HuntTile({
         }
     }
 
-    function testing() {
-        console.log(interval);
-    }
+    // function testing() {
+    //     console.log(interval);
+    // }
 
     async function handleSettings() {
         saveCurrentHunt(diff)
@@ -191,14 +190,8 @@ export default function HuntTile({
     
     useEffect(() => {
 
-        const pfp = document.getElementById('pfp');
+        
         const u = getDataFromLocalStorage('user');
-        if (pfp) {
-            pfp.addEventListener('click', () => {
-                saveCurrentHunt(diffRef.current);
-                document.location = "/shinyhunter/profile/" + u.id;
-            });
-        }
         
         const display = document.getElementById("main")
         if (display && u.id !== hunt.user) {
@@ -244,6 +237,16 @@ export default function HuntTile({
                     });
                 }
             });
+
+            const pfp_list = document.getElementsByClassName('pfp') as HTMLCollectionOf<HTMLImageElement>;
+            for (let i = 0; i < pfp_list.length; i++)
+            {
+                const pfp = pfp_list[i];
+                pfp.addEventListener('click', () => {
+                    saveCurrentHunt(diffRef.current);
+                    document.location = "/shinyhunter/profile/" + pfp.dataset.userId;
+                })
+            }
         }
 
     }, [hunt, saveCurrentHunt, timer, hunting, diff, interval]);

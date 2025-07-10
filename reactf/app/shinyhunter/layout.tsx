@@ -1,14 +1,15 @@
 'use client';
 import Head from "next/head";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import api from "../APIclient";
 import { useState, useEffect } from "react";
 import User from "@/app/interfaces/user";
 import sample from "@/app/samples/user";
 import Register from "@/app/util/serviceWorker";
+import ProfilePicture from "@/app/components/profilePicture";
 import Image from "next/image";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export default function Layout({
   children,
@@ -89,12 +90,7 @@ function handleProfile() {
                   </form>
                 </div>
                 <button className="newPage p-1" id="pfp" onClick={handleProfile}>
-                    <Image 
-                        className="h-24 w-24"
-                        src={user.avatar}
-                        height="96"
-                        width="96"
-                        alt="User PFP"/>
+                    <ProfilePicture src={user.avatar} id={`${user.id}`} tail={24} dimensions={96}></ProfilePicture>
                 </button>
               </div>
             </div>
