@@ -237,8 +237,11 @@ export default function HuntTile({
                 if (hunting) {
                     const s = getSeconds(timer);
                     setTimeDisplay(convertTime(s));
-                    setInt(interval + 1);
-                    setIntervalDisplay(convertTime(interval + 1));
+                    setInt(prev => {
+                        const newInt = prev + 1;
+                        setIntervalDisplay(convertTime(newInt));
+                        return newInt;
+                    });
                 }
             });
         }
