@@ -37,6 +37,7 @@ export default function HuntTile({
 
     timer.start({countdown: false, startValues: {seconds: hunt.hunt_time}});
     timer.addEventListener('secondsUpdated', function () {
+        console.log(timer.isPaused());
         if (!timer.isPaused()) {
             const s = getSeconds(timer);
             setTimeDisplay(convertTime(s));
@@ -96,12 +97,13 @@ export default function HuntTile({
         setHunting(false);
         console.log('pausing');
         timer.pause();
-        console.log(timer.isPaused());
+        console.log('pausing, paused: ', timer.isPaused());
     }
     
     function resume() {
         setHunting(true);
         timer.start();
+        console.log('resuming, paused: ', timer.isPaused());
     }
 
 
