@@ -110,7 +110,7 @@ export default function HuntTile({
         if (count < 999999) {
             incrementAndSave();
             saveTimeDataLocally();
-            setInterval(0);
+            setInt(0);
         }
     }
 
