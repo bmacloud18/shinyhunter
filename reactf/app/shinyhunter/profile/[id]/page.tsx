@@ -66,11 +66,14 @@ export default function Profile({params}: {params: {id: number}}) {
             
             const active = activeHunts.map((hunt: Hunt) => {
                 //ensure updated information is provided on homepage
-                console.log(activeHunt, activeHunt.id, hunt.id)
-                if (activeHunt && activeHunt.id && hunt.id === activeHunt.id) {
-                    console.log('using hunt', hunt)
-                    return <HuntTile key={hunt.id} hunt={activeHunt}/>
+                if (activeHunt && activeHunt.id) {
+                    console.log(activeHunt, activeHunt.id, hunt.id);
+                    if (hunt.id === activeHunt.id) {
+                        console.log('using hunt', hunt)
+                        return <HuntTile key={hunt.id} hunt={activeHunt}/>
+                    }
                 }
+                    
                 return <HuntTile key={hunt.id} hunt={hunt}/>
             });
             const completed = completedHunts.map((hunt: Hunt) => {
