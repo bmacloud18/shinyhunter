@@ -50,6 +50,9 @@ export default function Profile({params}: {params: {id: number}}) {
                     localStorage.removeItem('stopwatchData');
                     localStorage.removeItem('counterData');
 
+                    activeHunt.count = c;
+                    activeHunt.hunt_time = newtime;
+
                     api.updateHunt(activeHunt.id, newtime, c).then(res => {
                         console.log(res);
                     }).catch(err => {
