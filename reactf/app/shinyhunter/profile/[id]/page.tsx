@@ -65,8 +65,8 @@ export default function Profile({params}: {params: {id: number}}) {
                 (hunt: { 
                     end_date_display: String | null; 
                 }) => 
-                hunt.end_date_display !== null);
-            const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
+                hunt.end_date_display === null);
+            const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
             
             const active = activeHunts.map((hunt: Hunt) => {
                 //ensure updated information is provided on homepage
