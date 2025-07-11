@@ -13,6 +13,8 @@ import Hunt from "@/app/interfaces/hunt";
 import Timer from "easytimer.js";
 import useTimer from 'easytimer-react-hook';
 
+import storageUtil from "@/app/util/localStorage"
+
 export default function HuntTile({
     h
 } : {
@@ -42,16 +44,6 @@ export default function HuntTile({
 
 
 
-    //local storage functions
-    function saveDataToLocalStorage(key: string, data: any) {
-        localStorage.setItem(key, JSON.stringify(data));
-    }
-    
-    function getDataFromLocalStorage(key: string) {
-        const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) : null;
-    }
-    
     function saveTimeDataLocally() {
         const key = "stopwatchData";
         const data = {
@@ -60,7 +52,7 @@ export default function HuntTile({
             isRunning: hunting
         };
 
-        saveDataToLocalStorage(key, data);
+        storageUtil.saveDataToLocalStorage(key, data);
     }
     
     function incrementAndSave() {
@@ -70,7 +62,7 @@ export default function HuntTile({
         const data = {
             counter: count+1
         }
-        saveDataToLocalStorage(key, data);
+        storageUtil.saveDataToLocalStorage(key, data);
     }
     
     function decrementAndSave() {
@@ -80,7 +72,7 @@ export default function HuntTile({
         const data = {
             counter: count-1
         }
-        saveDataToLocalStorage(key, data);
+        storageUtil.saveDataToLocalStorage(key, data);
     }
 
     
@@ -118,16 +110,16 @@ export default function HuntTile({
         const currentInterval = intRef.current;
             if ((currentDiff != 0 || currentInterval > 3) && navigator.onLine) {
                 console.log('getting data');
-                const hunt = getDataFromLocalStorage('hunt');
-                const stopwatch = getDataFromLocalStorage('stopwatchData');
-                const counter = getDataFromLocalStorage('counterData');
-        
+                const hunt = storageUtil.getDataFromLocalStorage('hunt');
+                const stopwatch = storageUtil.getDataFromLocalStorage('stopwatchData');
+                const counter = storageUtil.getDataFromLocalStorage('counterData');
+                
                 if (hunt && stopwatch && counter) {
                     console.log('hunt saving');
                     const newtime = stopwatch.totalSeconds;
                     const c = counter.counter;
     
-                    console.log(hunt.id, newtime, count);
+                    console.log(hunt.id, newtime, c);
                     localStorage.removeItem('hunt');
                     localStorage.removeItem('stopwatchData');
                     localStorage.removeItem('counterData');
@@ -150,7 +142,7 @@ export default function HuntTile({
                 
         }
         else {
-            saveDataToLocalStorage('hunt', hunt);
+            storageUtil.saveDataToLocalStorage('hunt', hunt);
             resume();
         }
     }
@@ -180,18 +172,18 @@ export default function HuntTile({
     //set data variables and declare timer 
     if (stopwatchData === undefined) {
         saveTimeDataLocally();
-        setStopwatchData(getDataFromLocalStorage('stopwatchData'));
+        setStopwatchData(storageUtil.getDataFromLocalStorage('stopwatchData'));
     }
         
     if (counterData === undefined)
-        setCounterData(getDataFromLocalStorage('counterData'));
+        setCounterData(storageUtil.getDataFromLocalStorage('counterData'));
 
 
     
     useEffect(() => {
 
         
-        const u = getDataFromLocalStorage('user');
+        const u = storageUtil.getDataFromLocalStorage('user');
         
         const display = document.getElementById("main")
         if (display && u.id !== hunt.user) {
@@ -200,16 +192,16 @@ export default function HuntTile({
 
         if (method.length < 1) {
 
-            saveDataToLocalStorage('hunt', hunt);
+            storageUtil.saveDataToLocalStorage('hunt', hunt);
 
             //save count state and to local storage
             setCount(hunt.count);
-            saveDataToLocalStorage('counterData', {
+            storageUtil.saveDataToLocalStorage('counterData', {
                 counter: hunt.count
             });
 
             //save time state and to local storage
-            saveDataToLocalStorage('stopwatchData', {
+            storageUtil.saveDataToLocalStorage('stopwatchData', {
                 totalSeconds: hunt.hunt_time,
                 isRunning: true
             });

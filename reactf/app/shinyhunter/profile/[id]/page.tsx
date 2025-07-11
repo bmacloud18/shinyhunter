@@ -15,6 +15,8 @@ import sample from "@/app/samples/completedHunt"
 import sample2 from "@/app/samples/activeHunt";
 import sampleuser from "@/app/samples/user";
 
+import storageUtil from "@/app/util/localStorage"
+
 export default function Profile({params}: {params: {id: number}}) {
     const [loading, setLoading] = useState(true);
     const [activeItems, setActiveItems] = useState<React.ReactNode[]>([]);
@@ -26,25 +28,61 @@ export default function Profile({params}: {params: {id: number}}) {
     //fetch user and hunt data for profile display
     useEffect(() => {
         Promise.all([api.getCurrentUser(), api.getUserById(params.id), api.getHuntsByUser(params.id)]).then( (res) => {
+            //set user information and profile page information
             setUser(res[0]);
             setProfileUser(res[1]);
 
+            //save hunt if leftover from hunting and navigating to new page without saving
+            const activeHunt = storageUtil.getDataFromLocalStorage('hunt');
+            if (activeHunt) {
+                const stopwatch = storageUtil.getDataFromLocalStorage('stopwatchData');
+                const counter = storageUtil.getDataFromLocalStorage('counterData');
+
+                localStorage.removeItem('hunt');
+
+                if (stopwatch && counter) {
+                    console.log('saving hunt');
+                    console.log('hunt saving');
+                    const newtime = stopwatch.totalSeconds;
+                    const c = counter.counter;
+    
+                    console.log(activeHunt.id, newtime, c);
+                    
+                    localStorage.removeItem('stopwatchData');
+                    localStorage.removeItem('counterData');
+
+                    api.updateHunt(activeHunt.id, newtime, c).then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.error('Error syncing data with server: ', err);
+                    });
+                }
+
+                
+            }
+
+            //separate active and completed hunts based on end_date
             const hunts = res[2];
             const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
             const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
-
+            
             const active = activeHunts.map((hunt: Hunt) => {
+                //ensure updated information is provided on homepage
+                if (hunt.id = activeHunt.id) {
+                    return <HuntTile key={hunt.id} hunt={activeHunt}/>
+                }
                 return <HuntTile key={hunt.id} hunt={hunt}/>
             });
             const completed = completedHunts.map((hunt: Hunt) => {
                 return <HuntTile key={hunt.id} hunt={hunt}/>
             });
 
-
             setActiveItems(completed);
             setCompletedItems(active);
             setLoading(false);
+
         }).catch(e => {
+            //provide sample information if offline
             console.log('unable to connect to api');
             const hunts = [sample2, sample]
             const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
