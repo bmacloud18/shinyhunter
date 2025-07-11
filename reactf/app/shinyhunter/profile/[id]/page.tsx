@@ -61,16 +61,13 @@ export default function Profile({params}: {params: {id: number}}) {
 
             //separate active and completed hunts based on end_date
             const hunts = res[2];
-            const activeHunts = hunts.filter(
-                (hunt: { 
-                    end_date_display: String | null; 
-                }) => 
-                hunt.end_date_display === null);
+            const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
             const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
             
             const active = activeHunts.map((hunt: Hunt) => {
                 //ensure updated information is provided on homepage
-                if (activeHunt && activeHunt.id && hunt.id == activeHunt.id) {
+                console.log(activeHunt, activeHunt.id, hunt.id)
+                if (activeHunt && activeHunt.id && hunt.id === activeHunt.id) {
                     console.log('using hunt', hunt)
                     return <HuntTile key={hunt.id} hunt={activeHunt}/>
                 }
