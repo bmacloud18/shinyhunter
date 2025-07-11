@@ -42,7 +42,6 @@ export default function Profile({params}: {params: {id: number}}) {
 
                 if (stopwatch && counter) {
                     console.log('saving hunt');
-                    console.log('hunt saving');
                     const newtime = stopwatch.totalSeconds;
                     const c = counter.counter;
     
@@ -58,17 +57,21 @@ export default function Profile({params}: {params: {id: number}}) {
                     });
                 }
 
-                
             }
 
             //separate active and completed hunts based on end_date
             const hunts = res[2];
-            const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
+            const activeHunts = hunts.filter(
+                (hunt: { 
+                    end_date_display: String | null; 
+                }) => 
+                hunt.end_date_display !== null);
             const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
             
             const active = activeHunts.map((hunt: Hunt) => {
                 //ensure updated information is provided on homepage
                 if (hunt.id = activeHunt.id) {
+                    console.log('using hunt', hunt)
                     return <HuntTile key={hunt.id} hunt={activeHunt}/>
                 }
                 return <HuntTile key={hunt.id} hunt={hunt}/>
@@ -77,13 +80,13 @@ export default function Profile({params}: {params: {id: number}}) {
                 return <HuntTile key={hunt.id} hunt={hunt}/>
             });
 
-            setActiveItems(completed);
-            setCompletedItems(active);
+            setActiveItems(active);
+            setCompletedItems(completed);
             setLoading(false);
 
         }).catch(e => {
             //provide sample information if offline
-            console.log('unable to connect to api');
+            console.log('unable to connect to api', e.message);
             const hunts = [sample2, sample]
             const activeHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display !== null);
             const completedHunts = hunts.filter((hunt: { end_date_display: String | null; }) => hunt.end_date_display === null);
@@ -94,8 +97,8 @@ export default function Profile({params}: {params: {id: number}}) {
                 return <HuntTile hunt={hunt} key={hunt.id}/>
             });
         
-            setActiveItems(completed);
-            setCompletedItems(active);
+            setActiveItems(active);
+            setCompletedItems(completed);
         
             setProfileUser(sampleuser);
             setUser(sampleuser);
